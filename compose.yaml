@@ -1,13 +1,32 @@
 version: "3"
 services:
+  app:
+    container_name: db-media-sample-app
+    build:
+      context: .
+      dockerfile: sample/Dockerfile
+      target: development
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./sample:/app
+      - .air.toml:/app/.air.toml
+    depends_on:
+      - mongodb
+    networks:
+      - db-media-sample-network
+    environment:
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+
   mongodb:
+    container_name: db-media-sample-mongodb
     image: mongo:latest
-    container_name: mongodb
     ports:
       - "27017:27017"
     volumes:
       - ./data:/data/db
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: password
-    #   MONGO_INITDB_DATABASE: test
+    networks:
+      - db-media-sample-network
+networks:
+  db-media-sample-network:

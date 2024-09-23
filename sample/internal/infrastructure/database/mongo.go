@@ -19,7 +19,6 @@ func NewMongoHandler(c *DBConfig) (*mongoHandler, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.CtxTimeout)
 	defer cancel()
 
-	fmt.Println(c)
 	uri := fmt.Sprintf(
 		"%s://%s:%s",
 		c.Driver,
@@ -34,7 +33,6 @@ func NewMongoHandler(c *DBConfig) (*mongoHandler, error) {
 	// 	c.Host,
 	// 	c.Port,
 	// )
-	fmt.Println(uri)
 
 	clientOpts := options.Client().ApplyURI(uri)
 	client, err := mongo.Connect(ctx, clientOpts)

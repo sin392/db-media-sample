@@ -1,6 +1,7 @@
 package database
 
 import (
+	"os"
 	"time"
 )
 
@@ -17,8 +18,8 @@ type DBConfig struct {
 
 func NewConfig() *DBConfig {
 	return &DBConfig{
-		Host:       "localhost",
-		Port:       "27017",
+		Host:       os.Getenv("MONGODB_HOST"),
+		Port:       os.Getenv("MONGODB_PORT"),
 		Database:   "test",
 		Driver:     "mongodb",
 		User:       "root",
