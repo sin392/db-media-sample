@@ -3,6 +3,7 @@ package trace
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/zipkin"
@@ -20,9 +21,8 @@ func StartSpan(ctx context.Context, name string) (context.Context, trace.Span) {
 }
 
 func InitTraceProvider() {
-	zipkinURL := "http://zipkin:9411/api/v2/spans"
 	exporter, err := zipkin.New(
-		zipkinURL,
+		os.Getenv("ZIPKIN_ENDPOINT"),
 	)
 	if err != nil {
 		fmt.Println("failed to create exporter:", err)

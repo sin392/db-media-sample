@@ -23,6 +23,7 @@ services:
       - MONGODB_HOST=mongodb
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=test
+      - ZIPKIN_ENDPOINT=http://zipkin:9411/api/v2/spans
   migration:
     container_name: db-media-sample-migration
     image: migrate/migrate
