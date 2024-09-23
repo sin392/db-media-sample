@@ -15,7 +15,7 @@ type mongoHandler struct {
 	client *mongo.Client
 }
 
-func NewMongoHandler(c *config) (*mongoHandler, error) {
+func NewMongoHandler(c *config) (nosql.NoSQL, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.ctxTimeout)
 	defer cancel()
 

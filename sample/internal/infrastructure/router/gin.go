@@ -11,31 +11,41 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sin392/db-media-sample/internal/adapter/controller"
-	"github.com/sin392/db-media-sample/internal/adapter/presenter"
-	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
-	"github.com/sin392/db-media-sample/internal/usecase"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 type Server interface {
-	Listen()
+	ListenAndServe()
 }
+
+type Router interface {
+	Register(router gin.IRouter)
+}
+
+type Routers []Router
 
 type Port int64
 
+// TODO: フィールド整備
 type ginEngine struct {
-	router     *gin.Engine
-	db         nosql.NoSQL
-	port       Port
-	ctxTimeout time.Duration
+	router  *gin.Engine
+	routers Routers
+	server  *http.Server
+}
+
+func NewRouters(
+	shopRouter ShopRouter,
+) Routers {
+	return Routers{
+		&shopRouter,
+	}
 }
 
 func NewGinServer(
-	db nosql.NoSQL,
 	port Port,
-	t time.Duration,
+	ctxTimeout time.Duration,
+	routers Routers,
 ) *ginEngine {
 	router := gin.Default()
 	// openteremetryの設定
@@ -57,32 +67,41 @@ func NewGinServer(
 
 	p.Use(router)
 
-	return &ginEngine{
-		router:     router,
-		db:         db,
-		port:       port,
-		ctxTimeout: t,
-	}
-}
-
-func (g ginEngine) Listen() {
-	gin.SetMode(gin.ReleaseMode)
-	gin.Recovery()
-
-	g.setAppHandlers(g.router)
-
 	server := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 15 * time.Second,
-		Addr:         fmt.Sprintf(":%d", g.port),
-		Handler:      g.router,
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      router,
+	}
+
+	return &ginEngine{
+		router:  router,
+		routers: routers,
+		server:  server,
+	}
+}
+
+func (g ginEngine) ListenAndServe() {
+	gin.SetMode(gin.ReleaseMode)
+	gin.Recovery()
+
+	// ヘルスチェックエンドポイント
+	g.router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+	})
+	// ルーターの登録
+	v1 := g.router.Group("/v1")
+	for _, r := range g.routers {
+		r.Register(v1)
 	}
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil {
+		if err := g.server.ListenAndServe(); err != nil {
 			fmt.Println(err)
 		}
 	}()
@@ -94,49 +113,7 @@ func (g ginEngine) Listen() {
 		cancel()
 	}()
 
-	if err := server.Shutdown(ctx); err != nil {
+	if err := g.server.Shutdown(ctx); err != nil {
 		fmt.Println(err)
-	}
-}
-
-func (g ginEngine) setAppHandlers(router *gin.Engine) {
-	router.GET("/health", g.healthcheck())
-	router.GET("/v1/posts", g.buildNewFindByTitleAction())
-	router.GET("/v1/shops", g.buildNewFindShopByNameAction())
-}
-
-func (g ginEngine) buildNewFindByTitleAction() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var (
-			uc = usecase.NewFindPostByTitleIntercepter(
-				nosql.NewPostRepositoryImpl(g.db),
-				g.ctxTimeout,
-			)
-			ctrl = controller.NewFindByTitleController(uc, presenter.NewFindByTitlePresenter())
-		)
-
-		ctrl.Execute(c.Writer, c.Request)
-	}
-}
-
-func (g ginEngine) buildNewFindShopByNameAction() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var (
-			uc = usecase.NewFindShopByNameIntercepter(
-				nosql.NewShopRepositoryImpl(g.db),
-				g.ctxTimeout,
-			)
-			ctrl = controller.NewFindShopByNameController(uc, presenter.NewFindShopByNamePresenter())
-		)
-
-		ctrl.Execute(c.Writer, c.Request)
-	}
-}
-
-func (g ginEngine) healthcheck() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"status": "ok",
-		})
 	}
 }

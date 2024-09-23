@@ -2,7 +2,6 @@ package usecase
 
 import (
 	"context"
-	"time"
 
 	"github.com/sin392/db-media-sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/internal/domain/repository"
@@ -18,17 +17,14 @@ type FindShopByNameOutput struct {
 }
 
 type FindShopByNameInteractor struct {
-	repo       repository.ShopRepository
-	ctxTimeout time.Duration
+	repo repository.ShopRepository
 }
 
 func NewFindShopByNameIntercepter(
 	repo repository.ShopRepository,
-	ctxTimeout time.Duration,
 ) FindShopByNameUsecase {
 	return &FindShopByNameInteractor{
-		repo:       repo,
-		ctxTimeout: ctxTimeout,
+		repo: repo,
 	}
 }
 

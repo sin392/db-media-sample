@@ -9,20 +9,20 @@ import (
 	"github.com/sin392/db-media-sample/module/trace"
 )
 
-type FindByNameController struct {
+type FindShopByNameController struct {
 	uc        usecase.FindShopByNameUsecase
 	presenter presenter.FindShopByNamePresenter
 }
 
-func NewFindShopByNameController(uc usecase.FindShopByNameUsecase, presenter presenter.FindShopByNamePresenter) FindByNameController {
-	return FindByNameController{
+func NewFindShopByNameController(uc usecase.FindShopByNameUsecase, presenter presenter.FindShopByNamePresenter) FindShopByNameController {
+	return FindShopByNameController{
 		uc:        uc,
 		presenter: presenter,
 	}
 }
 
-func (c *FindByNameController) Execute(w http.ResponseWriter, r *http.Request) {
-	ctx, span := trace.StartSpan(r.Context(), "FindByNameController.Execute")
+func (c *FindShopByNameController) Execute(w http.ResponseWriter, r *http.Request) {
+	ctx, span := trace.StartSpan(r.Context(), "FindShopByNameController.Execute")
 	defer span.End()
 
 	Name := r.URL.Query().Get("name")
