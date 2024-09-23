@@ -1,0 +1,16 @@
+datasources:
+  - name: Prometheus
+    type: prometheus
+    url: http://prometheus:9090
+    access: proxy
+    isDefault: true
+  # - name: Zipkin
+  #   type: zipkin
+  #   url: http://zipkin:9411
+  #   access: proxy
+  #   isDefault: false
+  - name: Tempo
+    type: tempo
+    url: http://tempo:3200
+    access: proxy
+    isDefault: false

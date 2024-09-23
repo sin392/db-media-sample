@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/sin392/db-media-sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
 	"github.com/sin392/db-media-sample/internal/usecase"
+	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
@@ -40,6 +42,20 @@ func NewGinServer(
 	// TODO: どこかに切り出したい
 	router.ContextWithFallback = true
 	router.Use(otelgin.Middleware("db-media-sample"))
+	// metric exporterの設定
+	p := ginprometheus.NewPrometheus("gin")
+	p.ReqCntURLLabelMappingFn = func(c *gin.Context) string {
+		url := c.Request.URL.Path
+		for _, p := range c.Params {
+			if p.Key == "name" {
+				url = strings.Replace(url, p.Value, ":name", 1)
+				break
+			}
+		}
+		return url
+	}
+
+	p.Use(router)
 
 	return &ginEngine{
 		router:     router,
@@ -84,7 +100,7 @@ func (g ginEngine) Listen() {
 }
 
 func (g ginEngine) setAppHandlers(router *gin.Engine) {
-	router.GET("/v1/health", g.healthcheck())
+	router.GET("/health", g.healthcheck())
 	router.GET("/v1/posts", g.buildNewFindByTitleAction())
 	router.GET("/v1/shops", g.buildNewFindShopByNameAction())
 }

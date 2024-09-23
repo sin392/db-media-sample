@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/zipkin"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	sdkresource "go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
@@ -20,9 +21,33 @@ func StartSpan(ctx context.Context, name string) (context.Context, trace.Span) {
 	return tracer.Start(ctx, name)
 }
 
+type customSampler struct {
+	delegate sdktrace.Sampler
+}
+
+func (cs *customSampler) ShouldSample(p sdktrace.SamplingParameters) sdktrace.SamplingResult {
+	// /metricsはサンプリングしない
+	if strings.Contains(p.Name, "/metrics") {
+		return sdktrace.SamplingResult{Decision: sdktrace.RecordOnly}
+	}
+	return cs.delegate.ShouldSample(p)
+}
+
+func (cs *customSampler) Description() string {
+	return "CustomSampler"
+}
+
 func InitTraceProvider() {
-	exporter, err := zipkin.New(
-		os.Getenv("ZIPKIN_ENDPOINT"),
+	opts := []otlptracehttp.Option{
+		// WithEndpointURLを使う場合はスキーマの設定も必要
+		otlptracehttp.WithEndpoint(os.Getenv("TRACING_ENDPOINT")),
+	}
+	if os.Getenv("APP_ENV") == "local" {
+		opts = append(opts, otlptracehttp.WithInsecure())
+	}
+	exporter, err := otlptracehttp.New(
+		context.Background(),
+		opts...,
 	)
 	if err != nil {
 		fmt.Println("failed to create exporter:", err)
@@ -41,6 +66,9 @@ func InitTraceProvider() {
 				semconv.ServiceVersionKey.String("v1.0.0"),
 			),
 		),
+		// sdktrace.WithSampler(&customSampler{
+		// 	delegate: sdktrace.TraceIDRatioBased(1.0),
+		// }),
 	)
 	otel.SetTracerProvider(tp)
 }
