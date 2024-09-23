@@ -4,10 +4,10 @@ import "context"
 
 type (
 	NoSQL interface {
-		Store(context.Context, string, interface{}) error
-		Update(context.Context, string, interface{}, interface{}) error
-		FindAll(context.Context, string, interface{}, interface{}) error
-		FindOne(context.Context, string, interface{}, interface{}, interface{}) error
+		Store(ctx context.Context, collection string, data interface{}) error
+		Update(ctx context.Context, collection string, query interface{}, update interface{}) error
+		FindAll(ctx context.Context, collection string, query interface{}, result interface{}) error
+		FindOne(ctx context.Context, collection string, query interface{}, projection interface{}, result interface{}) error
 		StartSession() (Session, error)
 	}
 	Session interface {
