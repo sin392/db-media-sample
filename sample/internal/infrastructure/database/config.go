@@ -20,10 +20,10 @@ func NewConfig() *config {
 	return &config{
 		host:       os.Getenv("MONGODB_HOST"),
 		port:       os.Getenv("MONGODB_PORT"),
-		database:   "test",
-		driver:     "mongodb",
-		user:       "root",
-		password:   "password",
+		database:   os.Getenv("MONGODB_DATABASE"),
+		driver:     os.Getenv("MONGODB_DRIVER"),
+		user:       os.Getenv("MONGODB_ROOT_USER"),
+		password:   os.Getenv("MONGODB_ROOT_PASSWORD"),
 		ctxTimeout: 60 * time.Second,
 	}
 }
