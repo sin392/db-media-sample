@@ -78,17 +78,32 @@ func (g ginEngine) Listen() {
 
 func (g ginEngine) setAppHandlers(router *gin.Engine) {
 	router.GET("/v1/health", g.healthcheck())
-	router.GET("/v1/posts", g.buildNewFindPostByTitleAction())
+	router.GET("/v1/posts", g.buildNewFindByTitleAction())
+	router.GET("/v1/shops", g.buildNewFindShopByNameAction())
 }
 
-func (g ginEngine) buildNewFindPostByTitleAction() gin.HandlerFunc {
+func (g ginEngine) buildNewFindByTitleAction() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var (
 			uc = usecase.NewFindPostByTitleIntercepter(
 				nosql.NewPostRepositoryImpl(g.db),
 				g.ctxTimeout,
 			)
-			ctrl = controller.NewFindPostByTitleController(uc, presenter.NewFindPostByTitlePresenter())
+			ctrl = controller.NewFindByTitleController(uc, presenter.NewFindByTitlePresenter())
+		)
+
+		ctrl.Execute(c.Writer, c.Request)
+	}
+}
+
+func (g ginEngine) buildNewFindShopByNameAction() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var (
+			uc = usecase.NewFindShopByNameIntercepter(
+				nosql.NewShopRepositoryImpl(g.db),
+				g.ctxTimeout,
+			)
+			ctrl = controller.NewFindShopByNameController(uc, presenter.NewFindShopByNamePresenter())
 		)
 
 		ctrl.Execute(c.Writer, c.Request)

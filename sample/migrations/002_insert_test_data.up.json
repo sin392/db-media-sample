@@ -1,0 +1,32 @@
+[
+  {
+    "insert": "shops",
+    "documents": [
+      {
+        "name": "渋谷カレー",
+        "location": {
+          "prefecture": "東京都",
+          "city": "渋谷区",
+          "address": "新鮮1-2-3"
+        },
+        "tel": "03-1234-5678",
+        "image_url": "https://example.com/image.jpg",
+        "site_url": "https://example.com/",
+        "rating": 4.5,
+        "tags": ["激辛", "渋谷"],
+        "menus": [
+          {
+            "name": "カレー",
+            "price": 1000,
+            "desc": "スパイスが効いていて美味しいカレーです"
+          },
+          {
+            "name": "ナン",
+            "price": 300,
+            "desc": "ふわふわで美味しいナンです"
+          }
+        ]
+      }
+    ]
+  }
+]

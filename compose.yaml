@@ -12,16 +12,36 @@ services:
       - ./sample:/app
       - .air.toml:/app/.air.toml
     depends_on:
+      - migration
       - mongodb
     networks:
       - db-media-sample-network
     environment:
-      - MONGODB_HOST=mongodb
-      - MONGODB_PORT=27017
-      - MONGODB_DATABASE=test
       - MONGODB_DRIVER=mongodb
       - MONGODB_ROOT_USER=root
       - MONGODB_ROOT_PASSWORD=password
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=test
+
+  migration:
+    container_name: db-media-sample-migration
+    image: migrate/migrate
+    volumes:
+      - ./sample/migrations:/app/migrations
+    depends_on:
+      - mongodb
+    networks:
+      - db-media-sample-network
+    environment:
+      - MONGODB_DRIVER=mongodb
+      - MONGODB_ROOT_USER=root
+      - MONGODB_ROOT_PASSWORD=password
+      - MONGODB_HOST=mongodb
+      - MONGODB_PORT=27017
+      - MONGODB_DATABASE=test
+    # entrypoint: sh -c 'migrate -path /app/migrations -database $${MONGODB_DRIVER}://$${MONGODB_ROOT_USER}:$${MONGODB_ROOT_PASSWORD}@$${MONGODB_HOST}:$${MONGODB_PORT}/$${MONGODB_DATABASE} up'
+    entrypoint: sh -c 'migrate -path /app/migrations -database $${MONGODB_DRIVER}://$${MONGODB_HOST}:$${MONGODB_PORT}/$${MONGODB_DATABASE} up'
 
   mongodb:
     container_name: db-media-sample-mongodb
