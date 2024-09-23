@@ -10,15 +10,15 @@ import (
 
 var _ repository.PostRepository = (*PostRepositoryImpl)(nil)
 
-const tableName = "posts"
-
 type PostRepositoryImpl struct {
-	db NoSQL
+	db             NoSQL
+	collectionName string
 }
 
 func NewPostRepositoryImpl(db NoSQL) repository.PostRepository {
 	return &PostRepositoryImpl{
-		db: db,
+		db:             db,
+		collectionName: "posts",
 	}
 }
 
@@ -27,7 +27,7 @@ func (r *PostRepositoryImpl) FindByTitle(ctx context.Context, title string) (*mo
 	query := bson.M{
 		"title": title,
 	}
-	err := r.db.FindOne(ctx, tableName, query, nil, &result)
+	err := r.db.FindOne(ctx, r.collectionName, query, nil, &result)
 	if err != nil {
 		return nil, err
 	}

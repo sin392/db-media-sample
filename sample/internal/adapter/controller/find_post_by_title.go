@@ -11,10 +11,10 @@ import (
 
 type FindByTitleController struct {
 	uc        usecase.FindPostByTitleUsecase
-	presenter presenter.FindPostByTitlePresenter
+	presenter presenter.FindByTitlePresenter
 }
 
-func NewFindPostByTitleController(uc usecase.FindPostByTitleUsecase, presenter presenter.FindPostByTitlePresenter) FindByTitleController {
+func NewFindByTitleController(uc usecase.FindPostByTitleUsecase, presenter presenter.FindByTitlePresenter) FindByTitleController {
 	return FindByTitleController{
 		uc:        uc,
 		presenter: presenter,

@@ -5,15 +5,15 @@ import (
 	"github.com/sin392/db-media-sample/internal/usecase"
 )
 
-// var _ usecase.FindPostByTitlePresenter = findPostByTitlePresenter{}
+// var _ usecase.FindByTitlePresenter = FindByTitlePresenter{}
 
-type FindPostByTitlePresenter struct{}
+type FindByTitlePresenter struct{}
 
-func NewFindPostByTitlePresenter() FindPostByTitlePresenter {
-	return FindPostByTitlePresenter{}
+func NewFindByTitlePresenter() FindByTitlePresenter {
+	return FindByTitlePresenter{}
 }
 
-func (p FindPostByTitlePresenter) Output(post *model.Post) *usecase.FindPostByTitleOutput {
+func (p FindByTitlePresenter) Output(post *model.Post) *usecase.FindPostByTitleOutput {
 	return &usecase.FindPostByTitleOutput{
 		Title: post.Title,
 	}
