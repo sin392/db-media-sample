@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/sin392/db-media-sample/internal/adapter/controller/response"
@@ -22,7 +21,7 @@ func NewFindByTitleController(uc usecase.FindPostByTitleUsecase, presenter prese
 }
 
 func (c *FindByTitleController) Execute(w http.ResponseWriter, r *http.Request) {
-	ctx := context.Background()
+	ctx := r.Context()
 	title := r.URL.Query().Get("title")
 	output, err := c.uc.Execute(ctx, title)
 	if err != nil {

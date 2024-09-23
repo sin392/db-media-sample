@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/sin392/db-media-sample/internal/infrastructure"
+	"github.com/sin392/db-media-sample/module/trace"
 )
 
 type Application struct {
@@ -19,6 +20,9 @@ func NewApplication(
 }
 
 func (a *Application) Configure() {
+	// OpenTelemetryの初期化
+	trace.InitTraceProvider()
+	// 設定値の読み込み
 	a.config.
 		Name("sample").
 		ContextTimeout(10 * time.Second).

@@ -23,7 +23,6 @@ services:
       - MONGODB_HOST=mongodb
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=test
-
   migration:
     container_name: db-media-sample-migration
     image: migrate/migrate
@@ -42,7 +41,6 @@ services:
       - MONGODB_DATABASE=test
     # entrypoint: sh -c 'migrate -path /app/migrations -database $${MONGODB_DRIVER}://$${MONGODB_ROOT_USER}:$${MONGODB_ROOT_PASSWORD}@$${MONGODB_HOST}:$${MONGODB_PORT}/$${MONGODB_DATABASE} up'
     entrypoint: sh -c 'migrate -path /app/migrations -database $${MONGODB_DRIVER}://$${MONGODB_HOST}:$${MONGODB_PORT}/$${MONGODB_DATABASE} up'
-
   mongodb:
     container_name: db-media-sample-mongodb
     image: mongo:latest
@@ -50,6 +48,12 @@ services:
       - "27017:27017"
     volumes:
       - ./data:/data/db
+    networks:
+      - db-media-sample-network
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
     networks:
       - db-media-sample-network
 networks:

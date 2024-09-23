@@ -14,6 +14,7 @@ import (
 	"github.com/sin392/db-media-sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
 	"github.com/sin392/db-media-sample/internal/usecase"
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
 
 type Server interface {
@@ -34,8 +35,14 @@ func NewGinServer(
 	port Port,
 	t time.Duration,
 ) *ginEngine {
+	router := gin.Default()
+	// openteremetryの設定
+	// TODO: どこかに切り出したい
+	router.ContextWithFallback = true
+	router.Use(otelgin.Middleware("db-media-sample"))
+
 	return &ginEngine{
-		router:     gin.New(),
+		router:     router,
 		db:         db,
 		port:       port,
 		ctxTimeout: t,

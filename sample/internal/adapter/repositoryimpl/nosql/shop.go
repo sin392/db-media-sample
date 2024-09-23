@@ -5,6 +5,7 @@ import (
 
 	"github.com/sin392/db-media-sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/internal/domain/repository"
+	"github.com/sin392/db-media-sample/module/trace"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -24,6 +25,9 @@ func NewShopRepositoryImpl(db NoSQL) repository.ShopRepository {
 }
 
 func (r *ShopRepositoryImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
+	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
+	defer span.End()
+
 	var result model.Shop
 	query := bson.M{
 		// 大文字小文字を区別せずに部分一致検索
