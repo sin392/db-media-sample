@@ -9,13 +9,11 @@ import (
 )
 
 type FindShopByNameUsecase interface {
-	Execute(ctx context.Context, Name string) (*model.Shop, error)
+	Execute(ctx context.Context, name string) (*model.Shop, error)
 }
 
 type FindShopByNameOutput struct {
-	Name   string  `json:"name"`
-	Tel    string  `json:"tel"`
-	Rating float32 `json:"rating"`
+	model.Shop
 }
 
 type findShopByNameInteractor struct {
@@ -33,8 +31,8 @@ func NewFindShopByNameIntercepter(
 	}
 }
 
-func (a *findShopByNameInteractor) Execute(ctx context.Context, Name string) (*model.Shop, error) {
-	Shop, err := a.repo.FindByName(ctx, Name)
+func (a *findShopByNameInteractor) Execute(ctx context.Context, name string) (*model.Shop, error) {
+	Shop, err := a.repo.FindByName(ctx, name)
 	if err != nil {
 		return nil, err
 	}

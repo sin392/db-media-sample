@@ -15,6 +15,10 @@ func NewFindByTitlePresenter() FindByTitlePresenter {
 
 func (p FindByTitlePresenter) Output(post *model.Post) *usecase.FindPostByTitleOutput {
 	return &usecase.FindPostByTitleOutput{
-		Title: post.Title,
+		Post: model.Post{
+			ID:    post.ID,
+			Title: post.Title,
+			Desc:  post.Desc,
+		},
 	}
 }

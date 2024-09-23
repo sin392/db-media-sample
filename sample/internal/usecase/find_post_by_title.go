@@ -18,7 +18,7 @@ type FindPostByTitleUsecase interface {
 // }
 
 type FindPostByTitleOutput struct {
-	Title string `json:"title"`
+	model.Post
 }
 
 type findPostByTitleInteractor struct {
