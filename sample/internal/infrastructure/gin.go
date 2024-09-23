@@ -1,4 +1,4 @@
-package router
+package infrastructure
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sin392/db-media-sample/internal/infrastructure/router"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
@@ -25,8 +26,6 @@ type Router interface {
 
 type Routers []Router
 
-type Port int64
-
 // TODO: フィールド整備
 type ginEngine struct {
 	router  *gin.Engine
@@ -35,23 +34,41 @@ type ginEngine struct {
 }
 
 func NewRouters(
-	shopRouter ShopRouter,
+	shopRouter router.ShopRouter,
 ) Routers {
 	return Routers{
 		&shopRouter,
 	}
 }
 
-func NewGinServer(
-	port Port,
-	ctxTimeout time.Duration,
+func NewServer(
+	cfg *Config,
 	routers Routers,
-) *ginEngine {
+) Server {
 	router := gin.Default()
+
+	server := &http.Server{
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 15 * time.Second,
+		Addr:         fmt.Sprintf(":%d", cfg.WebServerPort),
+		Handler:      router,
+	}
+
+	gh := ginEngine{
+		router:  router,
+		routers: routers,
+		server:  server,
+	}
+	gh.useMiddleWares()
+
+	return &gh
+}
+
+func (g *ginEngine) useMiddleWares() {
 	// openteremetryの設定
 	// TODO: どこかに切り出したい
-	router.ContextWithFallback = true
-	router.Use(otelgin.Middleware("db-media-sample"))
+	g.router.ContextWithFallback = true
+	g.router.Use(otelgin.Middleware("db-media-sample"))
 	// metric exporterの設定
 	p := ginprometheus.NewPrometheus("gin")
 	p.ReqCntURLLabelMappingFn = func(c *gin.Context) string {
@@ -64,24 +81,10 @@ func NewGinServer(
 		}
 		return url
 	}
-
-	p.Use(router)
-
-	server := &http.Server{
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		Addr:         fmt.Sprintf(":%d", port),
-		Handler:      router,
-	}
-
-	return &ginEngine{
-		router:  router,
-		routers: routers,
-		server:  server,
-	}
+	p.Use(g.router)
 }
 
-func (g ginEngine) ListenAndServe() {
+func (g *ginEngine) ListenAndServe() {
 	gin.SetMode(gin.ReleaseMode)
 	gin.Recovery()
 
@@ -91,6 +94,7 @@ func (g ginEngine) ListenAndServe() {
 			"status": "ok",
 		})
 	})
+
 	// ルーターの登録
 	v1 := g.router.Group("/v1")
 	for _, r := range g.routers {

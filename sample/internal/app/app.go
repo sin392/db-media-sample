@@ -4,17 +4,16 @@ import (
 	"time"
 
 	"github.com/sin392/db-media-sample/internal/infrastructure"
-	"github.com/sin392/db-media-sample/internal/infrastructure/router"
 	"github.com/sin392/db-media-sample/module/trace"
 )
 
 type Application struct {
-	routers router.Routers
-	server  router.Server
+	routers infrastructure.Routers
+	server  infrastructure.Server
 }
 
 func NewApplication(
-	routers router.Routers,
+	routers infrastructure.Routers,
 ) (*Application, error) {
 	return &Application{
 		routers: routers,
@@ -26,7 +25,7 @@ func (a *Application) Configure() {
 	// OpenTelemetryの初期化
 	trace.InitTraceProvider()
 	// 設定値の読み込み
-	config := infrastructure.NewConfig("sample", router.Port(8080), 10*time.Second)
+	config := infrastructure.NewConfig("sample", infrastructure.Port(8080), 10*time.Second)
 
 	// サーバーの初期化
 	a.server = infrastructure.NewServer(config, a.routers)
