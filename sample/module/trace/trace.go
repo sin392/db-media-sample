@@ -66,9 +66,9 @@ func InitTraceProvider() {
 				semconv.ServiceVersionKey.String("v1.0.0"),
 			),
 		),
-		// sdktrace.WithSampler(&customSampler{
-		// 	delegate: sdktrace.TraceIDRatioBased(1.0),
-		// }),
+		sdktrace.WithSampler(&customSampler{
+			delegate: sdktrace.TraceIDRatioBased(1.0),
+		}),
 	)
 	otel.SetTracerProvider(tp)
 }
