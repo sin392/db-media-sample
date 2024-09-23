@@ -9,7 +9,7 @@ import (
 	"github.com/sin392/db-media-sample/internal/infrastructure/router"
 )
 
-type config struct {
+type Config struct {
 	appName       string
 	dbNoSQL       nosql.NoSQL
 	ctxTimeout    time.Duration
@@ -17,21 +17,21 @@ type config struct {
 	webServer     router.Server
 }
 
-func NewConfig() *config {
-	return &config{}
+func NewConfig() *Config {
+	return &Config{}
 }
 
-func (c *config) ContextTimeout(t time.Duration) *config {
+func (c *Config) ContextTimeout(t time.Duration) *Config {
 	c.ctxTimeout = t
 	return c
 }
 
-func (c *config) Name(name string) *config {
+func (c *Config) Name(name string) *Config {
 	c.appName = name
 	return c
 }
 
-func (c *config) DbNoSQL() *config {
+func (c *Config) DbNoSQL() *Config {
 	db, err := database.NewMongoHandler(database.NewConfig())
 	if err != nil {
 		return nil
@@ -41,7 +41,7 @@ func (c *config) DbNoSQL() *config {
 	return c
 }
 
-func (c *config) WebServer() *config {
+func (c *Config) WebServer() *Config {
 	s := router.NewGinServer(
 		c.dbNoSQL,
 		c.webServerPort,
@@ -52,7 +52,7 @@ func (c *config) WebServer() *config {
 	return c
 }
 
-func (c *config) WebServerPort(port string) *config {
+func (c *Config) WebServerPort(port string) *Config {
 	p, err := strconv.ParseInt(port, 10, 64)
 	if err != nil {
 		return nil
@@ -62,6 +62,6 @@ func (c *config) WebServerPort(port string) *config {
 	return c
 }
 
-func (c *config) Start() {
+func (c *Config) Start() {
 	c.webServer.Listen()
 }

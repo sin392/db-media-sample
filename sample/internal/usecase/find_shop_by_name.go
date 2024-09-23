@@ -16,7 +16,7 @@ type FindShopByNameOutput struct {
 	model.Shop
 }
 
-type findShopByNameInteractor struct {
+type FindShopByNameInteractor struct {
 	repo       repository.ShopRepository
 	ctxTimeout time.Duration
 }
@@ -25,13 +25,13 @@ func NewFindShopByNameIntercepter(
 	repo repository.ShopRepository,
 	ctxTimeout time.Duration,
 ) FindShopByNameUsecase {
-	return &findShopByNameInteractor{
+	return &FindShopByNameInteractor{
 		repo:       repo,
 		ctxTimeout: ctxTimeout,
 	}
 }
 
-func (a *findShopByNameInteractor) Execute(ctx context.Context, name string) (*model.Shop, error) {
+func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*model.Shop, error) {
 	Shop, err := a.repo.FindByName(ctx, name)
 	if err != nil {
 		return nil, err
