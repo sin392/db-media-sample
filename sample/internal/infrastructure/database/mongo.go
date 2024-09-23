@@ -15,15 +15,15 @@ type mongoHandler struct {
 	client *mongo.Client
 }
 
-func NewMongoHandler(c *DBConfig) (*mongoHandler, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), c.CtxTimeout)
+func NewMongoHandler(c *config) (*mongoHandler, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), c.ctxTimeout)
 	defer cancel()
 
 	uri := fmt.Sprintf(
 		"%s://%s:%s",
-		c.Driver,
-		c.Host,
-		c.Port,
+		c.driver,
+		c.host,
+		c.port,
 	)
 	// uri := fmt.Sprintf(
 	// 	"%s://%s:%s@%s:%s/?replicaSet=replicaset",
@@ -46,7 +46,7 @@ func NewMongoHandler(c *DBConfig) (*mongoHandler, error) {
 	}
 
 	return &mongoHandler{
-		db:     client.Database(c.Database),
+		db:     client.Database(c.database),
 		client: client,
 	}, nil
 }
