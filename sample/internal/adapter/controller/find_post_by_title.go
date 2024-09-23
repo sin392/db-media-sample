@@ -2,9 +2,9 @@ package controller
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
+	"github.com/sin392/db-media-sample/internal/adapter/controller/response"
 	"github.com/sin392/db-media-sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/internal/usecase"
 )
@@ -29,7 +29,5 @@ func (c *FindByTitleController) Execute(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	http.Header.Add(w.Header(), "content-type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(c.presenter.Output(output))
+	response.NewSuccess(c.presenter.Output(output), http.StatusCreated).Send(w)
 }
