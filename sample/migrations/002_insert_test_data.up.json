@@ -7,11 +7,11 @@
         "location": {
           "prefecture": "東京都",
           "city": "渋谷区",
-          "address": "新鮮1-2-3"
+          "address": "神泉1-2-3"
         },
         "tel": "03-1234-5678",
         "image_url": "https://example.com/image.jpg",
-        "site_url": "https://example.com/",
+        "site_url": "https://example.com",
         "rating": 4.5,
         "tags": ["激辛", "渋谷"],
         "menus": [
