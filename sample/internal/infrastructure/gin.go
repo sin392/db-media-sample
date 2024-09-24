@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sin392/db-media-sample/internal/config"
 	"github.com/sin392/db-media-sample/internal/infrastructure/router"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
@@ -41,7 +42,7 @@ func NewRouters(
 }
 
 func NewServer(
-	cfg *Config,
+	cfg *config.Config,
 	routers Routers,
 ) Server {
 	router := gin.Default()

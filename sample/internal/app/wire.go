@@ -9,6 +9,7 @@ import (
 	"github.com/sin392/db-media-sample/internal/adapter/controller"
 	"github.com/sin392/db-media-sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/internal/config"
 	"github.com/sin392/db-media-sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/internal/infrastructure/database"
 	"github.com/sin392/db-media-sample/internal/infrastructure/router"
@@ -16,7 +17,9 @@ import (
 )
 
 var WireSet = wire.NewSet(
+	config.Load,
 	// infrastructure
+	infrastructure.NewServer,
 	infrastructure.NewRouters,
 	router.NewShopRouter,
 	database.NewMongoHandler,

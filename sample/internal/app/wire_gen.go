@@ -11,6 +11,7 @@ import (
 	"github.com/sin392/db-media-sample/internal/adapter/controller"
 	"github.com/sin392/db-media-sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/internal/config"
 	"github.com/sin392/db-media-sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/internal/infrastructure/database"
 	"github.com/sin392/db-media-sample/internal/infrastructure/router"
@@ -20,8 +21,12 @@ import (
 // Injectors from wire.go:
 
 func InitializeApplication() (*Application, error) {
-	config := database.NewConfig()
-	noSQL, err := database.NewMongoHandler(config)
+	configConfig, err := config.Load()
+	if err != nil {
+		return nil, err
+	}
+	databaseConfig := database.NewConfig()
+	noSQL, err := database.NewMongoHandler(databaseConfig)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +36,8 @@ func InitializeApplication() (*Application, error) {
 	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase, findShopByNamePresenter)
 	shopRouter := router.NewShopRouter(findShopByNameController)
 	routers := infrastructure.NewRouters(shopRouter)
-	application, err := NewApplication(routers)
+	server := infrastructure.NewServer(configConfig, routers)
+	application, err := NewApplication(configConfig, server)
 	if err != nil {
 		return nil, err
 	}
@@ -40,4 +46,4 @@ func InitializeApplication() (*Application, error) {
 
 // wire.go:
 
-var WireSet = wire.NewSet(infrastructure.NewRouters, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)
+var WireSet = wire.NewSet(config.Load, infrastructure.NewServer, infrastructure.NewRouters, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)

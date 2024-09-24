@@ -1,34 +1,29 @@
 package app
 
 import (
-	"time"
-
+	"github.com/sin392/db-media-sample/internal/config"
 	"github.com/sin392/db-media-sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/module/trace"
 )
 
 type Application struct {
-	routers infrastructure.Routers
-	server  infrastructure.Server
+	cfg    *config.Config
+	server infrastructure.Server
 }
 
 func NewApplication(
-	routers infrastructure.Routers,
+	cfg *config.Config,
+	server infrastructure.Server,
 ) (*Application, error) {
 	return &Application{
-		routers: routers,
-		server:  nil,
+		cfg:    cfg,
+		server: server,
 	}, nil
 }
 
 func (a *Application) Configure() {
 	// OpenTelemetryの初期化
-	trace.InitTraceProvider()
-	// 設定値の読み込み
-	config := infrastructure.NewConfig("sample", infrastructure.Port(8080), 10*time.Second)
-
-	// サーバーの初期化
-	a.server = infrastructure.NewServer(config, a.routers)
+	trace.InitTraceProvider(a.cfg)
 }
 
 func (a *Application) Start() {

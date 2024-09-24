@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sin392/db-media-sample/internal/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	sdkresource "go.opentelemetry.io/otel/sdk/resource"
@@ -37,7 +38,7 @@ func (cs *customSampler) Description() string {
 	return "CustomSampler"
 }
 
-func InitTraceProvider() {
+func InitTraceProvider(cfg *config.Config) {
 	opts := []otlptracehttp.Option{
 		// WithEndpointURLを使う場合はスキーマの設定も必要
 		otlptracehttp.WithEndpoint(os.Getenv("TRACING_ENDPOINT")),
@@ -62,8 +63,8 @@ func InitTraceProvider() {
 		sdktrace.WithResource(
 			sdkresource.NewWithAttributes(
 				semconv.SchemaURL,
-				semconv.ServiceNameKey.String("sample"),
-				semconv.ServiceVersionKey.String("v1.0.0"),
+				semconv.ServiceNameKey.String(cfg.AppName),
+				semconv.ServiceVersionKey.String(cfg.AppVersion),
 			),
 		),
 		sdktrace.WithSampler(&customSampler{
