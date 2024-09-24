@@ -28,9 +28,8 @@ type Routers []Router
 
 // TODO: フィールド整備
 type ginEngine struct {
-	router  *gin.Engine
-	routers Routers
-	server  *http.Server
+	router *gin.Engine
+	server *http.Server
 }
 
 func NewRouters(
@@ -54,17 +53,17 @@ func NewServer(
 		Handler:      router,
 	}
 
-	gh := ginEngine{
-		router:  router,
-		routers: routers,
-		server:  server,
+	gh := &ginEngine{
+		router: router,
+		server: server,
 	}
-	gh.useMiddleWares()
+	gh.setupRouters(routers)
+	gh.setupMiddleWares()
 
-	return &gh
+	return gh
 }
 
-func (g *ginEngine) useMiddleWares() {
+func (g *ginEngine) setupMiddleWares() {
 	// openteremetryの設定
 	// TODO: どこかに切り出したい
 	g.router.ContextWithFallback = true
@@ -84,22 +83,23 @@ func (g *ginEngine) useMiddleWares() {
 	p.Use(g.router)
 }
 
-func (g *ginEngine) ListenAndServe() {
-	gin.SetMode(gin.ReleaseMode)
-	gin.Recovery()
-
+func (g *ginEngine) setupRouters(routers Routers) {
 	// ヘルスチェックエンドポイント
 	g.router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"status": "ok",
 		})
 	})
-
 	// ルーターの登録
 	v1 := g.router.Group("/v1")
-	for _, r := range g.routers {
+	for _, r := range routers {
 		r.Register(v1)
 	}
+}
+
+func (g *ginEngine) ListenAndServe() {
+	gin.SetMode(gin.ReleaseMode)
+	gin.Recovery()
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
