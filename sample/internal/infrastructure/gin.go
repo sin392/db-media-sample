@@ -11,8 +11,11 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/sin392/db-media-sample/docs"
 	"github.com/sin392/db-media-sample/internal/config"
 	"github.com/sin392/db-media-sample/internal/infrastructure/router"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	ginprometheus "github.com/zsais/go-gin-prometheus"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 )
@@ -91,6 +94,8 @@ func (g *ginEngine) setupRouters(routers Routers) {
 			"status": "ok",
 		})
 	})
+	// swaggerエンドポイント
+	g.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	// ルーターの登録
 	v1 := g.router.Group("/v1")
 	for _, r := range routers {
