@@ -9,6 +9,7 @@ import (
 	"github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type HttpServer struct {
@@ -31,7 +32,11 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to connect to grpc server: %w", err)
 	}
-	mux := runtime.NewServeMux()
+	mux := runtime.NewServeMux(
+		runtime.WithHealthzEndpoint(
+			grpc_health_v1.NewHealthClient(conn),
+		),
+	)
 	s.mux = mux
 	if err := shop.RegisterShopServiceHandler(ctx, s.mux, conn); err != nil {
 		return err
