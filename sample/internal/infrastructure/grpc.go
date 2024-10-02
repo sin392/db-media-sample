@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
@@ -21,7 +22,11 @@ func NewGrpcServer(
 	shopRouter router.ShopRouter,
 ) GrpcServer {
 	server := GrpcServer{
-		server:     grpc.NewServer(),
+		server: grpc.NewServer(
+			grpc.StatsHandler(
+				otelgrpc.NewServerHandler(),
+			),
+		),
 		shopRouter: shopRouter,
 	}
 	reflection.Register(server.server)

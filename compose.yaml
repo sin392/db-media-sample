@@ -25,7 +25,7 @@ services:
       - MONGODB_PORT=27017
       - MONGODB_DATABASE=test
       # 通常スキーマは不要だがlocalの場合はHTTP通信するためにhttp://を付与
-      - TRACING_ENDPOINT=tempo:55681
+      - HTTP_TRACING_ENDPOINT=tempo:55681
   migration:
     image: migrate/migrate
     volumes:

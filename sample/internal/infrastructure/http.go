@@ -7,13 +7,15 @@ import (
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/sin392/db-media-sample/sample/pb/shop/v1"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type HttpServer struct {
-	mux *runtime.ServeMux
+	mux http.Handler
 }
 
 func NewHttpServer() HttpServer {
@@ -28,6 +30,9 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 		grpc.WithTransportCredentials(
 			insecure.NewCredentials(),
 		),
+		grpc.WithStatsHandler(
+			otelgrpc.NewClientHandler(),
+		),
 	)
 	if err != nil {
 		return fmt.Errorf("failed to connect to grpc server: %w", err)
@@ -37,10 +42,16 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 			grpc_health_v1.NewHealthClient(conn),
 		),
 	)
-	s.mux = mux
-	if err := shop.RegisterShopServiceHandler(ctx, s.mux, conn); err != nil {
+	if err := shop.RegisterShopServiceHandler(ctx, mux, conn); err != nil {
 		return err
 	}
+	s.mux = mux
+	// 以下はmiddleware的に設定できるのでは？
+	s.mux = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// リクエストのパスをスパンの名前とするHTTPハンドラを生成
+		otelHandler := otelhttp.NewHandler(mux, fmt.Sprintf("%s %s", r.Method, r.URL.Path))
+		otelHandler.ServeHTTP(w, r)
+	})
 	return nil
 }
 
