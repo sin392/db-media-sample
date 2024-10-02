@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/sin392/db-media-sample/internal/config"
-	"github.com/sin392/db-media-sample/internal/infrastructure"
-	"github.com/sin392/db-media-sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/internal/config"
+	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
+	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
 type Application struct {

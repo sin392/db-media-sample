@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/sin392/db-media-sample/internal/domain/model"
+	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 )
 
 type ShopRepository interface {

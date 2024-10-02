@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sin392/db-media-sample/internal/config"
+	"github.com/sin392/db-media-sample/sample/internal/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	sdkresource "go.opentelemetry.io/otel/sdk/resource"

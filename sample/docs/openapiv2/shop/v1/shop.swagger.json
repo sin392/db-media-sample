@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "sample/shop.proto",
+    "title": "shop/v1/shop.proto",
     "version": "version not set"
   },
   "tags": [
@@ -78,7 +78,7 @@
         }
       }
     },
-    "samplev1Location": {
+    "shopv1Location": {
       "type": "object",
       "properties": {
         "prefecture": {
@@ -108,7 +108,7 @@
           "title": "店舗名"
         },
         "location": {
-          "$ref": "#/definitions/samplev1Location",
+          "$ref": "#/definitions/shopv1Location",
           "title": "住所"
         },
         "tel": {

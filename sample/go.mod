@@ -1,4 +1,4 @@
-module github.com/sin392/db-media-sample
+module github.com/sin392/db-media-sample/sample
 
 go 1.22.1
 

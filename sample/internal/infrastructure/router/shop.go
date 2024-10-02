@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sin392/db-media-sample/internal/adapter/controller"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 )
 
 type ShopRouter struct {

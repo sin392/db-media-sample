@@ -3,9 +3,9 @@ package usecase
 import (
 	"context"
 
-	"github.com/sin392/db-media-sample/internal/domain/model"
-	"github.com/sin392/db-media-sample/internal/domain/repository"
-	"github.com/sin392/db-media-sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/internal/domain/model"
+	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
+	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
 type FindShopByNameUsecase interface {

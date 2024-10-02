@@ -11,9 +11,9 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/sin392/db-media-sample/docs"
-	"github.com/sin392/db-media-sample/internal/config"
-	"github.com/sin392/db-media-sample/internal/infrastructure/router"
+	_ "github.com/sin392/db-media-sample/sample/docs"
+	"github.com/sin392/db-media-sample/sample/internal/config"
+	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	ginprometheus "github.com/zsais/go-gin-prometheus"

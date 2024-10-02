@@ -1,0 +1,21 @@
+version: v1
+plugins:
+  - name: go
+    out: sample/pb
+    opt:
+      - module=github.com/sin392/db-media-sample/sample/pb
+  - name: go-grpc
+    out: sample/pb
+    opt:
+      - module=github.com/sin392/db-media-sample/sample/pb
+  - name: grpc-gateway
+    out: sample/pb
+    opt:
+      - module=github.com/sin392/db-media-sample/sample/pb
+  - name: openapiv2
+    out: sample/docs/openapiv2
+    opt:
+      - json_names_for_fields=false
+  - name: doc
+    out: sample/docs/proto
+    opt: html,index.html,source_relative

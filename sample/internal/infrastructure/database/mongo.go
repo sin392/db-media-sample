@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sin392/db-media-sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )

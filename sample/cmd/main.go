@@ -1,6 +1,6 @@
 package main
 
-import "github.com/sin392/db-media-sample/internal/app"
+import "github.com/sin392/db-media-sample/sample/internal/app"
 
 // @title Swagger Example API
 // @version 1.0

@@ -1,8 +1,8 @@
 package presenter
 
 import (
-	"github.com/sin392/db-media-sample/internal/domain/model"
-	"github.com/sin392/db-media-sample/internal/usecase"
+	"github.com/sin392/db-media-sample/sample/internal/domain/model"
+	"github.com/sin392/db-media-sample/sample/internal/usecase"
 )
 
 type FindShopByNamePresenter struct{}

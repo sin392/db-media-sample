@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             (unknown)
-// source: sample/v1/shop.proto
+// source: shop/v1/shop.proto
 
 package shop
 
@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ShopService_FindShopByName_FullMethodName = "/sample.v1.ShopService/FindShopByName"
+	ShopService_FindShopByName_FullMethodName = "/shop.v1.ShopService/FindShopByName"
 )
 
 // ShopServiceClient is the client API for ShopService service.
@@ -48,20 +48,22 @@ func (c *shopServiceClient) FindShopByName(ctx context.Context, in *FindShopByNa
 }
 
 // ShopServiceServer is the server API for ShopService service.
-// All implementations should embed UnimplementedShopServiceServer
+// All implementations must embed UnimplementedShopServiceServer
 // for forward compatibility
 type ShopServiceServer interface {
 	// 店舗名で店舗を検索する
 	FindShopByName(context.Context, *FindShopByNameRequest) (*FindShopByNameResponse, error)
+	mustEmbedUnimplementedShopServiceServer()
 }
 
-// UnimplementedShopServiceServer should be embedded to have forward compatible implementations.
+// UnimplementedShopServiceServer must be embedded to have forward compatible implementations.
 type UnimplementedShopServiceServer struct {
 }
 
 func (UnimplementedShopServiceServer) FindShopByName(context.Context, *FindShopByNameRequest) (*FindShopByNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindShopByName not implemented")
 }
+func (UnimplementedShopServiceServer) mustEmbedUnimplementedShopServiceServer() {}
 
 // UnsafeShopServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ShopServiceServer will
@@ -96,7 +98,7 @@ func _ShopService_FindShopByName_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ShopService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "sample.v1.ShopService",
+	ServiceName: "shop.v1.ShopService",
 	HandlerType: (*ShopServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -105,5 +107,5 @@ var ShopService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "sample/v1/shop.proto",
+	Metadata: "shop/v1/shop.proto",
 }

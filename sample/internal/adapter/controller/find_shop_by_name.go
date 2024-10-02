@@ -3,10 +3,10 @@ package controller
 import (
 	"net/http"
 
-	"github.com/sin392/db-media-sample/internal/adapter/controller/response"
-	"github.com/sin392/db-media-sample/internal/adapter/presenter"
-	"github.com/sin392/db-media-sample/internal/usecase"
-	"github.com/sin392/db-media-sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/controller/response"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
+	"github.com/sin392/db-media-sample/sample/internal/usecase"
+	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
 type FindShopByNameController struct {
