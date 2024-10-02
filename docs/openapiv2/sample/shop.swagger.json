@@ -1,0 +1,169 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "sample/shop.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "ShopService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/shops": {
+      "get": {
+        "summary": "店舗名で店舗を検索する",
+        "operationId": "ShopService_FindShopByName",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1FindShopByNameResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "description": "店舗名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ShopService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "samplev1Location": {
+      "type": "object",
+      "properties": {
+        "prefecture": {
+          "type": "string",
+          "title": "県"
+        },
+        "city": {
+          "type": "string",
+          "title": "市"
+        },
+        "address": {
+          "type": "string",
+          "title": "住所"
+        }
+      },
+      "title": "Location"
+    },
+    "v1FindShopByNameResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "固有ID"
+        },
+        "name": {
+          "type": "string",
+          "title": "店舗名"
+        },
+        "location": {
+          "$ref": "#/definitions/samplev1Location",
+          "title": "住所"
+        },
+        "tel": {
+          "type": "string",
+          "title": "電話番号"
+        },
+        "image_url": {
+          "type": "string",
+          "title": "画像URL"
+        },
+        "site_url": {
+          "type": "string",
+          "title": "サイトURL"
+        },
+        "rating": {
+          "type": "number",
+          "format": "float",
+          "title": "評価"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "タグのリスト"
+        },
+        "menus": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/v1Menu"
+          },
+          "title": "メニューのリスト"
+        }
+      },
+      "title": "FindShopByNameResponse"
+    },
+    "v1Menu": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "商品名"
+        },
+        "price": {
+          "type": "integer",
+          "format": "int32",
+          "title": "価格"
+        },
+        "desc": {
+          "type": "string",
+          "title": "商品説明"
+        }
+      },
+      "title": "Menu"
+    }
+  }
+}

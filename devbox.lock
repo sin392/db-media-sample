@@ -1,6 +1,54 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "buf@latest": {
+      "last_modified": "2024-09-20T05:11:28Z",
+      "resolved": "github:NixOS/nixpkgs/79454ee9aacc9714653a4e7eb2a52b717728caff#buf",
+      "source": "devbox-search",
+      "version": "1.42.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ahlfqdmkf13s1ysdd9rcdmsjgf6bz9pc-buf-1.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ahlfqdmkf13s1ysdd9rcdmsjgf6bz9pc-buf-1.42.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/abnmak2iyqh9pi61nwf3bg555jdmza8v-buf-1.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/abnmak2iyqh9pi61nwf3bg555jdmza8v-buf-1.42.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/w9q1dhl02spymg13p95mk81ljcbqj5nz-buf-1.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/w9q1dhl02spymg13p95mk81ljcbqj5nz-buf-1.42.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/2pnvj3ghm6z42qjnx3y39fj3zqf8fzir-buf-1.42.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/2pnvj3ghm6z42qjnx3y39fj3zqf8fzir-buf-1.42.0"
+        }
+      }
+    },
     "go@latest": {
       "last_modified": "2024-09-10T15:01:03Z",
       "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#go_1_23",
@@ -46,6 +94,150 @@
             }
           ],
           "store_path": "/nix/store/mi0ybwsm6pmxzv9hsm6bcbqaq1pkf8wh-go-1.23.1"
+        }
+      }
+    },
+    "protoc-gen-doc@latest": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#protoc-gen-doc",
+      "source": "devbox-search",
+      "version": "1.5.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/6nww9blgy5a59rp6q7mxk4gr33cssa41-protoc-gen-doc-1.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/6nww9blgy5a59rp6q7mxk4gr33cssa41-protoc-gen-doc-1.5.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/a6yz8cgy1i4zizzfpm69yj02niwm5b2p-protoc-gen-doc-1.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/a6yz8cgy1i4zizzfpm69yj02niwm5b2p-protoc-gen-doc-1.5.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/jlpgijyjflkkqq5fp5scdvabrlw29dk9-protoc-gen-doc-1.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/jlpgijyjflkkqq5fp5scdvabrlw29dk9-protoc-gen-doc-1.5.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0szby3wnba8l9jkjkhwfxdv6k8nc5mbs-protoc-gen-doc-1.5.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0szby3wnba8l9jkjkhwfxdv6k8nc5mbs-protoc-gen-doc-1.5.1"
+        }
+      }
+    },
+    "protoc-gen-go-grpc@latest": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#protoc-gen-go-grpc",
+      "source": "devbox-search",
+      "version": "1.3.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lpm3apyqzvlgssxdgq18yyk8dcns5ly6-protoc-gen-go-grpc-1.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lpm3apyqzvlgssxdgq18yyk8dcns5ly6-protoc-gen-go-grpc-1.3.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ggl3sxxjxv1wq7hdpfhvypk1lvlsidwq-protoc-gen-go-grpc-1.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ggl3sxxjxv1wq7hdpfhvypk1lvlsidwq-protoc-gen-go-grpc-1.3.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n6xbzxwapl1840ydxmwx7ly7yk8hpnbd-protoc-gen-go-grpc-1.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n6xbzxwapl1840ydxmwx7ly7yk8hpnbd-protoc-gen-go-grpc-1.3.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/aj54zcsh6ippqgbkaamd62q2b8a44yg6-protoc-gen-go-grpc-1.3.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/aj54zcsh6ippqgbkaamd62q2b8a44yg6-protoc-gen-go-grpc-1.3.0"
+        }
+      }
+    },
+    "protoc-gen-go@latest": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#protoc-gen-go",
+      "source": "devbox-search",
+      "version": "1.34.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lglr8b454k6ap0d71zgsgxvsy29sjvkh-protoc-gen-go-1.34.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lglr8b454k6ap0d71zgsgxvsy29sjvkh-protoc-gen-go-1.34.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/nancf5naia9iyv68sg7j68z6a346gzpf-protoc-gen-go-1.34.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/nancf5naia9iyv68sg7j68z6a346gzpf-protoc-gen-go-1.34.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9jvn0lcij9vds9z5cfnjzfii5mj7iqqw-protoc-gen-go-1.34.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/9jvn0lcij9vds9z5cfnjzfii5mj7iqqw-protoc-gen-go-1.34.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/l4azqvhlpdn88rj3qsi3nrmi82qp7c5s-protoc-gen-go-1.34.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/l4azqvhlpdn88rj3qsi3nrmi82qp7c5s-protoc-gen-go-1.34.2"
         }
       }
     }

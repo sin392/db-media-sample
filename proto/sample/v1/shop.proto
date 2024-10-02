@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package sample.v1;
+
+option go_package = "github.com/sin392/db-media-sample/pb/sample/v1/shop";
+
+import "google/api/annotations.proto";
+
+// Location
+message Location {
+  // 県
+  string prefecture = 1;
+  // 市
+  string city = 2;
+  // 住所
+  string address = 3;
+}
+
+// Menu
+message Menu {
+  // 商品名
+  string name = 1;
+  // 価格
+  int32 price = 2;
+  // 商品説明
+  string desc = 3;
+}
+
+// Shop
+message Shop {
+  // 固有ID
+  string id = 1;
+  // 店舗名
+  string name = 2;
+  // 住所
+  Location location = 3;
+  // 電話番号
+  string tel = 4;
+  // 画像URL
+  string image_url = 5;
+  // サイトURL
+  string site_url = 6;
+  // 評価
+  float rating = 7;
+  // タグのリスト
+  repeated string tags = 8;
+  // メニューのリスト
+  repeated Menu menus = 9;
+}
+
+// FindShopByNameRequest
+message FindShopByNameRequest {
+  // 店舗名
+  string name = 1;
+}
+
+// FindShopByNameResponse
+message FindShopByNameResponse {
+  // 固有ID
+  string id = 1;
+  // 店舗名
+  string name = 2;
+  // 住所
+  Location location = 3;
+  // 電話番号
+  string tel = 4;
+  // 画像URL
+  string image_url = 5;
+  // サイトURL
+  string site_url = 6;
+  // 評価
+  float rating = 7;
+  // タグのリスト
+  repeated string tags = 8;
+  // メニューのリスト
+  repeated Menu menus = 9;
+}
+
+// ShopService
+service ShopService {
+  // 店舗名で店舗を検索する
+  rpc FindShopByName(FindShopByNameRequest) returns (FindShopByNameResponse) {
+    option (google.api.http) = {
+      get: "/v1/shops"
+    };
+  }
+}
