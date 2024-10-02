@@ -6,6 +6,7 @@ services:
       dockerfile: sample/Dockerfile
       target: development
     ports:
+      - "50051:50051"
       - "8080:8080"
     volumes:
       - ./sample:/app

@@ -1,9 +1,9 @@
 package controller
 
 import (
-	"net/http"
+	"context"
+	"fmt"
 
-	"github.com/sin392/db-media-sample/sample/internal/adapter/controller/response"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 	"github.com/sin392/db-media-sample/sample/module/trace"
@@ -21,15 +21,13 @@ func NewFindShopByNameController(uc usecase.FindShopByNameUsecase, presenter pre
 	}
 }
 
-func (c *FindShopByNameController) Execute(w http.ResponseWriter, r *http.Request) {
-	ctx, span := trace.StartSpan(r.Context(), "FindShopByNameController.Execute")
+func (c *FindShopByNameController) Execute(ctx context.Context, name string) (*usecase.FindShopByNameOutput, error) {
+	ctx, span := trace.StartSpan(ctx, "FindShopByNameController.Execute")
 	defer span.End()
 
-	Name := r.URL.Query().Get("name")
-	output, err := c.uc.Execute(ctx, Name)
+	output, err := c.uc.Execute(ctx, name)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil, fmt.Errorf("failed to execute usecase: %w", err)
 	}
-	response.NewSuccess(c.presenter.Output(output), http.StatusCreated).Send(w)
+	return c.presenter.Output(output), nil
 }

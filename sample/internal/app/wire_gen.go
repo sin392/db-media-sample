@@ -35,9 +35,9 @@ func InitializeApplication() (*Application, error) {
 	findShopByNamePresenter := presenter.NewFindShopByNamePresenter()
 	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase, findShopByNamePresenter)
 	shopRouter := router.NewShopRouter(findShopByNameController)
-	routers := infrastructure.NewRouters(shopRouter)
-	server := infrastructure.NewServer(configConfig, routers)
-	application, err := NewApplication(configConfig, server)
+	grpcServer := infrastructure.NewGrpcServer(shopRouter)
+	httpServer := infrastructure.NewHttpServer()
+	application, err := NewApplication(configConfig, grpcServer, httpServer)
 	if err != nil {
 		return nil, err
 	}
@@ -46,4 +46,4 @@ func InitializeApplication() (*Application, error) {
 
 // wire.go:
 
-var WireSet = wire.NewSet(config.Load, infrastructure.NewServer, infrastructure.NewRouters, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)
+var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, infrastructure.NewGrpcRouters, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)

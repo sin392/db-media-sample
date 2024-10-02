@@ -19,8 +19,9 @@ import (
 var WireSet = wire.NewSet(
 	config.Load,
 	// infrastructure
-	infrastructure.NewServer,
-	infrastructure.NewRouters,
+	infrastructure.NewHttpServer,
+	infrastructure.NewGrpcServer,
+	infrastructure.NewGrpcRouters,
 	router.NewShopRouter,
 	database.NewMongoHandler,
 	database.NewConfig,
