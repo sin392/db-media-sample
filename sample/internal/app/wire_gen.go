@@ -46,4 +46,4 @@ func InitializeApplication() (*Application, error) {
 
 // wire.go:
 
-var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, infrastructure.NewGrpcRouters, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)
+var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, presenter.NewFindShopByNamePresenter, usecase.NewFindShopByNameIntercepter, nosql.NewShopRepositoryImpl)
