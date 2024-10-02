@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"time"
 
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
 	"google.golang.org/grpc"
@@ -20,19 +19,11 @@ type GrpcServer struct {
 	shopRouter router.ShopRouter
 }
 
-func timeoutInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
-	defer cancel()
-	return handler(ctx, req)
-}
-
 func NewGrpcServer(
 	shopRouter router.ShopRouter,
 ) GrpcServer {
 	server := GrpcServer{
-		server: grpc.NewServer(
-			grpc.UnaryInterceptor(timeoutInterceptor),
-		),
+		server:     grpc.NewServer(),
 		shopRouter: shopRouter,
 	}
 	reflection.Register(server.server)
