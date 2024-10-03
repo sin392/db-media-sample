@@ -15,12 +15,12 @@ type Menu struct {
 }
 
 type Shop struct {
-	ID       string   `bson:"_id" json:"id" copier:"Id"`
+	ID       string   `bson:"_id" json:"id"`
 	Name     string   `bson:"name" json:"name"`
 	Location Location `bson:"location" json:"location"`
 	Tel      string   `bson:"tel" json:"tel"`
-	ImageURL string   `bson:"image_url" json:"image_url" copier:"ImageUrl"`
-	SiteURL  string   `bson:"site_url" json:"site_url" copier:"SiteUrl"`
+	ImageURL string   `bson:"image_url" json:"image_url"`
+	SiteURL  string   `bson:"site_url" json:"site_url"`
 	Rating   float32  `bson:"rating" json:"rating"`
 	Tags     []string `bson:"tags" json:"tags"`
 	Menus    []Menu   `bson:"menus" json:"menus"`

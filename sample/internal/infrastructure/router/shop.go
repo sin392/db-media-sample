@@ -50,7 +50,6 @@ func (r *ShopRouter) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute controller: %w", err)
 	}
-	fmt.Println(shops)
 	var res pb.ListShopResponse
 	copier.Copy(&res.Shops, shops)
 	return &res, nil
