@@ -16,6 +16,8 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 )
 
+// usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
+// presenterは汎用的な表現にまとめていいかも
 var WireSet = wire.NewSet(
 	config.Load,
 	// infrastructure
@@ -26,9 +28,12 @@ var WireSet = wire.NewSet(
 	database.NewConfig,
 	// adapter
 	controller.NewFindShopByNameController,
+	controller.NewListShopController,
 	presenter.NewFindShopByNamePresenter,
+	presenter.NewListShopPresenter,
 	// usecase
 	usecase.NewFindShopByNameIntercepter,
+	usecase.NewListShopIntercepter,
 	nosql.NewShopRepositoryImpl,
 )
 

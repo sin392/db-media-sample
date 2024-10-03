@@ -29,9 +29,9 @@ func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*m
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
 	defer span.End()
 
-	Shop, err := a.repo.FindByName(ctx, name)
+	shop, err := a.repo.FindByName(ctx, name)
 	if err != nil {
 		return nil, err
 	}
-	return Shop, nil
+	return shop, nil
 }

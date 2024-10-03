@@ -187,6 +187,14 @@
                 </li>
               
                 <li>
+                  <a href="#shop.v1.ListShopRequest"><span class="badge">M</span>ListShopRequest</a>
+                </li>
+              
+                <li>
+                  <a href="#shop.v1.ListShopResponse"><span class="badge">M</span>ListShopResponse</a>
+                </li>
+              
+                <li>
                   <a href="#shop.v1.Location"><span class="badge">M</span>Location</a>
                 </li>
               
@@ -315,6 +323,61 @@
                   <td><a href="#shop.v1.Menu">Menu</a></td>
                   <td>repeated</td>
                   <td><p>メニューのリスト </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="shop.v1.ListShopRequest">ListShopRequest</h3>
+        <p>ListShopRequest</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>page</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>ページ番号 </p></td>
+                </tr>
+              
+                <tr>
+                  <td>per_page</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>1ページあたりの表示数 </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="shop.v1.ListShopResponse">ListShopResponse</h3>
+        <p>FindShopByNameResponse</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>shops</td>
+                  <td><a href="#shop.v1.Shop">Shop</a></td>
+                  <td>repeated</td>
+                  <td><p>店舗のリスト </p></td>
                 </tr>
               
             </tbody>
@@ -502,6 +565,14 @@
 店舗名で店舗を検索する</p></td>
               </tr>
             
+              <tr>
+                <td>ListShop</td>
+                <td><a href="#shop.v1.ListShopRequest">ListShopRequest</a></td>
+                <td><a href="#shop.v1.ListShopResponse">ListShopResponse</a></td>
+                <td><p>ListShop
+店舗を一覧表示する</p></td>
+              </tr>
+            
           </tbody>
         </table>
 
@@ -524,6 +595,16 @@
               
               <tr>
                 <td>FindShopByName</td>
+                <td>GET</td>
+                <td>/v1/shops/name/{name}</td>
+                <td></td>
+              </tr>
+              
+            
+              
+              
+              <tr>
+                <td>ListShop</td>
                 <td>GET</td>
                 <td>/v1/shops</td>
                 <td></td>

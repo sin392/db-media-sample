@@ -17,6 +17,36 @@ paths:
   /v1/shops:
     get:
       summary: |-
+        ListShop
+        店舗を一覧表示する
+      operationId: ShopService_ListShop
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1ListShopResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: page
+          description: ページ番号
+          in: query
+          required: false
+          type: integer
+          format: int32
+        - name: perPage
+          description: 1ページあたりの表示数
+          in: query
+          required: false
+          type: integer
+          format: int32
+      tags:
+        - ShopService
+  /v1/shops/name/{name}:
+    get:
+      summary: |-
         FindShopByName
         店舗名で店舗を検索する
       operationId: ShopService_FindShopByName
@@ -32,8 +62,8 @@ paths:
       parameters:
         - name: name
           description: 店舗名
-          in: query
-          required: false
+          in: path
+          required: true
           type: string
       tags:
         - ShopService
@@ -107,6 +137,16 @@ definitions:
           $ref: '#/definitions/v1Menu'
         title: メニューのリスト
     title: FindShopByNameResponse
+  v1ListShopResponse:
+    type: object
+    properties:
+      shops:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Shop'
+        title: 店舗のリスト
+    title: FindShopByNameResponse
   v1Menu:
     type: object
     properties:
@@ -121,3 +161,40 @@ definitions:
         type: string
         title: 商品説明
     title: Menu
+  v1Shop:
+    type: object
+    properties:
+      id:
+        type: string
+        title: 固有ID
+      name:
+        type: string
+        title: 店舗名
+      location:
+        $ref: '#/definitions/shopv1Location'
+        title: 住所
+      tel:
+        type: string
+        title: 電話番号
+      imageUrl:
+        type: string
+        title: 画像URL
+      siteUrl:
+        type: string
+        title: サイトURL
+      rating:
+        type: number
+        format: float
+        title: 評価
+      tags:
+        type: array
+        items:
+          type: string
+        title: タグのリスト
+      menus:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Menu'
+        title: メニューのリスト
+    title: Shop

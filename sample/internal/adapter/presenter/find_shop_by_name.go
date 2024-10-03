@@ -7,7 +7,7 @@ import (
 type (
 	FindShopByNamePresenter struct{}
 	FindShopByNameOutput    struct {
-		model.Shop
+		*model.Shop
 	}
 )
 
@@ -17,16 +17,6 @@ func NewFindShopByNamePresenter() FindShopByNamePresenter {
 
 func (p FindShopByNamePresenter) Output(shop *model.Shop) *FindShopByNameOutput {
 	return &FindShopByNameOutput{
-		Shop: model.Shop{
-			ID:       shop.ID,
-			Name:     shop.Name,
-			Location: shop.Location,
-			Tel:      shop.Tel,
-			ImageURL: shop.ImageURL,
-			SiteURL:  shop.SiteURL,
-			Rating:   shop.Rating,
-			Tags:     shop.Tags,
-			Menus:    shop.Menus,
-		},
+		Shop: shop,
 	}
 }

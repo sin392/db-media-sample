@@ -11,10 +11,12 @@ import (
 type ShopRouter struct {
 	pb.ShopServiceServer
 	findShopByNameCtrl controller.FindShopByNameController
+	listShopCtrl       controller.ListShopController
 }
 
 func NewShopRouter(
 	findShopByNameCtrl controller.FindShopByNameController,
+	listShopCtrl controller.ListShopController,
 ) ShopRouter {
 	return ShopRouter{
 		findShopByNameCtrl: findShopByNameCtrl,
@@ -49,6 +51,16 @@ func (r *ShopRouter) FindShopByName(ctx context.Context, req *pb.FindShopByNameR
 		Rating:   shop.Rating,
 		Tags:     shop.Tags,
 		Menus:    menus,
+	}, nil
+}
+
+func (r *ShopRouter) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb.ListShopResponse, error) {
+	_, err := r.listShopCtrl.Execute(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ListShopResponse{
+		Shops: []*pb.Shop{},
 	}, nil
 }
 

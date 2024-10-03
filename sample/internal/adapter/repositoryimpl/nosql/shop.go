@@ -12,6 +12,8 @@ import (
 
 var _ repository.ShopRepository = (*ShopRepositoryImpl)(nil)
 
+const shopCollectionName = "shops"
+
 type ShopRepositoryImpl struct {
 	db             NoSQL
 	collectionName string
@@ -20,10 +22,11 @@ type ShopRepositoryImpl struct {
 func NewShopRepositoryImpl(db NoSQL) repository.ShopRepository {
 	return &ShopRepositoryImpl{
 		db:             db,
-		collectionName: "shops",
+		collectionName: shopCollectionName,
 	}
 }
 
+// FindByName 名前から店舗を取得する
 func (r *ShopRepositoryImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
 	defer span.End()
@@ -38,4 +41,17 @@ func (r *ShopRepositoryImpl) FindByName(ctx context.Context, name string) (*mode
 		return nil, err
 	}
 	return &result, nil
+}
+
+// List 店舗一覧を取得する
+func (r *ShopRepositoryImpl) List(ctx context.Context) ([]*model.Shop, error) {
+	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.List")
+	defer span.End()
+
+	var results []*model.Shop
+	err := r.db.FindAll(ctx, r.collectionName, nil, &results)
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
 }
