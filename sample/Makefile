@@ -8,8 +8,8 @@ docs: docs/deps ## ドキュメント生成系のtargetを一括で実行しま�
 .PHONY: docs/deps
 docs/deps: ## パッケージの依存関係のドキュメント生成をします
 	gomod graph --packages --annotate 'github.com/sin392/db-media-sample/sample/internal/**/*' | \
-	grep -v 'golang.org' | \
 	sed -e 's|github.com/sin392/db-media-sample/sample/internal/||g' | \
+	grep -v -e 'golang.org' -e 'app' -e 'config' | \
 	dot -Tpng -o docs/graph/deps.png
 
 ##################################################
