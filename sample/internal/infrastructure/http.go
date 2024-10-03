@@ -56,9 +56,8 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 	)
 	// Swaggerエンドポイント
 	// TODO: 開発環境以外では公開しないようにする
-	mux.HandlePath("GET", "/docs/swagger.json", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-		// TODO: マージしたswagger.jsonを返すようにする
-		http.ServeFile(w, r, "./docs/openapiv2/shop/v1/shop.swagger.json")
+	mux.HandlePath("GET", "/docs/swagger.yaml", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		http.ServeFile(w, r, "./docs/openapiv2/merged-swagger.json")
 	})
 	// SwaggerUIエンドポイント
 	mux.HandlePath("GET", "/docs",
