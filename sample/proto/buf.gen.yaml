@@ -16,7 +16,7 @@ plugins:
     out: ../docs/openapiv2
     opt:
       - output_format=yaml
-      # allow_merge=true
+      - allow_merge=true
   - name: doc
     out: ../docs/proto
-    opt: html,index.html,source_relative
+    opt: html,index.html
