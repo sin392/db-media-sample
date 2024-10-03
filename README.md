@@ -9,3 +9,4 @@
 - domain ... ドメインロジックに関するコード置き場
 
 ![sampleのアーキテクチャ図](sample/docs/graph/deps.png)
+注: wireでの依存関係がちょっとわかりづらいな

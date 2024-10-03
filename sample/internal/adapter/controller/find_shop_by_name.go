@@ -21,7 +21,7 @@ func NewFindShopByNameController(uc usecase.FindShopByNameUsecase, presenter pre
 	}
 }
 
-func (c *FindShopByNameController) Execute(ctx context.Context, name string) (*usecase.FindShopByNameOutput, error) {
+func (c *FindShopByNameController) Execute(ctx context.Context, name string) (*presenter.FindShopByNameOutput, error) {
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameController.Execute")
 	defer span.End()
 

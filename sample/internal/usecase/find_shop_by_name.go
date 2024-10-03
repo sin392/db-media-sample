@@ -8,17 +8,14 @@ import (
 	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
-type FindShopByNameUsecase interface {
-	Execute(ctx context.Context, name string) (*model.Shop, error)
-}
-
-type FindShopByNameOutput struct {
-	model.Shop
-}
-
-type FindShopByNameInteractor struct {
-	repo repository.ShopRepository
-}
+type (
+	FindShopByNameUsecase interface {
+		Execute(ctx context.Context, name string) (*model.Shop, error)
+	}
+	FindShopByNameInteractor struct {
+		repo repository.ShopRepository
+	}
+)
 
 func NewFindShopByNameIntercepter(
 	repo repository.ShopRepository,
