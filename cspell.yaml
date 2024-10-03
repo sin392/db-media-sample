@@ -2,9 +2,11 @@ $schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell
 version: "0.2"
 language: en
 ignorePaths:
+  - "data/**"
+  - "grafana/**"
+  - ".*/**"
   - "**/*_test.go" # テストコードは除外する
   - "**/wire_gen.go" # wire による生成ファイル
-  - "**/yaml/*.yaml" # 設定ファイルは除外する
   - "**/docs/proto/**" # protoによって生成されたドキュメント
   - "**/docs/openaiv2/**" # protoによって生成されたドキュメント
   - "/node_modules/**" # npm の依存ライブラリ

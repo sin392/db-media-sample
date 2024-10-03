@@ -1,5 +1,7 @@
 apidocs
 bson
+devbox
+gobin
 healthz
 installsuffix
 interactor
@@ -7,7 +9,9 @@ intercepter
 ldflags
 mapstructure
 multiclient
+openaiv
 openapiv
+openzipkin
 otelgrpc
 otelhttp
 otlptrace
@@ -24,3 +28,4 @@ sess
 shopv
 usecase
 wireinject
+zipkin
