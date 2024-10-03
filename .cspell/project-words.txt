@@ -5,6 +5,7 @@ healthz
 installsuffix
 interactor
 intercepter
+jinzhu
 ldflags
 mapstructure
 multiclient

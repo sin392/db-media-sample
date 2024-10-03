@@ -11,7 +11,7 @@ import (
 
 type (
 	ListShopUsecase interface {
-		Execute(ctx context.Context) ([]*model.Shop, error)
+		Execute(ctx context.Context) ([]model.Shop, error)
 	}
 	ListShopInteractor struct {
 		repo repository.ShopRepository
@@ -26,7 +26,7 @@ func NewListShopIntercepter(
 	}
 }
 
-func (a *ListShopInteractor) Execute(ctx context.Context) ([]*model.Shop, error) {
+func (a *ListShopInteractor) Execute(ctx context.Context) ([]model.Shop, error) {
 	ctx, span := trace.StartSpan(ctx, "ListShopInteractor.Execute")
 	defer span.End()
 

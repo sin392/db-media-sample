@@ -9,7 +9,6 @@ package app
 import (
 	"github.com/google/wire"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
-	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
 	"github.com/sin392/db-media-sample/sample/internal/config"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
@@ -32,11 +31,9 @@ func InitializeApplication() (*Application, error) {
 	}
 	shopRepository := nosql.NewShopRepositoryImpl(noSQL)
 	findShopByNameUsecase := usecase.NewFindShopByNameIntercepter(shopRepository)
-	findShopByNamePresenter := presenter.NewFindShopByNamePresenter()
-	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase, findShopByNamePresenter)
+	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase)
 	listShopUsecase := usecase.NewListShopIntercepter(shopRepository)
-	listShopPresenter := presenter.NewListShopPresenter()
-	listShopController := controller.NewListShopController(listShopUsecase, listShopPresenter)
+	listShopController := controller.NewListShopController(listShopUsecase)
 	shopRouter := router.NewShopRouter(findShopByNameController, listShopController)
 	grpcServer := infrastructure.NewGrpcServer(shopRouter)
 	httpServer := infrastructure.NewHttpServer()
@@ -49,4 +46,6 @@ func InitializeApplication() (*Application, error) {
 
 // wire.go:
 
-var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, controller.NewListShopController, presenter.NewFindShopByNamePresenter, presenter.NewListShopPresenter, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter, nosql.NewShopRepositoryImpl)
+// usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
+// presenterは汎用的な表現にまとめていいかも
+var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, controller.NewListShopController, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter, nosql.NewShopRepositoryImpl)

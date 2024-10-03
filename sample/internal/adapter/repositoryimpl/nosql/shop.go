@@ -32,24 +32,24 @@ func (r *ShopRepositoryImpl) FindByName(ctx context.Context, name string) (*mode
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
 	defer span.End()
 
-	var result *model.Shop
+	var result model.Shop
 	query := bson.M{
 		// 大文字小文字を区別せずに部分一致検索
 		"name": primitive.Regex{Pattern: name, Options: ""},
 	}
-	err := r.db.FindOne(ctx, r.collectionName, query, nil, result)
+	err := r.db.FindOne(ctx, r.collectionName, query, nil, &result)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}
-	return result, nil
+	return &result, nil
 }
 
 // List 店舗一覧を取得する
-func (r *ShopRepositoryImpl) List(ctx context.Context) ([]*model.Shop, error) {
+func (r *ShopRepositoryImpl) List(ctx context.Context) ([]model.Shop, error) {
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.List")
 	defer span.End()
 
-	var results []*model.Shop
+	var results []model.Shop
 	query := bson.M{}
 	err := r.db.FindAll(ctx, r.collectionName, query, &results)
 	if err != nil {

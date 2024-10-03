@@ -7,7 +7,6 @@ import (
 	"github.com/google/wire"
 
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
-	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
 	"github.com/sin392/db-media-sample/sample/internal/config"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
@@ -29,8 +28,6 @@ var WireSet = wire.NewSet(
 	// adapter
 	controller.NewFindShopByNameController,
 	controller.NewListShopController,
-	presenter.NewFindShopByNamePresenter,
-	presenter.NewListShopPresenter,
 	// usecase
 	usecase.NewFindShopByNameIntercepter,
 	usecase.NewListShopIntercepter,

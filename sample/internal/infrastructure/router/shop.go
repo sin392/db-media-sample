@@ -2,7 +2,9 @@ package router
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/jinzhu/copier"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"google.golang.org/grpc"
@@ -28,7 +30,7 @@ func (r *ShopRouter) FindShopByName(ctx context.Context, req *pb.FindShopByNameR
 	name := req.GetName()
 	shop, err := r.findShopByNameCtrl.Execute(ctx, name)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to execute controller: %w", err)
 	}
 	menus := make([]*pb.Menu, len(shop.Menus))
 	for i, m := range shop.Menus {
@@ -38,31 +40,20 @@ func (r *ShopRouter) FindShopByName(ctx context.Context, req *pb.FindShopByNameR
 			Desc:  m.Desc,
 		}
 	}
-	return &pb.FindShopByNameResponse{
-		Id:   shop.ID,
-		Name: shop.Name,
-		Location: &pb.Location{
-			Prefecture: shop.Location.Prefecture,
-			City:       shop.Location.City,
-			Address:    shop.Location.Address,
-		},
-		Tel:      shop.Tel,
-		ImageUrl: shop.ImageURL,
-		SiteUrl:  shop.SiteURL,
-		Rating:   shop.Rating,
-		Tags:     shop.Tags,
-		Menus:    menus,
-	}, nil
+	var res pb.FindShopByNameResponse
+	copier.Copy(&res, shop)
+	return &res, nil
 }
 
 func (r *ShopRouter) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb.ListShopResponse, error) {
-	_, err := r.listShopCtrl.Execute(ctx)
+	shops, err := r.listShopCtrl.Execute(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to execute controller: %w", err)
 	}
-	return &pb.ListShopResponse{
-		Shops: []*pb.Shop{},
-	}, nil
+	fmt.Println(shops)
+	var res pb.ListShopResponse
+	copier.Copy(&res.Shops, shops)
+	return &res, nil
 }
 
 func (r *ShopRouter) Register(server *grpc.Server) {
