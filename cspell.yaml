@@ -22,8 +22,3 @@ dictionaryDefinitions:
 dictionaries:
   - en_US
   - project-words
-languageSettings:
-  - languageId: "go"
-    locale: "*"
-    dictionaries:
-      - go
