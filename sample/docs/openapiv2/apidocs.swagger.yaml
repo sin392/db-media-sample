@@ -16,7 +16,9 @@ produces:
 paths:
   /v1/shops:
     get:
-      summary: 店舗名で店舗を検索する
+      summary: |-
+        FindShopByName
+        店舗名で店舗を検索する
       operationId: ShopService_FindShopByName
       responses:
         "200":

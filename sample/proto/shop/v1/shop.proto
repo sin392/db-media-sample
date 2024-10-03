@@ -93,6 +93,7 @@ message FindShopByNameResponse {
 
 // ShopService
 service ShopService {
+  // FindShopByName
   // 店舗名で店舗を検索する
   rpc FindShopByName(FindShopByNameRequest) returns (FindShopByNameResponse) {
     option (google.api.http) = {

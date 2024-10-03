@@ -26,6 +26,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShopServiceClient interface {
+	// FindShopByName
 	// 店舗名で店舗を検索する
 	FindShopByName(ctx context.Context, in *FindShopByNameRequest, opts ...grpc.CallOption) (*FindShopByNameResponse, error)
 }
@@ -51,6 +52,7 @@ func (c *shopServiceClient) FindShopByName(ctx context.Context, in *FindShopByNa
 // All implementations must embed UnimplementedShopServiceServer
 // for forward compatibility
 type ShopServiceServer interface {
+	// FindShopByName
 	// 店舗名で店舗を検索する
 	FindShopByName(context.Context, *FindShopByNameRequest) (*FindShopByNameResponse, error)
 	mustEmbedUnimplementedShopServiceServer()
