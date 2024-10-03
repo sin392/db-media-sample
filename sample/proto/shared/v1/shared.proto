@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package shared.v1;
+
+// goのコードは生成からは除外しているがパッケージ指定しないとgenerate時にエラーになる
+option go_package = "github.com/sin392/db-media-sample/sample/pb/shared/v1;shared";
+
+import "protoc-gen-openapiv2/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Sample API";
+    version: "v1";
+    contact: {
+      email: "sin392@gmail.com";
+    };
+    license: {
+      name: "My License";
+      url: "LICENSE.txt";
+    };
+  };
+};

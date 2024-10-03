@@ -1,22 +1,31 @@
-version: v1
+version: v2
+managed:
+  enabled: true
+  disable:
+    - module: buf.build/googleapis/googleapis
+    - module: buf.build/grpc-ecosystem/grpc-gateway
 plugins:
-  - name: go
+  - local: protoc-gen-go
     out: ../pb
     opt:
       - module=github.com/sin392/db-media-sample/sample/pb
-  - name: go-grpc
+  - local: protoc-gen-go-grpc
     out: ../pb
     opt:
       - module=github.com/sin392/db-media-sample/sample/pb
-  - name: grpc-gateway
+  - local: protoc-gen-grpc-gateway
     out: ../pb
     opt:
       - module=github.com/sin392/db-media-sample/sample/pb
-  - name: openapiv2
+  - local: protoc-gen-openapiv2
     out: ../docs/openapiv2
     opt:
       - output_format=yaml
       - allow_merge=true
-  - name: doc
+  - local: protoc-gen-doc
     out: ../docs/proto
     opt: html,index.html
+inputs:
+  - directory: ../proto
+    exclude_paths:
+      - shared/v1/shared.proto

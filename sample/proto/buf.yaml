@@ -3,6 +3,7 @@ lint:
   use:
     - STANDARD
     - COMMENTS
+  allow_comment_ignores: true
 breaking:
   use:
     - FILE

@@ -1,12 +1,7 @@
 swagger: "2.0"
 info:
-  title: Sample API
-  version: v1
-  contact:
-    email: sin392@gmail.com
-  license:
-    name: My License
-    url: LICENSE.txt
+  title: shop/v1/shop.proto
+  version: version not set
 tags:
   - name: ShopService
 consumes:
