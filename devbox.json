@@ -14,7 +14,6 @@
       "export PATH=$GOBIN:$PATH",
       "go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest",
       "go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest",
-      "go install github.com/g3co/go-swagger-merger@latest",
       "echo 'Welcome to devbox!' > /dev/null"
     ],
     "scripts": {
