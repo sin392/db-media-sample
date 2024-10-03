@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
@@ -31,7 +32,7 @@ func (a *ListShopInteractor) Execute(ctx context.Context) ([]*model.Shop, error)
 
 	shops, err := a.repo.List(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to list shops: %w", err)
 	}
 	return shops, nil
 }

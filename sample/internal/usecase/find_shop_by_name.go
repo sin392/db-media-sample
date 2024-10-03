@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
@@ -31,7 +32,7 @@ func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*m
 
 	shop, err := a.repo.FindByName(ctx, name)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}
 	return shop, nil
 }
