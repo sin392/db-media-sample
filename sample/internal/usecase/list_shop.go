@@ -29,9 +29,9 @@ func (a *ListShopInteractor) Execute(ctx context.Context) ([]*model.Shop, error)
 	ctx, span := trace.StartSpan(ctx, "ListShopInteractor.Execute")
 	defer span.End()
 
-	Shop, err := a.repo.List(ctx)
+	shops, err := a.repo.List(ctx)
 	if err != nil {
 		return nil, err
 	}
-	return Shop, nil
+	return shops, nil
 }

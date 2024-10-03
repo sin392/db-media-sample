@@ -20,6 +20,7 @@ func NewShopRouter(
 ) ShopRouter {
 	return ShopRouter{
 		findShopByNameCtrl: findShopByNameCtrl,
+		listShopCtrl:       listShopCtrl,
 	}
 }
 
