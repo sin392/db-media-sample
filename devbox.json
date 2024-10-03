@@ -6,7 +6,8 @@
     "protoc-gen-go@latest",
     "protoc-gen-go-grpc@latest",
     "protoc-gen-doc@latest",
-    "buf@latest"
+    "buf@latest",
+    "graphviz@latest"
   ],
   "shell": {
     "init_hook": [
@@ -15,6 +16,7 @@
       "export PATH=$GOBIN:$PATH",
       "go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@latest",
       "go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@latest",
+      "go install github.com/Helcaraxan/gomod@latest",
       "echo 'Welcome to devbox!' > /dev/null"
     ],
     "scripts": {

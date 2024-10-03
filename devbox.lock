@@ -97,6 +97,54 @@
         }
       }
     },
+    "graphviz@latest": {
+      "last_modified": "2024-09-10T15:01:03Z",
+      "resolved": "github:NixOS/nixpkgs/5ed627539ac84809c78b2dd6d26a5cebeb5ae269#graphviz",
+      "source": "devbox-search",
+      "version": "12.1.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/cfpbm3f6s0cmkig56pj8ibm1515nwrdi-graphviz-12.1.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/cfpbm3f6s0cmkig56pj8ibm1515nwrdi-graphviz-12.1.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lzcx7dgxk2cd3qdbxwnv62zswl6p6kcc-graphviz-12.1.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lzcx7dgxk2cd3qdbxwnv62zswl6p6kcc-graphviz-12.1.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/24qjqvmwqnpn968kpg6k10y3digxkk9b-graphviz-12.1.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/24qjqvmwqnpn968kpg6k10y3digxkk9b-graphviz-12.1.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/ddryn1firb2j64dxnmls5s6830c0w003-graphviz-12.1.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/ddryn1firb2j64dxnmls5s6830c0w003-graphviz-12.1.0"
+        }
+      }
+    },
     "nodejs@latest": {
       "last_modified": "2024-09-10T15:01:03Z",
       "plugin_version": "0.0.2",
