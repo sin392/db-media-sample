@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-openapi/runtime/middleware"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sin392/db-media-sample/sample/pb/shop/v1"
@@ -46,13 +47,28 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 	if err := shop.RegisterShopServiceHandler(ctx, mux, conn); err != nil {
 		return err
 	}
+	// メトリクスエンドポイント
 	mux.HandlePath("GET", "/metrics",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 			metricHandler := promhttp.Handler()
 			metricHandler.ServeHTTP(w, r)
 		}),
 	)
-	s.mux = mux
+	// Swaggerエンドポイント
+	// TODO: 開発環境以外では公開しないようにする
+	mux.HandlePath("GET", "/docs/swagger.json", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		// TODO: マージしたswagger.jsonを返すようにする
+		http.ServeFile(w, r, "./docs/openapiv2/shop/v1/shop.swagger.json")
+	})
+	// SwaggerUIエンドポイント
+	mux.HandlePath("GET", "/docs",
+		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+			swaggerHandler := middleware.SwaggerUI(middleware.SwaggerUIOpts{
+				SpecURL: "/docs/swagger.json",
+			}, mux)
+			swaggerHandler.ServeHTTP(w, r)
+		}),
+	)
 	// 以下はmiddleware的に設定できるのでは？
 	s.mux = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// リクエストのパスをスパンの名前とするHTTPハンドラを生成
