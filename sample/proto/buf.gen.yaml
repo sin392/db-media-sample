@@ -27,5 +27,5 @@ plugins:
     opt: html,index.html
 inputs:
   - directory: ../proto
-    exclude_paths:
-      - shared/v1/shared.proto
+    paths:
+      - shop
