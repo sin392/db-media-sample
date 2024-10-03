@@ -1,7 +1,6 @@
 apidocs
 bson
-devbox
-gobin
+gomod
 healthz
 installsuffix
 interactor
@@ -9,14 +8,11 @@ intercepter
 ldflags
 mapstructure
 multiclient
-openaiv
 openapiv
-openzipkin
 otelgrpc
 otelhttp
 otlptrace
 otlptracehttp
-petstore
 promhttp
 protoc
 replicaset
@@ -26,6 +22,6 @@ sdktrace
 semconv
 sess
 shopv
+tpng
 usecase
 wireinject
-zipkin
