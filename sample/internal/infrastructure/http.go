@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -45,6 +46,12 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 	if err := shop.RegisterShopServiceHandler(ctx, mux, conn); err != nil {
 		return err
 	}
+	mux.HandlePath("GET", "/metrics",
+		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+			metricHandler := promhttp.Handler()
+			metricHandler.ServeHTTP(w, r)
+		}),
+	)
 	s.mux = mux
 	// 以下はmiddleware的に設定できるのでは？
 	s.mux = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

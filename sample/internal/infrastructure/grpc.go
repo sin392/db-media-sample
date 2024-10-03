@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -26,9 +27,12 @@ func NewGrpcServer(
 			grpc.StatsHandler(
 				otelgrpc.NewServerHandler(),
 			),
+			grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
+			grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
 		),
 		shopRouter: shopRouter,
 	}
+	grpc_prometheus.Register(server.server)
 	reflection.Register(server.server)
 	routers := NewGrpcRouters(shopRouter)
 	server.setupRouters(routers)

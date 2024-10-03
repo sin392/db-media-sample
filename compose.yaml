@@ -83,7 +83,7 @@ services:
       - "3000:3000"
     volumes:
       - ./datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
-      - ./grafana:/var/lib/grafana/grafana.db
+      # - ./grafana:/var/lib/grafana/grafana.db
     environment:
       - GF_AUTH_DISABLE_LOGIN_FORM=true
       - GF_AUTH_ANONYMOUS_ENABLED=true
