@@ -3,6 +3,7 @@
   "packages": [
     "go@latest",
     "nodejs@latest",
+    "python@latest",
     "protoc-gen-go@latest",
     "protoc-gen-go-grpc@latest",
     "protoc-gen-doc@latest",
