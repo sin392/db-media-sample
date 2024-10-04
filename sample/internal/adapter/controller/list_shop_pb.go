@@ -22,7 +22,7 @@ func (c *ShopPbController) ListShop(ctx context.Context, req *pb.ListShopRequest
 	var pbRes pb.ListShopResponse
 	// ここのコピーもう少し改善できないか？
 	if err := copier.Copy(&pbRes.Shops, output.ShopList); err != nil {
-		return nil, fmt.Errorf("failed to copy from res to pbRes: %w", err)
+		return nil, fmt.Errorf("failed to copy from output to pbRes: %w", err)
 	}
 
 	return &pbRes, nil

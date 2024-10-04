@@ -11,31 +11,29 @@ import (
 
 type (
 	FindShopByNameUsecase interface {
-		NewInput(name string) *FindShopByNameInput
 		Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error)
 	}
 	FindShopByNameInteractor struct {
 		qRepo repository.ShopQueryRepository
 	}
 	FindShopByNameInput struct {
-		name string
+		Name string
 	}
 	FindShopByNameOutput struct {
 		*model.Shop
 	}
 )
 
+// requiredのパラメータに関しては構造体作る段階でエラーが出るのでチェック不要
+func (i *FindShopByNameInput) Validate() error {
+	return nil
+}
+
 func NewFindShopByNameIntercepter(
 	qRepo repository.ShopQueryRepository,
 ) FindShopByNameUsecase {
 	return &FindShopByNameInteractor{
 		qRepo: qRepo,
-	}
-}
-
-func (a *FindShopByNameInteractor) NewInput(name string) *FindShopByNameInput {
-	return &FindShopByNameInput{
-		name: name,
 	}
 }
 
@@ -49,7 +47,7 @@ func (a *FindShopByNameInteractor) Execute(ctx context.Context, input *FindShopB
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
 	defer span.End()
 
-	shop, err := a.qRepo.FindByName(ctx, input.name)
+	shop, err := a.qRepo.FindByName(ctx, input.Name)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}

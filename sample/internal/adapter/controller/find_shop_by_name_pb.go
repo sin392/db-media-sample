@@ -5,15 +5,31 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
+	"github.com/sin392/db-media-sample/sample/internal/usecase"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
+
+// バリデーションもここで行う
+func (c *ShopPbController) newInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
+	input := &usecase.FindShopByNameInput{
+		Name: req.GetName(),
+	}
+	if err := input.Validate(); err != nil {
+		return nil, fmt.Errorf("failed to validate input: %w", err)
+	}
+	return input, nil
+}
 
 func (c *ShopPbController) FindShopByName(ctx context.Context, req *pb.FindShopByNameRequest) (*pb.FindShopByNameResponse, error) {
 	ctx, span := trace.StartSpan(ctx, "FindShopByNamePbController.FindShopByName")
 	defer span.End()
 
-	input := c.findShopByNameUc.NewInput(req.GetName())
+	// リクエストのパースとバリデーション
+	input, err := c.newInput(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create input: %w", err)
+	}
 	// usecaseの実行
 	output, err := c.findShopByNameUc.Execute(ctx, input)
 	if err != nil {
@@ -22,7 +38,7 @@ func (c *ShopPbController) FindShopByName(ctx context.Context, req *pb.FindShopB
 	// レスポンス用の形式に変換
 	var pbRes pb.FindShopByNameResponse
 	if err := copier.Copy(&pbRes, output); err != nil {
-		return nil, fmt.Errorf("failed to copy from res to pbRes: %w", err)
+		return nil, fmt.Errorf("failed to copy from output to pbRes: %w", err)
 	}
 
 	return &pbRes, nil
