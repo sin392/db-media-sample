@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sin392/db-media-sample/sample/internal/domain/model"
+	"github.com/jinzhu/copier"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
@@ -12,23 +12,14 @@ import (
 
 // バリデーションもここで行う
 func newStoreShopInput(req *pb.StoreShopRequest) (*usecase.StoreShopInput, error) {
-	input := &usecase.StoreShopInput{
-		// マッピングくそだるくないか？
-		// ドメインモデル埋め込んじゃうとコンストラクタ経由以外でドメインモデルできちゃうのも気になる
-		Shop: model.Shop{
-			Name: req.GetName(),
-			Location: model.Location{
-				Prefecture: req.GetLocation().GetPrefecture(),
-				City:       req.GetLocation().GetCity(),
-				Address:    req.GetLocation().GetAddress(),
-			},
-			// TODO...
-		},
+	var input usecase.StoreShopInput
+	if err := copier.Copy(&input, req); err != nil {
+		return nil, fmt.Errorf("failed to convert from proto: %w", err)
 	}
 	if err := input.Validate(); err != nil {
 		return nil, fmt.Errorf("failed to validate input: %w", err)
 	}
-	return input, nil
+	return &input, nil
 }
 
 func (c *ShopControllerPb) StoreShop(ctx context.Context, req *pb.StoreShopRequest) (*pb.StoreShopResponse, error) {

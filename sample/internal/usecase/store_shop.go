@@ -16,16 +16,17 @@ type (
 	StoreShopUsecaseImpl struct {
 		qRepo repository.ShopCommandRepository
 	}
-	StoreShopInput struct {
-		model.Shop
-	}
+	StoreShopInput model.Shop
 )
 
 var _ StoreShopUsecase = (*StoreShopUsecaseImpl)(nil)
 
-// requiredのパラメータに関しては構造体作る段階でエラーが出るのでチェック不要
 func (i *StoreShopInput) Validate() error {
-	return nil
+	var err error
+	if i.Name == "" {
+		err = fmt.Errorf("name is required")
+	}
+	return err
 }
 
 func NewStoreShopUsecase(
@@ -40,7 +41,10 @@ func (a *StoreShopUsecaseImpl) Execute(ctx context.Context, input *StoreShopInpu
 	ctx, span := trace.StartSpan(ctx, "StoreShopUsecase.Execute")
 	defer span.End()
 
-	if err := a.qRepo.Store(ctx, input.Shop); err != nil {
+	// TODO: コンストラクタを使ってその中でIDを生成する
+	shop := model.Shop(*input)
+	shop.ID = ctx.Value("snowflakeID").(string)
+	if err := a.qRepo.Store(ctx, shop); err != nil {
 		return fmt.Errorf("failed to store shop: %w", err)
 	}
 	return nil

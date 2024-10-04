@@ -19,16 +19,17 @@ type (
 	FindShopByNameInput struct {
 		Name string
 	}
-	FindShopByNameOutput struct {
-		*model.Shop
-	}
+	FindShopByNameOutput model.Shop
 )
 
 var _ FindShopByNameUsecase = (*FindShopByNameUsecaseImpl)(nil)
 
-// requiredのパラメータに関しては構造体作る段階でエラーが出るのでチェック不要
 func (i *FindShopByNameInput) Validate() error {
-	return nil
+	var err error
+	if i.Name == "" {
+		err = fmt.Errorf("name is required")
+	}
+	return err
 }
 
 func NewFindShopByNameUsecase(
@@ -40,9 +41,8 @@ func NewFindShopByNameUsecase(
 }
 
 func (a *FindShopByNameUsecaseImpl) newOutput(shop *model.Shop) *FindShopByNameOutput {
-	return &FindShopByNameOutput{
-		shop,
-	}
+	output := FindShopByNameOutput(*shop)
+	return &output
 }
 
 func (a *FindShopByNameUsecaseImpl) Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error) {

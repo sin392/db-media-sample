@@ -3,6 +3,7 @@
     "insert": "shops",
     "documents": [
       {
+        "_id": "1842199255008153600",
         "name": "渋谷カレー",
         "location": {
           "prefecture": "東京都",

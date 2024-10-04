@@ -16,9 +16,7 @@ type (
 	ListShopUsecaseImpl struct {
 		qRepo repository.ShopQueryRepository
 	}
-	ShopListOutput struct {
-		model.ShopList
-	}
+	ShopListOutput model.ShopList
 )
 
 var _ ListShopUsecase = (*ListShopUsecaseImpl)(nil)
@@ -32,9 +30,8 @@ func NewListShopUsecase(
 }
 
 func (a *ListShopUsecaseImpl) newOutput(shops model.ShopList) *ShopListOutput {
-	return &ShopListOutput{
-		shops,
-	}
+	output := ShopListOutput(shops)
+	return &output
 }
 
 func (a *ListShopUsecaseImpl) Execute(ctx context.Context) (*ShopListOutput, error) {

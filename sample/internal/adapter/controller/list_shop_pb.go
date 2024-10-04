@@ -21,7 +21,7 @@ func (c *ShopControllerPb) ListShop(ctx context.Context, req *pb.ListShopRequest
 	// レスポンス用の形式に変換
 	var pbRes pb.ListShopResponse
 	// ここのコピーもう少し改善できないか？
-	if err := copier.Copy(&pbRes.Shops, output.ShopList); err != nil {
+	if err := copier.Copy(&pbRes.Shops, output); err != nil {
 		return nil, fmt.Errorf("failed to copy from output to pbRes: %w", err)
 	}
 
