@@ -1,4 +1,4 @@
-package nosql
+package repository
 
 import "context"
 
@@ -8,9 +8,9 @@ type (
 		Update(ctx context.Context, collection string, query interface{}, update interface{}) error
 		FindAll(ctx context.Context, collection string, query interface{}, result interface{}) error
 		FindOne(ctx context.Context, collection string, query interface{}, projection interface{}, result interface{}) error
-		StartSession() (Session, error)
+		StartSession() (NoSQLSession, error)
 	}
-	Session interface {
+	NoSQLSession interface {
 		WithTransaction(context.Context, func(context.Context) error) error
 		EndSession(context.Context)
 	}

@@ -7,7 +7,7 @@ import (
 	"github.com/google/wire"
 
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
-	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"github.com/sin392/db-media-sample/sample/internal/config"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/database"
@@ -28,10 +28,10 @@ var WireSet = wire.NewSet(
 	// adapter
 	controller.NewFindShopByNameController,
 	controller.NewListShopController,
+	repository.NewShopNoSQLQueryRepositoryImpl,
 	// usecase
 	usecase.NewFindShopByNameIntercepter,
 	usecase.NewListShopIntercepter,
-	nosql.NewShopRepositoryImpl,
 )
 
 func InitializeApplication() (*Application, error) {

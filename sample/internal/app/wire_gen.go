@@ -9,7 +9,7 @@ package app
 import (
 	"github.com/google/wire"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
-	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"github.com/sin392/db-media-sample/sample/internal/config"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/database"
@@ -29,10 +29,10 @@ func InitializeApplication() (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	shopRepository := nosql.NewShopRepositoryImpl(noSQL)
-	findShopByNameUsecase := usecase.NewFindShopByNameIntercepter(shopRepository)
+	shopQueryRepository := repository.NewShopNoSQLQueryRepositoryImpl(noSQL)
+	findShopByNameUsecase := usecase.NewFindShopByNameIntercepter(shopQueryRepository)
 	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase)
-	listShopUsecase := usecase.NewListShopIntercepter(shopRepository)
+	listShopUsecase := usecase.NewListShopIntercepter(shopQueryRepository)
 	listShopController := controller.NewListShopController(listShopUsecase)
 	shopRouter := router.NewShopRouter(findShopByNameController, listShopController)
 	grpcServer := infrastructure.NewGrpcServer(shopRouter)
@@ -48,4 +48,4 @@ func InitializeApplication() (*Application, error) {
 
 // usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
 // presenterは汎用的な表現にまとめていいかも
-var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, controller.NewListShopController, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter, nosql.NewShopRepositoryImpl)
+var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, controller.NewListShopController, repository.NewShopNoSQLQueryRepositoryImpl, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter)

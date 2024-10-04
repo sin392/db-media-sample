@@ -14,7 +14,7 @@ type (
 		Execute(ctx context.Context, name string) (*ShopOutput, error)
 	}
 	FindShopByNameInteractor struct {
-		repo repository.ShopRepository
+		qRepo repository.ShopQueryRepository
 	}
 	// OutputData
 	ShopOutput struct {
@@ -23,10 +23,10 @@ type (
 )
 
 func NewFindShopByNameIntercepter(
-	repo repository.ShopRepository,
+	qRepo repository.ShopQueryRepository,
 ) FindShopByNameUsecase {
 	return &FindShopByNameInteractor{
-		repo: repo,
+		qRepo: qRepo,
 	}
 }
 
@@ -34,7 +34,7 @@ func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*S
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
 	defer span.End()
 
-	shop, err := a.repo.FindByName(ctx, name)
+	shop, err := a.qRepo.FindByName(ctx, name)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}

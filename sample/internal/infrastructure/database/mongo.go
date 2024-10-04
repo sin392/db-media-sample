@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sin392/db-media-sample/sample/internal/adapter/repositoryimpl/nosql"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -15,7 +15,7 @@ type mongoHandler struct {
 	client *mongo.Client
 }
 
-func NewMongoHandler(c *config) (nosql.NoSQL, error) {
+func NewMongoHandler(c *config) (repository.NoSQL, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), c.ctxTimeout)
 	defer cancel()
 
@@ -105,7 +105,7 @@ func (mgo mongoHandler) FindOne(
 	return nil
 }
 
-func (mgo *mongoHandler) StartSession() (nosql.Session, error) {
+func (mgo *mongoHandler) StartSession() (repository.NoSQLSession, error) {
 	session, err := mgo.client.StartSession()
 	if err != nil {
 		log.Fatal(err)
