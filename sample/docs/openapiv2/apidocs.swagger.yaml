@@ -16,9 +16,8 @@ produces:
 paths:
   /v1/shops:
     get:
-      summary: |-
-        ListShop
-        店舗を一覧表示する
+      summary: ListShop
+      description: 店舗を一覧表示する
       operationId: ShopService_ListShop
       responses:
         "200":
@@ -45,9 +44,8 @@ paths:
       tags:
         - ShopService
     post:
-      summary: |-
-        StoreShop
-        店舗を登録する
+      summary: StoreShop
+      description: 店舗を登録する
       operationId: ShopService_StoreShop
       responses:
         "200":
@@ -68,9 +66,8 @@ paths:
         - ShopService
   /v1/shops/name/{name}:
     get:
-      summary: |-
-        FindShopByName
-        店舗名で店舗を検索する
+      summary: FindShopByName
+      description: 店舗名で店舗を検索する
       operationId: ShopService_FindShopByName
       responses:
         "200":

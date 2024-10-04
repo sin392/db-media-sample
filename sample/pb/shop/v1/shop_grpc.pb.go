@@ -29,12 +29,15 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ShopServiceClient interface {
 	// FindShopByName
+	//
 	// 店舗名で店舗を検索する
 	FindShopByName(ctx context.Context, in *FindShopByNameRequest, opts ...grpc.CallOption) (*FindShopByNameResponse, error)
 	// ListShop
+	//
 	// 店舗を一覧表示する
 	ListShop(ctx context.Context, in *ListShopRequest, opts ...grpc.CallOption) (*ListShopResponse, error)
 	// StoreShop
+	//
 	// 店舗を登録する
 	StoreShop(ctx context.Context, in *StoreShopRequest, opts ...grpc.CallOption) (*StoreShopResponse, error)
 }
@@ -79,12 +82,15 @@ func (c *shopServiceClient) StoreShop(ctx context.Context, in *StoreShopRequest,
 // for forward compatibility
 type ShopServiceServer interface {
 	// FindShopByName
+	//
 	// 店舗名で店舗を検索する
 	FindShopByName(context.Context, *FindShopByNameRequest) (*FindShopByNameResponse, error)
 	// ListShop
+	//
 	// 店舗を一覧表示する
 	ListShop(context.Context, *ListShopRequest) (*ListShopResponse, error)
 	// StoreShop
+	//
 	// 店舗を登録する
 	StoreShop(context.Context, *StoreShopRequest) (*StoreShopResponse, error)
 	mustEmbedUnimplementedShopServiceServer()
