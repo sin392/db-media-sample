@@ -24,8 +24,8 @@ var WireSet = wire.NewSet(
 	database.NewMongoHandler,
 	database.NewConfig,
 	// adapter
-	controller.NewShopPbController,
-	repository.NewShopNoSQLQueryRepository,
+	controller.NewShopControllerPb,
+	repository.NewShopQueryRepositoryNoSQL,
 	// usecase
 	usecase.NewFindShopByNameUsecase,
 	usecase.NewListShopUsecase,

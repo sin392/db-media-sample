@@ -11,7 +11,7 @@ import (
 )
 
 // バリデーションもここで行う
-func (c *ShopPbController) newInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
+func (c *ShopControllerPb) newInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
 	input := &usecase.FindShopByNameInput{
 		Name: req.GetName(),
 	}
@@ -21,7 +21,7 @@ func (c *ShopPbController) newInput(req *pb.FindShopByNameRequest) (*usecase.Fin
 	return input, nil
 }
 
-func (c *ShopPbController) FindShopByName(ctx context.Context, req *pb.FindShopByNameRequest) (*pb.FindShopByNameResponse, error) {
+func (c *ShopControllerPb) FindShopByName(ctx context.Context, req *pb.FindShopByNameRequest) (*pb.FindShopByNameResponse, error) {
 	ctx, span := trace.StartSpan(ctx, "FindShopByNamePbController.FindShopByName")
 	defer span.End()
 

@@ -11,24 +11,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var _ repository.ShopQueryRepository = (*ShopNoSQLQueryRepositoryImpl)(nil)
+var _ repository.ShopQueryRepository = (*ShopQueryRepositoryNoSQLImpl)(nil)
 
 const shopCollectionName = "shops"
 
-type ShopNoSQLQueryRepositoryImpl struct {
+type ShopQueryRepositoryNoSQLImpl struct {
 	db             NoSQL
 	collectionName string
 }
 
-func NewShopNoSQLQueryRepository(db NoSQL) repository.ShopQueryRepository {
-	return &ShopNoSQLQueryRepositoryImpl{
+func NewShopQueryRepositoryNoSQL(db NoSQL) repository.ShopQueryRepository {
+	return &ShopQueryRepositoryNoSQLImpl{
 		db:             db,
 		collectionName: shopCollectionName,
 	}
 }
 
 // FindByName 名前から店舗を取得する
-func (r *ShopNoSQLQueryRepositoryImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
+func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
 	defer span.End()
 
@@ -45,7 +45,7 @@ func (r *ShopNoSQLQueryRepositoryImpl) FindByName(ctx context.Context, name stri
 }
 
 // List 店舗一覧を取得する
-func (r *ShopNoSQLQueryRepositoryImpl) List(ctx context.Context) (model.ShopList, error) {
+func (r *ShopQueryRepositoryNoSQLImpl) List(ctx context.Context) (model.ShopList, error) {
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.List")
 	defer span.End()
 

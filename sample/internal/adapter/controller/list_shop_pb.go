@@ -9,8 +9,8 @@ import (
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
-func (c *ShopPbController) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb.ListShopResponse, error) {
-	ctx, span := trace.StartSpan(ctx, "ShopPbController.ListShop")
+func (c *ShopControllerPb) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb.ListShopResponse, error) {
+	ctx, span := trace.StartSpan(ctx, "ShopControllerPb.ListShop")
 	defer span.End()
 
 	// usecaseの実行

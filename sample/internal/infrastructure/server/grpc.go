@@ -20,7 +20,7 @@ type GrpcServer struct {
 }
 
 func NewGrpcServer(
-	shopSrv controller.ShopPbController,
+	shopSrv controller.ShopControllerPb,
 ) GrpcServer {
 	server := GrpcServer{
 		Server: grpc.NewServer(
@@ -36,7 +36,7 @@ func NewGrpcServer(
 	return server
 }
 
-func (s *GrpcServer) configure(shopSrv controller.ShopPbController) {
+func (s *GrpcServer) configure(shopSrv controller.ShopControllerPb) {
 	// リフレクションサービスの登録
 	reflection.Register(s)
 	// ヘルスチェックサービスの登録

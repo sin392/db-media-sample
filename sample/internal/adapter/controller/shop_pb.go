@@ -5,20 +5,20 @@ import (
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
-type ShopPbController struct {
+type ShopControllerPb struct {
 	pb.UnimplementedShopServiceServer
 	findShopByNameUc usecase.FindShopByNameUsecase
 	listShopUc       usecase.ListShopUsecase
 }
 
-var _ pb.ShopServiceServer = (*ShopPbController)(nil)
+var _ pb.ShopServiceServer = (*ShopControllerPb)(nil)
 
-// pb.ShopServiceServerを実装したShopPbControllerを生成する
-func NewShopPbController(
+// pb.ShopServiceServerを実装したShopControllerPbを生成する
+func NewShopControllerPb(
 	findShopByNameUc usecase.FindShopByNameUsecase,
 	listShopUc usecase.ListShopUsecase,
-) ShopPbController {
-	return ShopPbController{
+) ShopControllerPb {
+	return ShopControllerPb{
 		findShopByNameUc: findShopByNameUc,
 		listShopUc:       listShopUc,
 	}
