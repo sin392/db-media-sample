@@ -41,7 +41,10 @@ func (r *ShopRouter) FindShopByName(ctx context.Context, req *pb.FindShopByNameR
 		}
 	}
 	var res pb.FindShopByNameResponse
-	copier.Copy(&res, shop)
+	// 構造体にcopier:"must"タグを設定していないとエラーは出ない
+	if err := copier.Copy(&res, shop); err != nil {
+		return nil, fmt.Errorf("failed to copy shops: %w", err)
+	}
 	return &res, nil
 }
 
@@ -51,7 +54,10 @@ func (r *ShopRouter) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb
 		return nil, fmt.Errorf("failed to execute controller: %w", err)
 	}
 	var res pb.ListShopResponse
-	copier.Copy(&res.Shops, shops)
+	// 構造体にcopier:"must"タグを設定していないとエラーは出ない
+	if err := copier.Copy(&res.Shops, shops); err != nil {
+		return nil, fmt.Errorf("failed to copy shops: %w", err)
+	}
 	return &res, nil
 }
 
