@@ -13,7 +13,7 @@ type (
 	FindShopByNameUsecase interface {
 		Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error)
 	}
-	FindShopByNameInteractor struct {
+	FindShopByNameUsecaseImpl struct {
 		qRepo repository.ShopQueryRepository
 	}
 	FindShopByNameInput struct {
@@ -24,27 +24,29 @@ type (
 	}
 )
 
+var _ FindShopByNameUsecase = (*FindShopByNameUsecaseImpl)(nil)
+
 // requiredのパラメータに関しては構造体作る段階でエラーが出るのでチェック不要
 func (i *FindShopByNameInput) Validate() error {
 	return nil
 }
 
-func NewFindShopByNameIntercepter(
+func NewFindShopByNameUsecase(
 	qRepo repository.ShopQueryRepository,
 ) FindShopByNameUsecase {
-	return &FindShopByNameInteractor{
+	return &FindShopByNameUsecaseImpl{
 		qRepo: qRepo,
 	}
 }
 
-func (a *FindShopByNameInteractor) newOutput(shop *model.Shop) *FindShopByNameOutput {
+func (a *FindShopByNameUsecaseImpl) newOutput(shop *model.Shop) *FindShopByNameOutput {
 	return &FindShopByNameOutput{
 		shop,
 	}
 }
 
-func (a *FindShopByNameInteractor) Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error) {
-	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
+func (a *FindShopByNameUsecaseImpl) Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error) {
+	ctx, span := trace.StartSpan(ctx, "FindShopByNameUsecase.Execute")
 	defer span.End()
 
 	shop, err := a.qRepo.FindByName(ctx, input.Name)

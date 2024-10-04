@@ -20,7 +20,7 @@ type ShopNoSQLQueryRepositoryImpl struct {
 	collectionName string
 }
 
-func NewShopNoSQLQueryRepositoryImpl(db NoSQL) repository.ShopQueryRepository {
+func NewShopNoSQLQueryRepository(db NoSQL) repository.ShopQueryRepository {
 	return &ShopNoSQLQueryRepositoryImpl{
 		db:             db,
 		collectionName: shopCollectionName,

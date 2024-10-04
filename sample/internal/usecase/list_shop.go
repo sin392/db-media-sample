@@ -13,7 +13,7 @@ type (
 	ListShopUsecase interface {
 		Execute(ctx context.Context) (*ShopListOutput, error)
 	}
-	ListShopInteractor struct {
+	ListShopUsecaseImpl struct {
 		qRepo repository.ShopQueryRepository
 	}
 	ShopListOutput struct {
@@ -21,22 +21,24 @@ type (
 	}
 )
 
-func NewListShopIntercepter(
+var _ ListShopUsecase = (*ListShopUsecaseImpl)(nil)
+
+func NewListShopUsecase(
 	qRepo repository.ShopQueryRepository,
 ) ListShopUsecase {
-	return &ListShopInteractor{
+	return &ListShopUsecaseImpl{
 		qRepo: qRepo,
 	}
 }
 
-func (a *ListShopInteractor) newOutput(shops model.ShopList) *ShopListOutput {
+func (a *ListShopUsecaseImpl) newOutput(shops model.ShopList) *ShopListOutput {
 	return &ShopListOutput{
 		shops,
 	}
 }
 
-func (a *ListShopInteractor) Execute(ctx context.Context) (*ShopListOutput, error) {
-	ctx, span := trace.StartSpan(ctx, "ListShopInteractor.Execute")
+func (a *ListShopUsecaseImpl) Execute(ctx context.Context) (*ShopListOutput, error) {
+	ctx, span := trace.StartSpan(ctx, "ListShopUsecaseImpl.Execute")
 	defer span.End()
 
 	shops, err := a.qRepo.List(ctx)

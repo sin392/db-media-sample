@@ -28,9 +28,9 @@ func InitializeApplication() (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	shopQueryRepository := repository.NewShopNoSQLQueryRepositoryImpl(noSQL)
-	findShopByNameUsecase := usecase.NewFindShopByNameIntercepter(shopQueryRepository)
-	listShopUsecase := usecase.NewListShopIntercepter(shopQueryRepository)
+	shopQueryRepository := repository.NewShopNoSQLQueryRepository(noSQL)
+	findShopByNameUsecase := usecase.NewFindShopByNameUsecase(shopQueryRepository)
+	listShopUsecase := usecase.NewListShopUsecase(shopQueryRepository)
 	shopPbController := controller.NewShopPbController(findShopByNameUsecase, listShopUsecase)
 	grpcServer := server.NewGrpcServer(shopPbController)
 	httpServer := server.NewHttpServer()
@@ -45,4 +45,4 @@ func InitializeApplication() (*Application, error) {
 
 // usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
 // presenterは汎用的な表現にまとめていいかも
-var WireSet = wire.NewSet(config.Load, server.NewHttpServer, server.NewGrpcServer, database.NewMongoHandler, database.NewConfig, controller.NewShopPbController, repository.NewShopNoSQLQueryRepositoryImpl, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter)
+var WireSet = wire.NewSet(config.Load, server.NewHttpServer, server.NewGrpcServer, database.NewMongoHandler, database.NewConfig, controller.NewShopPbController, repository.NewShopNoSQLQueryRepository, usecase.NewFindShopByNameUsecase, usecase.NewListShopUsecase)
