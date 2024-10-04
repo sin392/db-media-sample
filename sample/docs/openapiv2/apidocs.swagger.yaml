@@ -100,6 +100,10 @@ definitions:
         type: string
         title: 住所
     title: Location
+    required:
+      - prefecture
+      - city
+      - address
   v1FindShopByNameResponse:
     type: object
     properties:
@@ -137,6 +141,9 @@ definitions:
           $ref: '#/definitions/v1Menu'
         title: メニューのリスト
     title: FindShopByNameResponse
+    required:
+      - id
+      - name
   v1ListShopResponse:
     type: object
     properties:
@@ -147,6 +154,8 @@ definitions:
           $ref: '#/definitions/v1Shop'
         title: 店舗のリスト
     title: FindShopByNameResponse
+    required:
+      - shops
   v1Menu:
     type: object
     properties:
@@ -161,6 +170,9 @@ definitions:
         type: string
         title: 商品説明
     title: Menu
+    required:
+      - name
+      - price
   v1Shop:
     type: object
     properties:
@@ -198,3 +210,6 @@ definitions:
           $ref: '#/definitions/v1Menu'
         title: メニューのリスト
     title: Shop
+    required:
+      - id
+      - name

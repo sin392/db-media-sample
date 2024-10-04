@@ -5,6 +5,7 @@ package shop.v1;
 option go_package = "github.com/sin392/db-media-sample/sample/pb/shop/v1;shop";
 
 import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
@@ -24,19 +25,19 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 // Location
 message Location {
   // 県
-  string prefecture = 1;
+  string prefecture = 1 [(google.api.field_behavior) = REQUIRED];
   // 市
-  string city = 2;
+  string city = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
-  string address = 3;
+  string address = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Menu
 message Menu {
   // 商品名
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   // 価格
-  int32 price = 2;
+  int32 price = 2 [(google.api.field_behavior) = REQUIRED];
   // 商品説明
   string desc = 3;
 }
@@ -44,9 +45,9 @@ message Menu {
 // Shop
 message Shop {
   // 固有ID
-  string id = 1;
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
   // 店舗名
-  string name = 2;
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
   Location location = 3;
   // 電話番号
@@ -66,15 +67,15 @@ message Shop {
 // FindShopByNameRequest
 message FindShopByNameRequest {
   // 店舗名
-  string name = 1;
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // FindShopByNameResponse
 message FindShopByNameResponse {
   // 固有ID
-  string id = 1;
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
   // 店舗名
-  string name = 2;
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
   Location location = 3;
   // 電話番号
@@ -102,7 +103,7 @@ message ListShopRequest {
 // FindShopByNameResponse
 message ListShopResponse {
   // 店舗のリスト
-  repeated Shop shops = 1;
+  repeated Shop shops = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // ShopService
