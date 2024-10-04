@@ -11,13 +11,16 @@ import (
 
 type (
 	FindShopByNameUsecase interface {
-		Execute(ctx context.Context, name string) (*ShopOutput, error)
+		NewInput(name string) *FindShopByNameInput
+		Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error)
 	}
 	FindShopByNameInteractor struct {
 		qRepo repository.ShopQueryRepository
 	}
-	// OutputData
-	ShopOutput struct {
+	FindShopByNameInput struct {
+		name string
+	}
+	FindShopByNameOutput struct {
 		*model.Shop
 	}
 )
@@ -30,16 +33,25 @@ func NewFindShopByNameIntercepter(
 	}
 }
 
-func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*ShopOutput, error) {
+func (a *FindShopByNameInteractor) NewInput(name string) *FindShopByNameInput {
+	return &FindShopByNameInput{
+		name: name,
+	}
+}
+
+func (a *FindShopByNameInteractor) newOutput(shop *model.Shop) *FindShopByNameOutput {
+	return &FindShopByNameOutput{
+		shop,
+	}
+}
+
+func (a *FindShopByNameInteractor) Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error) {
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
 	defer span.End()
 
-	shop, err := a.qRepo.FindByName(ctx, name)
+	shop, err := a.qRepo.FindByName(ctx, input.name)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}
-	res := &ShopOutput{
-		shop,
-	}
-	return res, nil
+	return a.newOutput(shop), nil
 }

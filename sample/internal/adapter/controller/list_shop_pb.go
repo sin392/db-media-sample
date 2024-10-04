@@ -14,14 +14,14 @@ func (c *ShopPbController) ListShop(ctx context.Context, req *pb.ListShopRequest
 	defer span.End()
 
 	// usecaseの実行
-	shops, err := c.listShopUc.Execute(ctx)
+	output, err := c.listShopUc.Execute(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute usecase: %w", err)
 	}
 	// レスポンス用の形式に変換
 	var pbRes pb.ListShopResponse
 	// ここのコピーもう少し改善できないか？
-	if err := copier.Copy(&pbRes.Shops, shops.ShopList); err != nil {
+	if err := copier.Copy(&pbRes.Shops, output.ShopList); err != nil {
 		return nil, fmt.Errorf("failed to copy from res to pbRes: %w", err)
 	}
 

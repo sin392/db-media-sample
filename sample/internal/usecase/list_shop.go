@@ -16,7 +16,6 @@ type (
 	ListShopInteractor struct {
 		qRepo repository.ShopQueryRepository
 	}
-	// OutputData
 	ShopListOutput struct {
 		model.ShopList
 	}
@@ -30,6 +29,12 @@ func NewListShopIntercepter(
 	}
 }
 
+func (a *ListShopInteractor) newOutput(shops model.ShopList) *ShopListOutput {
+	return &ShopListOutput{
+		shops,
+	}
+}
+
 func (a *ListShopInteractor) Execute(ctx context.Context) (*ShopListOutput, error) {
 	ctx, span := trace.StartSpan(ctx, "ListShopInteractor.Execute")
 	defer span.End()
@@ -38,8 +43,5 @@ func (a *ListShopInteractor) Execute(ctx context.Context) (*ShopListOutput, erro
 	if err != nil {
 		return nil, fmt.Errorf("failed to list shops: %w", err)
 	}
-	res := &ShopListOutput{
-		shops,
-	}
-	return res, nil
+	return a.newOutput(shops), nil
 }

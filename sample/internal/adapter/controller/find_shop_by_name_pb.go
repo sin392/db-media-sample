@@ -13,16 +13,15 @@ func (c *ShopPbController) FindShopByName(ctx context.Context, req *pb.FindShopB
 	ctx, span := trace.StartSpan(ctx, "FindShopByNamePbController.FindShopByName")
 	defer span.End()
 
-	// usecase用のInputに変換
-	name := req.GetName()
+	input := c.findShopByNameUc.NewInput(req.GetName())
 	// usecaseの実行
-	shop, err := c.findShopByNameUc.Execute(ctx, name)
+	output, err := c.findShopByNameUc.Execute(ctx, input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute usecase: %w", err)
 	}
 	// レスポンス用の形式に変換
 	var pbRes pb.FindShopByNameResponse
-	if err := copier.Copy(&pbRes, shop); err != nil {
+	if err := copier.Copy(&pbRes, output); err != nil {
 		return nil, fmt.Errorf("failed to copy from res to pbRes: %w", err)
 	}
 
