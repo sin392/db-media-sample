@@ -1,4 +1,4 @@
-package infrastructure
+package server
 
 import (
 	"fmt"
@@ -6,7 +6,8 @@ import (
 	"net"
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
+	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
@@ -15,51 +16,35 @@ import (
 )
 
 type GrpcServer struct {
-	server     *grpc.Server
-	shopRouter router.ShopRouter
+	*grpc.Server
 }
 
 func NewGrpcServer(
-	shopRouter router.ShopRouter,
+	shopSrv controller.ShopPbController,
 ) GrpcServer {
 	server := GrpcServer{
-		server: grpc.NewServer(
+		Server: grpc.NewServer(
 			grpc.StatsHandler(
 				otelgrpc.NewServerHandler(),
 			),
 			grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
 			grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
 		),
-		shopRouter: shopRouter,
 	}
-	grpc_prometheus.Register(server.server)
-	reflection.Register(server.server)
-	routers := NewGrpcRouters(shopRouter)
-	server.setupRouters(routers)
+	server.configure(shopSrv)
 
 	return server
 }
 
-type GrpcRouter interface {
-	Register(server *grpc.Server)
-}
-
-type GrpcRouters []GrpcRouter
-
-func NewGrpcRouters(
-	shopRouter router.ShopRouter,
-) GrpcRouters {
-	return GrpcRouters{
-		&shopRouter,
-	}
-}
-
-func (s *GrpcServer) setupRouters(routers GrpcRouters) {
-	hs := health.NewServer()
-	grpc_health_v1.RegisterHealthServer(s.server, hs)
-	for _, router := range routers {
-		router.Register(s.server)
-	}
+func (s *GrpcServer) configure(shopSrv controller.ShopPbController) {
+	// リフレクションサービスの登録
+	reflection.Register(s)
+	// ヘルスチェックサービスの登録
+	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
+	// gRPCのメトリクスサービスの登録
+	grpc_prometheus.Register(s.Server)
+	// Shopサービスの登録
+	pb.RegisterShopServiceServer(s, &shopSrv)
 }
 
 func (s *GrpcServer) ListenAndServe() error {
@@ -67,7 +52,7 @@ func (s *GrpcServer) ListenAndServe() error {
 	if err != nil {
 		return fmt.Errorf("failed to listen: %v", err)
 	}
-	if err := s.server.Serve(listenPort); err != nil {
+	if err := s.Serve(listenPort); err != nil {
 		return fmt.Errorf("failed to serve: %v", err)
 	}
 	log.Println("gRPC server started")

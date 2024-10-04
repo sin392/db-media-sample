@@ -4,31 +4,33 @@ import (
 	"sync"
 
 	"github.com/sin392/db-media-sample/sample/internal/config"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
+	"github.com/sin392/db-media-sample/sample/internal/infrastructure/server"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
 type Application struct {
 	cfg        *config.Config
-	grpcServer infrastructure.GrpcServer
-	httpServer infrastructure.HttpServer
+	grpcServer server.GrpcServer
+	httpServer server.HttpServer
 	wg         sync.WaitGroup
 }
 
 func NewApplication(
 	cfg *config.Config,
-	grpcServer infrastructure.GrpcServer,
-	httpServer infrastructure.HttpServer,
+	grpcServer server.GrpcServer,
+	httpServer server.HttpServer,
 ) (*Application, error) {
-	return &Application{
+	app := &Application{
 		cfg:        cfg,
 		grpcServer: grpcServer,
 		httpServer: httpServer,
 		wg:         sync.WaitGroup{},
-	}, nil
+	}
+	app.configure()
+	return app, nil
 }
 
-func (a *Application) Configure() {
+func (a *Application) configure() {
 	// OpenTelemetryの初期化
 	trace.InitTraceProvider(a.cfg)
 }

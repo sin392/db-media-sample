@@ -11,9 +11,8 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"github.com/sin392/db-media-sample/sample/internal/config"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/database"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
+	"github.com/sin392/db-media-sample/sample/internal/infrastructure/server"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 )
 
@@ -31,12 +30,10 @@ func InitializeApplication() (*Application, error) {
 	}
 	shopQueryRepository := repository.NewShopNoSQLQueryRepositoryImpl(noSQL)
 	findShopByNameUsecase := usecase.NewFindShopByNameIntercepter(shopQueryRepository)
-	findShopByNameController := controller.NewFindShopByNameController(findShopByNameUsecase)
 	listShopUsecase := usecase.NewListShopIntercepter(shopQueryRepository)
-	listShopController := controller.NewListShopController(listShopUsecase)
-	shopRouter := router.NewShopRouter(findShopByNameController, listShopController)
-	grpcServer := infrastructure.NewGrpcServer(shopRouter)
-	httpServer := infrastructure.NewHttpServer()
+	shopPbController := controller.NewShopPbController(findShopByNameUsecase, listShopUsecase)
+	grpcServer := server.NewGrpcServer(shopPbController)
+	httpServer := server.NewHttpServer()
 	application, err := NewApplication(configConfig, grpcServer, httpServer)
 	if err != nil {
 		return nil, err
@@ -48,4 +45,4 @@ func InitializeApplication() (*Application, error) {
 
 // usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
 // presenterは汎用的な表現にまとめていいかも
-var WireSet = wire.NewSet(config.Load, infrastructure.NewHttpServer, infrastructure.NewGrpcServer, router.NewShopRouter, database.NewMongoHandler, database.NewConfig, controller.NewFindShopByNameController, controller.NewListShopController, repository.NewShopNoSQLQueryRepositoryImpl, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter)
+var WireSet = wire.NewSet(config.Load, server.NewHttpServer, server.NewGrpcServer, database.NewMongoHandler, database.NewConfig, controller.NewShopPbController, repository.NewShopNoSQLQueryRepositoryImpl, usecase.NewFindShopByNameIntercepter, usecase.NewListShopIntercepter)

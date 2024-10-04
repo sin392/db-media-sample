@@ -8,7 +8,5 @@ func main() {
 		panic(err)
 	}
 
-	app.Configure()
-
 	app.Start()
 }

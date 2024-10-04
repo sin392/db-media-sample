@@ -9,9 +9,8 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"github.com/sin392/db-media-sample/sample/internal/config"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/database"
-	"github.com/sin392/db-media-sample/sample/internal/infrastructure/router"
+	"github.com/sin392/db-media-sample/sample/internal/infrastructure/server"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 )
 
@@ -20,14 +19,12 @@ import (
 var WireSet = wire.NewSet(
 	config.Load,
 	// infrastructure
-	infrastructure.NewHttpServer,
-	infrastructure.NewGrpcServer,
-	router.NewShopRouter,
+	server.NewHttpServer,
+	server.NewGrpcServer,
 	database.NewMongoHandler,
 	database.NewConfig,
 	// adapter
-	controller.NewFindShopByNameController,
-	controller.NewListShopController,
+	controller.NewShopPbController,
 	repository.NewShopNoSQLQueryRepositoryImpl,
 	// usecase
 	usecase.NewFindShopByNameIntercepter,
