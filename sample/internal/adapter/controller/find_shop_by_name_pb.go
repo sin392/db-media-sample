@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
-	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
@@ -21,14 +20,9 @@ func (c *ShopPbController) FindShopByName(ctx context.Context, req *pb.FindShopB
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute usecase: %w", err)
 	}
-	// プレゼンテーションのための変換
-	output, err := presenter.OutputShopPassThrough(shop)
-	if err != nil {
-		return nil, fmt.Errorf("failed to pass through: %w", err)
-	}
 	// レスポンス用の形式に変換
 	var pbRes pb.FindShopByNameResponse
-	if err := copier.Copy(&pbRes, output); err != nil {
+	if err := copier.Copy(&pbRes, shop); err != nil {
 		return nil, fmt.Errorf("failed to copy from res to pbRes: %w", err)
 	}
 
