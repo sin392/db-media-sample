@@ -9,6 +9,7 @@ type ShopControllerPb struct {
 	pb.UnimplementedShopServiceServer
 	findShopByNameUc usecase.FindShopByNameUsecase
 	listShopUc       usecase.ListShopUsecase
+	storeShopUc      usecase.StoreShopUsecase
 }
 
 var _ pb.ShopServiceServer = (*ShopControllerPb)(nil)
@@ -17,9 +18,11 @@ var _ pb.ShopServiceServer = (*ShopControllerPb)(nil)
 func NewShopControllerPb(
 	findShopByNameUc usecase.FindShopByNameUsecase,
 	listShopUc usecase.ListShopUsecase,
+	storeShopUc usecase.StoreShopUsecase,
 ) ShopControllerPb {
 	return ShopControllerPb{
 		findShopByNameUc: findShopByNameUc,
 		listShopUc:       listShopUc,
+		storeShopUc:      storeShopUc,
 	}
 }

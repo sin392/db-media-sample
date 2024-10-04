@@ -13,7 +13,7 @@ import (
 
 var _ repository.ShopQueryRepository = (*ShopQueryRepositoryNoSQLImpl)(nil)
 
-const shopCollectionName = "shops"
+const shopQueryCollectionName = "shops"
 
 type ShopQueryRepositoryNoSQLImpl struct {
 	db             NoSQL
@@ -23,7 +23,7 @@ type ShopQueryRepositoryNoSQLImpl struct {
 func NewShopQueryRepositoryNoSQL(db NoSQL) repository.ShopQueryRepository {
 	return &ShopQueryRepositoryNoSQLImpl{
 		db:             db,
-		collectionName: shopCollectionName,
+		collectionName: shopQueryCollectionName,
 	}
 }
 
@@ -50,7 +50,7 @@ func (r *ShopQueryRepositoryNoSQLImpl) List(ctx context.Context) (model.ShopList
 	defer span.End()
 
 	var results model.ShopList
-	query := bson.M{}
+	var query bson.M
 	err := r.db.FindAll(ctx, r.collectionName, query, &results)
 	if err != nil {
 		return nil, fmt.Errorf("failed to find all shops: %w", err)

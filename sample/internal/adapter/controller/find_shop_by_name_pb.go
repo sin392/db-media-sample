@@ -11,7 +11,7 @@ import (
 )
 
 // バリデーションもここで行う
-func (c *ShopControllerPb) newInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
+func newFindShopByNameInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
 	input := &usecase.FindShopByNameInput{
 		Name: req.GetName(),
 	}
@@ -26,7 +26,7 @@ func (c *ShopControllerPb) FindShopByName(ctx context.Context, req *pb.FindShopB
 	defer span.End()
 
 	// リクエストのパースとバリデーション
-	input, err := c.newInput(req)
+	input, err := newFindShopByNameInput(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create input: %w", err)
 	}

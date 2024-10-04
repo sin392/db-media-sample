@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	ShopService_FindShopByName_FullMethodName = "/shop.v1.ShopService/FindShopByName"
 	ShopService_ListShop_FullMethodName       = "/shop.v1.ShopService/ListShop"
+	ShopService_StoreShop_FullMethodName      = "/shop.v1.ShopService/StoreShop"
 )
 
 // ShopServiceClient is the client API for ShopService service.
@@ -33,6 +34,9 @@ type ShopServiceClient interface {
 	// ListShop
 	// 店舗を一覧表示する
 	ListShop(ctx context.Context, in *ListShopRequest, opts ...grpc.CallOption) (*ListShopResponse, error)
+	// StoreShop
+	// 店舗を登録する
+	StoreShop(ctx context.Context, in *StoreShopRequest, opts ...grpc.CallOption) (*StoreShopResponse, error)
 }
 
 type shopServiceClient struct {
@@ -61,6 +65,15 @@ func (c *shopServiceClient) ListShop(ctx context.Context, in *ListShopRequest, o
 	return out, nil
 }
 
+func (c *shopServiceClient) StoreShop(ctx context.Context, in *StoreShopRequest, opts ...grpc.CallOption) (*StoreShopResponse, error) {
+	out := new(StoreShopResponse)
+	err := c.cc.Invoke(ctx, ShopService_StoreShop_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ShopServiceServer is the server API for ShopService service.
 // All implementations must embed UnimplementedShopServiceServer
 // for forward compatibility
@@ -71,6 +84,9 @@ type ShopServiceServer interface {
 	// ListShop
 	// 店舗を一覧表示する
 	ListShop(context.Context, *ListShopRequest) (*ListShopResponse, error)
+	// StoreShop
+	// 店舗を登録する
+	StoreShop(context.Context, *StoreShopRequest) (*StoreShopResponse, error)
 	mustEmbedUnimplementedShopServiceServer()
 }
 
@@ -83,6 +99,9 @@ func (UnimplementedShopServiceServer) FindShopByName(context.Context, *FindShopB
 }
 func (UnimplementedShopServiceServer) ListShop(context.Context, *ListShopRequest) (*ListShopResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListShop not implemented")
+}
+func (UnimplementedShopServiceServer) StoreShop(context.Context, *StoreShopRequest) (*StoreShopResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StoreShop not implemented")
 }
 func (UnimplementedShopServiceServer) mustEmbedUnimplementedShopServiceServer() {}
 
@@ -133,6 +152,24 @@ func _ShopService_ListShop_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ShopService_StoreShop_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StoreShopRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ShopServiceServer).StoreShop(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ShopService_StoreShop_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ShopServiceServer).StoreShop(ctx, req.(*StoreShopRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ShopService_ServiceDesc is the grpc.ServiceDesc for ShopService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -147,6 +184,10 @@ var ShopService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListShop",
 			Handler:    _ShopService_ListShop_Handler,
+		},
+		{
+			MethodName: "StoreShop",
+			Handler:    _ShopService_StoreShop_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

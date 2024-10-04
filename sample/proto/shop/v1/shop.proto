@@ -106,6 +106,29 @@ message ListShopResponse {
   repeated Shop shops = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
+// StoreShopRequest
+message StoreShopRequest {
+  // 店舗名
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  // 住所
+  Location location = 2 [(google.api.field_behavior) = REQUIRED];
+  // 電話番号
+  string tel = 3;
+  // 画像URL
+  string image_url = 4;
+  // サイトURL
+  string site_url = 5;
+  // 評価
+  float rating = 6;
+  // タグのリスト
+  repeated string tags = 7;
+  // メニューのリスト
+  repeated Menu menus = 8;
+}
+
+// StoreShopResponse
+message StoreShopResponse {}
+
 // ShopService
 service ShopService {
   // FindShopByName
@@ -120,6 +143,14 @@ service ShopService {
   rpc ListShop(ListShopRequest) returns (ListShopResponse) {
     option (google.api.http) = {
       get: "/v1/shops"
+    };
+  }
+  // StoreShop
+  // 店舗を登録する
+  rpc StoreShop(StoreShopRequest) returns (StoreShopResponse) {
+    option (google.api.http) = {
+      post: "/v1/shops"
+      body: "*"
     };
   }
 }

@@ -44,6 +44,28 @@ paths:
           format: int32
       tags:
         - ShopService
+    post:
+      summary: |-
+        StoreShop
+        店舗を登録する
+      operationId: ShopService_StoreShop
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/v1StoreShopResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/v1StoreShopRequest'
+      tags:
+        - ShopService
   /v1/shops/name/{name}:
     get:
       summary: |-
@@ -213,3 +235,43 @@ definitions:
     required:
       - id
       - name
+  v1StoreShopRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        title: 店舗名
+      location:
+        $ref: '#/definitions/shopv1Location'
+        title: 住所
+      tel:
+        type: string
+        title: 電話番号
+      imageUrl:
+        type: string
+        title: 画像URL
+      siteUrl:
+        type: string
+        title: サイトURL
+      rating:
+        type: number
+        format: float
+        title: 評価
+      tags:
+        type: array
+        items:
+          type: string
+        title: タグのリスト
+      menus:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/v1Menu'
+        title: メニューのリスト
+    title: StoreShopRequest
+    required:
+      - name
+      - location
+  v1StoreShopResponse:
+    type: object
+    title: StoreShopResponse

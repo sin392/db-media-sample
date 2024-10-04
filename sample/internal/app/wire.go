@@ -26,9 +26,11 @@ var WireSet = wire.NewSet(
 	// adapter
 	controller.NewShopControllerPb,
 	repository.NewShopQueryRepositoryNoSQL,
+	repository.NewShopCommandRepositoryNoSQL,
 	// usecase
 	usecase.NewFindShopByNameUsecase,
 	usecase.NewListShopUsecase,
+	usecase.NewStoreShopUsecase,
 )
 
 func InitializeApplication() (*Application, error) {

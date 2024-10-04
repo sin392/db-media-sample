@@ -12,3 +12,8 @@ type ShopQueryRepository interface {
 	// List 店舗一覧を取得する
 	List(ctx context.Context) (model.ShopList, error)
 }
+
+type ShopCommandRepository interface {
+	// Store 店舗を保存する
+	Store(ctx context.Context, shop model.Shop) error
+}
