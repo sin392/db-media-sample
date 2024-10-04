@@ -11,10 +11,14 @@ import (
 
 type (
 	FindShopByNameUsecase interface {
-		Execute(ctx context.Context, name string) (*model.Shop, error)
+		Execute(ctx context.Context, name string) (*ShopOutput, error)
 	}
 	FindShopByNameInteractor struct {
 		repo repository.ShopRepository
+	}
+	// OutputData
+	ShopOutput struct {
+		*model.Shop
 	}
 )
 
@@ -26,7 +30,7 @@ func NewFindShopByNameIntercepter(
 	}
 }
 
-func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*model.Shop, error) {
+func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*ShopOutput, error) {
 	ctx, span := trace.StartSpan(ctx, "FindShopByNameInteractor.Execute")
 	defer span.End()
 
@@ -34,5 +38,8 @@ func (a *FindShopByNameInteractor) Execute(ctx context.Context, name string) (*m
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}
-	return shop, nil
+	res := &ShopOutput{
+		shop,
+	}
+	return res, nil
 }

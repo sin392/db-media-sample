@@ -25,3 +25,5 @@ type Shop struct {
 	Tags     []string `bson:"tags" json:"tags"`
 	Menus    []Menu   `bson:"menus" json:"menus"`
 }
+
+type ShopList []Shop

@@ -4,14 +4,20 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/sin392/db-media-sample/sample/internal/domain/model"
+	"github.com/sin392/db-media-sample/sample/internal/adapter/presenter"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
-type ListShopController struct {
-	uc usecase.ListShopUsecase
-}
+type (
+	ListShopController struct {
+		uc usecase.ListShopUsecase
+	}
+	// ViewModel
+	ListShopResponse struct {
+		usecase.ShopListOutput
+	}
+)
 
 func NewListShopController(uc usecase.ListShopUsecase) ListShopController {
 	return ListShopController{
@@ -19,7 +25,7 @@ func NewListShopController(uc usecase.ListShopUsecase) ListShopController {
 	}
 }
 
-func (c *ListShopController) Execute(ctx context.Context) ([]model.Shop, error) {
+func (c *ListShopController) Execute(ctx context.Context) (*presenter.ShopListResponse, error) {
 	ctx, span := trace.StartSpan(ctx, "ListShopController.Execute")
 	defer span.End()
 
@@ -27,5 +33,5 @@ func (c *ListShopController) Execute(ctx context.Context) ([]model.Shop, error) 
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute usecase: %w", err)
 	}
-	return shops, nil
+	return presenter.OutputShopListPassThrough(shops)
 }

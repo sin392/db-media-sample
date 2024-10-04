@@ -10,5 +10,5 @@ type ShopRepository interface {
 	// FindByName 名前から店舗を取得する
 	FindByName(ctx context.Context, name string) (*model.Shop, error)
 	// List 店舗一覧を取得する
-	List(ctx context.Context) ([]model.Shop, error)
+	List(ctx context.Context) (model.ShopList, error)
 }

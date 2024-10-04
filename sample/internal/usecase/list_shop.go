@@ -11,10 +11,14 @@ import (
 
 type (
 	ListShopUsecase interface {
-		Execute(ctx context.Context) ([]model.Shop, error)
+		Execute(ctx context.Context) (*ShopListOutput, error)
 	}
 	ListShopInteractor struct {
 		repo repository.ShopRepository
+	}
+	// OutputData
+	ShopListOutput struct {
+		model.ShopList
 	}
 )
 
@@ -26,7 +30,7 @@ func NewListShopIntercepter(
 	}
 }
 
-func (a *ListShopInteractor) Execute(ctx context.Context) ([]model.Shop, error) {
+func (a *ListShopInteractor) Execute(ctx context.Context) (*ShopListOutput, error) {
 	ctx, span := trace.StartSpan(ctx, "ListShopInteractor.Execute")
 	defer span.End()
 
@@ -34,5 +38,8 @@ func (a *ListShopInteractor) Execute(ctx context.Context) ([]model.Shop, error) 
 	if err != nil {
 		return nil, fmt.Errorf("failed to list shops: %w", err)
 	}
-	return shops, nil
+	res := &ShopListOutput{
+		shops,
+	}
+	return res, nil
 }

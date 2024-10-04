@@ -45,11 +45,11 @@ func (r *ShopRepositoryImpl) FindByName(ctx context.Context, name string) (*mode
 }
 
 // List 店舗一覧を取得する
-func (r *ShopRepositoryImpl) List(ctx context.Context) ([]model.Shop, error) {
+func (r *ShopRepositoryImpl) List(ctx context.Context) (model.ShopList, error) {
 	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.List")
 	defer span.End()
 
-	var results []model.Shop
+	var results model.ShopList
 	query := bson.M{}
 	err := r.db.FindAll(ctx, r.collectionName, query, &results)
 	if err != nil {
