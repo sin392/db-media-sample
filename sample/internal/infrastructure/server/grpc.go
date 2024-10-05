@@ -24,11 +24,6 @@ type GrpcServer struct {
 func NewGrpcServer(
 	shopSrv controller.ShopControllerPb,
 ) GrpcServer {
-	// Node には 1 を指定していますが、環境によって変えるべき
-	snowflakeNode, err := snowflake.NewNode(1)
-	if err != nil {
-		log.Fatalf("failed to create snowflake node: %v", err)
-	}
 	server := GrpcServer{
 		Server: grpc.NewServer(
 			grpc.StatsHandler(
@@ -37,22 +32,30 @@ func NewGrpcServer(
 			grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
 			grpc.ChainUnaryInterceptor(
 				grpc_prometheus.UnaryServerInterceptor,
-				// TODO: 定義の切り出し
-				func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
-					// Generate a new Snowflake ID for each request
-					snowflakeID := snowflakeNode.Generate().String()
-					fmt.Printf("snowflakeID: %s\n", snowflakeID)
-					// Add the ID to the request context
-					ctx = context.WithValue(ctx, "snowflakeID", snowflakeID)
-					// Call the original unary handler
-					return handler(ctx, req)
-				},
+				generateSnowflakeIDInterceptor(1),
 			),
 		),
 	}
 	server.configure(shopSrv)
 
 	return server
+}
+
+func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	// Node には 1 を指定していますが、環境によって変えるべき
+	node, err := snowflake.NewNode(nodeID)
+	if err != nil {
+		log.Fatalf("failed to create snowflake node: %v", err)
+	}
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+		// Generate a new Snowflake ID for each request
+		snowflakeID := node.Generate().String()
+		fmt.Printf("snowflakeID: %s\n", snowflakeID)
+		// Add the ID to the request context
+		ctx = context.WithValue(ctx, "snowflakeID", snowflakeID)
+		// Call the original unary handler
+		return handler(ctx, req)
+	}
 }
 
 func (s *GrpcServer) configure(shopSrv controller.ShopControllerPb) {
