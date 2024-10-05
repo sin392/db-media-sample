@@ -6,6 +6,7 @@ import (
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
+	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
@@ -26,7 +27,10 @@ func (i *StoreShopInput) Validate() error {
 	if i.Name == "" {
 		err = fmt.Errorf("name is required")
 	}
-	return err
+	if err != nil {
+		return appErrors.NewApplicationError(appErrors.InvalidParameterError, err.Error())
+	}
+	return nil
 }
 
 func NewStoreShopUsecase(
