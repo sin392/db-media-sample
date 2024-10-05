@@ -47,6 +47,7 @@ func NewGrpcServer(
 }
 
 // エラーのロギングとgRPCステータスコードの変換を行うインターセプター
+// TODO: detailsも返すようにしたい
 func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	resp, err := handler(ctx, req)
 	// エラーのロギング
