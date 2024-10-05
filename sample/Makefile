@@ -42,6 +42,9 @@ lint/cspell: ## cspell によるスペルチェックを実行します
 ### 依存関係のupdate系
 ##################################################
 
+.PHONY: update
+update: update/proto update/cspell ## 依存関係のupdate系のtargetを一括実行します
+
 .PHONY: update/proto
 update/proto: ## bufで管理しているprotoの依存関係を更新します
 	cd proto && buf mod update

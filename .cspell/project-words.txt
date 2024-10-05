@@ -1,10 +1,9 @@
 apidocs
 bson
+bwmarrin
 gomod
 healthz
 installsuffix
-interactor
-intercepter
 jinzhu
 ldflags
 mapstructure
@@ -17,7 +16,6 @@ otlptracehttp
 promhttp
 protoc
 replicaset
-repositoryimpl
 sdkresource
 sdktrace
 semconv

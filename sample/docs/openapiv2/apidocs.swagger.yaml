@@ -24,6 +24,24 @@ paths:
           description: A successful response.
           schema:
             $ref: '#/definitions/v1ListShopResponse'
+        "500":
+          description: 内部エラー
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 13
+              details: []
+              message: Internal Server Error
+        "504":
+          description: タイムアウト
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 4
+              details: []
+              message: Timeout
         default:
           description: An unexpected error response.
           schema:
@@ -52,6 +70,33 @@ paths:
           description: A successful response.
           schema:
             $ref: '#/definitions/v1StoreShopResponse'
+        "409":
+          description: 登録しようとしている店舗が既に存在する場合
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 6
+              details: []
+              message: Conflict
+        "500":
+          description: 内部エラー
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 13
+              details: []
+              message: Internal Server Error
+        "504":
+          description: タイムアウト
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 4
+              details: []
+              message: Timeout
         default:
           description: An unexpected error response.
           schema:
@@ -74,6 +119,33 @@ paths:
           description: A successful response.
           schema:
             $ref: '#/definitions/v1FindShopByNameResponse'
+        "404":
+          description: 店舗が見つからない場合
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 5
+              details: []
+              message: Not Found
+        "500":
+          description: 内部エラー
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 13
+              details: []
+              message: Internal Server Error
+        "504":
+          description: タイムアウト
+          schema:
+            $ref: '#/definitions/rpcStatus'
+          examples:
+            application/json:
+              code: 4
+              details: []
+              message: Timeout
         default:
           description: An unexpected error response.
           schema:
