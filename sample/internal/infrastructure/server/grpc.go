@@ -49,7 +49,6 @@ func NewGrpcServer(
 // エラーのロギングとgRPCステータスコードの変換を行うインターセプター
 func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	resp, err := handler(ctx, req)
-	var appErr *appErrors.ApplicationError
 	// エラーのロギング
 	if err != nil {
 		log.Printf("ERROR: %v", err)
@@ -62,6 +61,7 @@ func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.U
 		return nil, status.Errorf(codes.Internal, "canceled")
 	}
 	// アプリケーション内部でのエラーの判定
+	var appErr *appErrors.ApplicationError
 	if errors.As(err, &appErr) {
 		switch appErr.GetType() {
 		case appErrors.NotFoundError:
