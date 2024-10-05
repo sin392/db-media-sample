@@ -3,6 +3,7 @@ module github.com/sin392/db-media-sample/sample
 go 1.22.1
 
 require (
+	github.com/bwmarrin/snowflake v0.3.0
 	github.com/go-openapi/runtime v0.28.0
 	github.com/google/wire v0.6.0
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
@@ -25,7 +26,6 @@ require (
 require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
-	github.com/bwmarrin/snowflake v0.3.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect

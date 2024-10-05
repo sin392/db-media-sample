@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
@@ -39,7 +38,7 @@ func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name stri
 	}
 	err := r.db.FindOne(ctx, r.collectionName, query, nil, &result)
 	if err != nil {
-		return nil, fmt.Errorf("failed to find shop by name: %w", err)
+		return nil, classifyError(err)
 	}
 	return &result, nil
 }
@@ -53,7 +52,7 @@ func (r *ShopQueryRepositoryNoSQLImpl) List(ctx context.Context) (model.ShopList
 	var query bson.M
 	err := r.db.FindAll(ctx, r.collectionName, query, &results)
 	if err != nil {
-		return nil, fmt.Errorf("failed to find all shops: %w", err)
+		return nil, classifyError(err)
 	}
 	return results, nil
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	// ここのパッケージ名変更していいのでは？
 	"github.com/sin392/db-media-sample/sample/internal/adapter/repository"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -53,7 +54,7 @@ func NewMongoHandler(c *config) (repository.NoSQL, error) {
 
 func (mgo mongoHandler) Store(ctx context.Context, collection string, data interface{}) error {
 	if _, err := mgo.db.Collection(collection).InsertOne(ctx, data); err != nil {
-		return err
+		return mgo.classifyError(err)
 	}
 
 	return nil
@@ -70,16 +71,16 @@ func (mgo mongoHandler) Update(ctx context.Context, collection string, query int
 func (mgo mongoHandler) FindAll(ctx context.Context, collection string, query interface{}, result interface{}) error {
 	cur, err := mgo.db.Collection(collection).Find(ctx, query)
 	if err != nil {
-		return err
+		return mgo.classifyError(err)
 	}
 
 	defer cur.Close(ctx)
 	if err = cur.All(ctx, result); err != nil {
-		return err
+		return mgo.classifyError(err)
 	}
 
 	if err := cur.Err(); err != nil {
-		return err
+		return mgo.classifyError(err)
 	}
 
 	return nil
@@ -99,7 +100,7 @@ func (mgo mongoHandler) FindOne(
 			options.FindOne().SetProjection(projection),
 		).Decode(result)
 	if err != nil {
-		return err
+		return mgo.classifyError(err)
 	}
 
 	return nil
@@ -112,6 +113,21 @@ func (mgo *mongoHandler) StartSession() (repository.NoSQLSession, error) {
 	}
 
 	return newMongoHandlerSession(session), nil
+}
+
+func (m *mongoHandler) classifyError(err error) error {
+	switch err {
+	case mongo.ErrNoDocuments:
+		return repository.NewDatabaseError(repository.NotFoundError, err.Error())
+	case mongo.ErrNilDocument:
+		return repository.NewDatabaseError(repository.InvalidParameterError, err.Error())
+	case mongo.ErrClientDisconnected:
+		return repository.NewDatabaseError(repository.ConnectionError, err.Error())
+	case mongo.ErrUnacknowledgedWrite:
+		return repository.NewDatabaseError(repository.ConflictError, err.Error())
+	default:
+		return repository.NewDatabaseError(repository.UnknownError, err.Error())
+	}
 }
 
 type mongoDBSession struct {

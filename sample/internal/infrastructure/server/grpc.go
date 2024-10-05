@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -9,12 +10,15 @@ import (
 	"github.com/bwmarrin/snowflake"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
+	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
 )
 
 type GrpcServer struct {
@@ -33,6 +37,7 @@ func NewGrpcServer(
 			grpc.ChainUnaryInterceptor(
 				grpc_prometheus.UnaryServerInterceptor,
 				generateSnowflakeIDInterceptor(1),
+				errorHandlingInterceptor,
 			),
 		),
 	}
@@ -41,6 +46,40 @@ func NewGrpcServer(
 	return server
 }
 
+// エラーのロギングとgRPCステータスコードの変換を行うインターセプター
+func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	resp, err := handler(ctx, req)
+	var appErr *appErrors.ApplicationError
+	// エラーのロギング
+	if err != nil {
+		log.Printf("ERROR: %v", err)
+	}
+	// コンテキストに関するエラーの判定
+	if errors.Is(err, context.DeadlineExceeded) {
+		return nil, status.Errorf(codes.DeadlineExceeded, "timeout")
+	}
+	if errors.Is(err, context.Canceled) {
+		return nil, status.Errorf(codes.Internal, "canceled")
+	}
+	// アプリケーション内部でのエラーの判定
+	if errors.As(err, &appErr) {
+		switch appErr.GetType() {
+		case appErrors.NotFoundError:
+			return nil, status.Errorf(codes.NotFound, "not found")
+		case appErrors.InvalidParameterError:
+			return nil, status.Errorf(codes.InvalidArgument, "invalid parameter")
+		case appErrors.InternalError:
+			return nil, status.Errorf(codes.Internal, "internal error")
+		case appErrors.ConflictError:
+			return nil, status.Errorf(codes.AlreadyExists, "conflict")
+		default:
+			return nil, status.Errorf(codes.Unknown, "unknown")
+		}
+	}
+	return resp, err
+}
+
+// Snowflake ID を生成してコンテキストに追加するインターセプター
 func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	// Node には 1 を指定していますが、環境によって変えるべき
 	node, err := snowflake.NewNode(nodeID)
@@ -50,7 +89,6 @@ func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req 
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		// Generate a new Snowflake ID for each request
 		snowflakeID := node.Generate().String()
-		fmt.Printf("snowflakeID: %s\n", snowflakeID)
 		// Add the ID to the request context
 		ctx = context.WithValue(ctx, "snowflakeID", snowflakeID)
 		// Call the original unary handler

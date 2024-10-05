@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
@@ -30,7 +29,7 @@ func (r *ShopCommandRepositoryNoSQLImpl) Store(ctx context.Context, shop model.S
 	defer span.End()
 
 	if err := r.db.Store(ctx, r.collectionName, shop); err != nil {
-		return fmt.Errorf("failed to store shop: %w", err)
+		return classifyError(err)
 	}
 	return nil
 }
