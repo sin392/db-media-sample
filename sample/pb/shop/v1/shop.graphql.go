@@ -519,11 +519,9 @@ type graphql__resolver_ShopService struct {
 // new_graphql_resolver_ShopService creates pointer of service struct
 func new_graphql_resolver_ShopService(conn *grpc.ClientConn) *graphql__resolver_ShopService {
 	return &graphql__resolver_ShopService{
-		conn: conn,
-		host: "localhost:50051",
-		dialOptions: []grpc.DialOption{
-			grpc.WithInsecure(),
-		},
+		conn:        conn,
+		host:        "localhost:50051",
+		dialOptions: []grpc.DialOption{},
 	}
 }
 
@@ -545,7 +543,7 @@ func (x *graphql__resolver_ShopService) CreateConnection(ctx context.Context) (*
 // GetQueries returns acceptable graphql.Fields for Query.
 func (x *graphql__resolver_ShopService) GetQueries(conn *grpc.ClientConn) graphql.Fields {
 	return graphql.Fields{
-		"Shop": &graphql.Field{
+		"FindShopByName": &graphql.Field{
 			Type: Gql__type_FindShopByNameResponse(),
 			Args: graphql.FieldConfigArgument{
 				"name": &graphql.ArgumentConfig{
@@ -557,7 +555,7 @@ func (x *graphql__resolver_ShopService) GetQueries(conn *grpc.ClientConn) graphq
 			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 				var req FindShopByNameRequest
 				if err := runtime.MarshalRequest(p.Args, &req, false); err != nil {
-					return nil, errors.Wrap(err, "Failed to marshal request for Shop")
+					return nil, errors.Wrap(err, "Failed to marshal request for FindShopByName")
 				}
 				client := NewShopServiceClient(conn)
 				resp, err := client.FindShopByName(p.Context, &req)
