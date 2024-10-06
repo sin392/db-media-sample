@@ -1,5 +1,17 @@
 /data
+**/docs/**/*
+**/tmp/**/*
+/scripts
+/vendor
+**/*.md
+**/*.proto
+.cspell
+.devbox
+.venv
+.vscode
 devbox.*
 */.git*
 */Dockerfile*
 */docker-compose*
+*.yaml
+Makefile

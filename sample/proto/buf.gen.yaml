@@ -7,16 +7,17 @@ managed:
 plugins:
   - local: protoc-gen-go
     out: ../pb
-    opt:
-      - module=github.com/sin392/db-media-sample/sample/pb
+    opt: paths=source_relative
   - local: protoc-gen-go-grpc
     out: ../pb
-    opt:
-      - module=github.com/sin392/db-media-sample/sample/pb
+    opt: paths=source_relative
   - local: protoc-gen-grpc-gateway
     out: ../pb
-    opt:
-      - module=github.com/sin392/db-media-sample/sample/pb
+    opt: paths=source_relative
+  # gql-gatewayから参照するためのコード生成
+  - local: protoc-gen-graphql
+    out: ../pb
+    opt: paths=source_relative
   - local: protoc-gen-openapiv2
     out: ../docs/openapiv2
     opt:

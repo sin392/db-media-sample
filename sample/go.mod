@@ -1,16 +1,19 @@
 module github.com/sin392/db-media-sample/sample
 
-go 1.22.1
+go 1.23.1
 
 require (
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/go-openapi/runtime v0.28.0
 	github.com/google/wire v0.6.0
+	github.com/graphql-go/graphql v0.7.8
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/jinzhu/copier v0.4.0
+	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.3
 	github.com/spf13/viper v1.19.0
+	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
 	go.mongodb.org/mongo-driver v1.17.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.49.0
@@ -44,6 +47,7 @@ require (
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/iancoleman/strcase v0.0.0-20191112232945-16388991a334 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect

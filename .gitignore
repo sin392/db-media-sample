@@ -3,3 +3,4 @@
 /grafana
 */tmp
 !.cspell
+go.work*

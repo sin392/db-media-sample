@@ -1,8 +1,22 @@
 version: "3"
 services:
+  gql:
+    build:
+      context: ./
+      dockerfile: gql-gateway/Dockerfile
+      target: development
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./gql-gateway:/app
+      - .air.toml:/app/.air.toml
+    depends_on:
+      - api
+    networks:
+      - db-media-sample-network
   api:
     build:
-      context: .
+      context: ./
       dockerfile: sample/Dockerfile
       target: development
     ports:

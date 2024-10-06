@@ -1,0 +1,6 @@
+[submodule "sample/grpc-graphql-gateway"]
+	path = sample/grpc-graphql-gateway
+	url = https://github.com/ysugimoto/grpc-graphql-gateway.git
+[submodule "vendor/grpc-graphql-gateway"]
+	path = vendor/grpc-graphql-gateway
+	url = https://github.com/ysugimoto/grpc-graphql-gateway.git

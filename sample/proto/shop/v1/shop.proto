@@ -8,6 +8,8 @@ import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
+import "vendor/grpc-graphql-gateway/graphql.proto";
+
 // Location
 message Location {
   // 県
@@ -53,7 +55,7 @@ message Shop {
 // FindShopByNameRequest
 message FindShopByNameRequest {
   // 店舗名
-  string name = 1 [(google.api.field_behavior) = REQUIRED];
+  string name = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
 }
 
 // FindShopByNameResponse
@@ -162,10 +164,19 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
 
 // ShopService
 service ShopService {
+  option (graphql.service) = {
+    host: "localhost:50051"
+    insecure: true
+  };
+
   // FindShopByName
   //
   // 店舗名で店舗を検索する
   rpc FindShopByName(FindShopByNameRequest) returns (FindShopByNameResponse) {
+    option (graphql.schema) = {
+      type: QUERY
+      name: "Shop"
+    };
     option (google.api.http) = {
       get: "/v1/shops/name/{name}"
     };

@@ -43,11 +43,15 @@ lint/cspell: ## cspell によるスペルチェックを実行します
 ##################################################
 
 .PHONY: update
-update: update/proto update/cspell ## 依存関係のupdate系のtargetを一括実行します
+update: update/proto update/link update/cspell ## 依存関係のupdate系のtargetを一括実行します
 
 .PHONY: update/proto
 update/proto: ## bufで管理しているprotoの依存関係を更新します
 	cd proto && buf mod update
+
+.PHONY: update/link
+update/link: ## 外部protoのsymlinkを作成
+	ln -sf ../../../../vendor/grpc-graphql-gateway/include/graphql/graphql.proto proto/vendor/grpc-graphql-gateway/graphql.proto
 
 .PHONY: update/cspell
 update/cspell: ## cspellで使っているカスタム辞書を更新します。実行後に差分を見てtypoが含まれていないか確認してください。
