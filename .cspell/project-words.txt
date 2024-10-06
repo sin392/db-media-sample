@@ -57,6 +57,7 @@ gopls
 goprivate
 gqlerrors
 grahpql
+graphi
 graphviz
 groupcache
 gyxi

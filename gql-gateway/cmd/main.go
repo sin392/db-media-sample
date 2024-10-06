@@ -4,9 +4,10 @@ package main
 import (
 	"fmt"
 	"log"
-
 	"net/http"
 
+	"github.com/graphql-go/graphql"
+	"github.com/graphql-go/handler"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"github.com/ysugimoto/grpc-graphql-gateway/runtime"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
@@ -35,10 +36,25 @@ func main() {
 	// 	grpc_health_v1.NewHealthClient(conn),
 	// ),
 	)
+	c := graphql.SchemaConfig{}
+	schema, _ := graphql.NewSchema(c)
+	h := handler.New(&handler.Config{
+		Schema:     &schema,
+		Pretty:     true,
+		GraphiQL:   false,
+		Playground: true,
+		PlaygroundConfig: &handler.PlaygroundConfig{
+			Endpoint:             "/query",
+			SubscriptionEndpoint: "/query",
+		},
+	})
 
 	if err := pb.RegisterShopServiceGraphqlHandler(mux, conn); err != nil {
 		log.Fatalln(err)
 	}
-	http.Handle("/graphql", mux)
+	// playgroundのエンドポイント
+	http.Handle("/", h)
+	// graphqlのエンドポイント
+	http.Handle("/query", mux)
 	log.Fatalln(http.ListenAndServe(":8081", nil))
 }

@@ -3,6 +3,8 @@ module github.com/sin392/db-media-sample/gql-gateway
 go 1.23.1
 
 require (
+	github.com/graphql-go/graphql v0.8.1
+	github.com/graphql-go/handler v0.2.4
 	github.com/sin392/db-media-sample/sample v0.0.0-20241006050753-966627b64d84
 	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0
@@ -13,7 +15,6 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/graphql-go/graphql v0.8.1 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0 // indirect
 	github.com/iancoleman/strcase v0.3.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
