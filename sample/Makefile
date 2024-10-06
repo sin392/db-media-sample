@@ -2,11 +2,15 @@
 ### generate 系
 ##################################################
 .PHONY: generate
-generate: generate/proto ## generate系のtargetを一括で実行します
+generate: generate/proto generate/graphql ## generate系のtargetを一括で実行します
 
 .PHONY: generate/proto
 generate/proto: ## protoファイルのコード生成を実行します
 	cd proto && buf generate
+
+.PHONY: generate/graphql
+generate/graphql: ## graphqlファイルのコード生成を実行します
+	cd graph && gqlgen generate
 
 ##################################################
 ### docs 系

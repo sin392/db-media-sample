@@ -21,6 +21,7 @@ var WireSet = wire.NewSet(
 	// infrastructure
 	server.NewHttpServer,
 	server.NewGrpcServer,
+	server.NewGqlServer,
 	database.NewMongoHandler,
 	database.NewConfig,
 	// adapter

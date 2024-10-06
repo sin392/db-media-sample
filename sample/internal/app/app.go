@@ -12,6 +12,7 @@ type Application struct {
 	cfg        *config.Config
 	grpcServer server.GrpcServer
 	httpServer server.HttpServer
+	gqlServer  server.GqlServer
 	wg         sync.WaitGroup
 }
 
@@ -19,11 +20,13 @@ func NewApplication(
 	cfg *config.Config,
 	grpcServer server.GrpcServer,
 	httpServer server.HttpServer,
+	gqlServer server.GqlServer,
 ) (*Application, error) {
 	app := &Application{
 		cfg:        cfg,
 		grpcServer: grpcServer,
 		httpServer: httpServer,
+		gqlServer:  gqlServer,
 		wg:         sync.WaitGroup{},
 	}
 	app.configure()
@@ -36,13 +39,17 @@ func (a *Application) configure() {
 }
 
 func (a *Application) Start() {
-	a.wg.Add(2) // 非同期に起動するサーバの数だけカウントアップ
+	a.wg.Add(3) // 非同期に起動するサーバの数だけカウントアップ
 	go func() {
 		a.grpcServer.ListenAndServe()
 		a.wg.Done()
 	}()
 	go func() {
 		a.httpServer.ListenAndServe()
+		a.wg.Done()
+	}()
+	go func() {
+		a.gqlServer.ListenAndServe()
 		a.wg.Done()
 	}()
 	a.wg.Wait()

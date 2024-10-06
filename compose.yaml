@@ -6,7 +6,7 @@ services:
       dockerfile: gql-gateway/Dockerfile
       target: development
     ports:
-      - "8081:8081"
+      - "8082:8082"
     volumes:
       - ./gql-gateway:/app
       - .air.toml:/app/.air.toml
@@ -22,6 +22,7 @@ services:
     ports:
       - "50051:50051"
       - "8080:8080"
+      - "8081:8081"
     volumes:
       - ./sample:/app
       - .air.toml:/app/.air.toml
