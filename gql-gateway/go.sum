@@ -21,6 +21,8 @@ github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 h1:Jamvg5psRI
 github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sin392/db-media-sample/sample v0.0.0-20241006050753-966627b64d84 h1:7Ko5dqlkgzqkYdBpMPQm4UPCI0KkJw3oIKuLQNZkg2E=
 github.com/sin392/db-media-sample/sample v0.0.0-20241006050753-966627b64d84/go.mod h1:KS5ZivAt9vFwnNakcClcqhq0tkZi8KQXhKOAz6kJGYk=
+github.com/sin392/db-media-sample/sample v0.0.0-20241006062151-39748f54dc50 h1:mpCzwXkICG3ZSZDNITvz7+2WLetcFA1tYDdse42nXGE=
+github.com/sin392/db-media-sample/sample v0.0.0-20241006062151-39748f54dc50/go.mod h1:KS5ZivAt9vFwnNakcClcqhq0tkZi8KQXhKOAz6kJGYk=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
 github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 github.com/ysugimoto/grpc-graphql-gateway v0.23.0 h1:drcrvS7i8t4hr2Hg4Pmzj+i+9fC8esQS1c0Bp3sp6l4=

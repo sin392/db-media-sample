@@ -5,7 +5,7 @@ go 1.23.1
 require (
 	github.com/graphql-go/graphql v0.8.1
 	github.com/graphql-go/handler v0.2.4
-	github.com/sin392/db-media-sample/sample v0.0.0-20241006050753-966627b64d84
+	github.com/sin392/db-media-sample/sample v0.0.0-20241006062151-39748f54dc50
 	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0
 	google.golang.org/grpc v1.67.1
