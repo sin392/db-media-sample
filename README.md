@@ -21,6 +21,11 @@
 
 ![sampleのアーキテクチャ図](sample/docs/graph/deps.png)
 
+# 動作確認について
+docker-composeで各サービスを起動できます。
+注: 複数のモジュールを変更している場合、composeの実行時に各モジュールのコンテナで他のモジュールをimportしている場合にはローカルではなくリモートリポジトリの状況を参照するため、事前に変更のチェックインが必要です。
+（go.workの設定をdocker-composeにも反映しようとしたがairと両立させるのが難しくて断念）
+
 # 参考
 - protoをdtoに変換すべきかの議論
   - ref: https://www.reddit.com/r/golang/comments/rdkqwv/grpc_use_the_generated_proto_as_a_model/
