@@ -54,7 +54,7 @@ func main() {
 		log.Fatalln(err)
 	}
 	// playgroundのエンドポイント
-	http.Handle("/", h)
+	http.Handle("/playground", h)
 	// graphqlのエンドポイント
 	http.Handle("/query", mux)
 	log.Fatalln(http.ListenAndServe(":8081", nil))
