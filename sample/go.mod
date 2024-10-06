@@ -7,7 +7,7 @@ require (
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/go-openapi/runtime v0.28.0
 	github.com/google/wire v0.6.0
-	github.com/graphql-go/graphql v0.7.8
+	github.com/graphql-go/graphql v0.8.1
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/jinzhu/copier v0.4.0
