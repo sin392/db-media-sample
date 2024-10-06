@@ -36,11 +36,11 @@ func Gql__type_StoreShopRequest() *graphql.Object {
 			Description: `StoreShopRequest`,
 			Fields: graphql.Fields{
 				"name": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `店舗名`,
 				},
 				"location": &graphql.Field{
-					Type:        Gql__type_Location(),
+					Type:        graphql.NewNonNull(Gql__type_Location()),
 					Description: `住所`,
 				},
 				"tel": &graphql.Field{
@@ -80,11 +80,11 @@ func Gql__type_Shop() *graphql.Object {
 			Description: `Shop`,
 			Fields: graphql.Fields{
 				"id": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `固有ID`,
 				},
 				"name": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `店舗名`,
 				},
 				"location": &graphql.Field{
@@ -128,11 +128,11 @@ func Gql__type_Menu() *graphql.Object {
 			Description: `Menu`,
 			Fields: graphql.Fields{
 				"name": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `商品名`,
 				},
 				"price": &graphql.Field{
-					Type:        graphql.Int,
+					Type:        graphql.NewNonNull(graphql.Int),
 					Description: `価格`,
 				},
 				"desc": &graphql.Field{
@@ -152,15 +152,15 @@ func Gql__type_Location() *graphql.Object {
 			Description: `Location`,
 			Fields: graphql.Fields{
 				"prefecture": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `県`,
 				},
 				"city": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `市`,
 				},
 				"address": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `住所`,
 				},
 			},
@@ -176,7 +176,7 @@ func Gql__type_ListShopResponse() *graphql.Object {
 			Description: `FindShopByNameResponse`,
 			Fields: graphql.Fields{
 				"shops": &graphql.Field{
-					Type:        graphql.NewList(Gql__type_Shop()),
+					Type:        graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(Gql__type_Shop()))),
 					Description: `店舗のリスト`,
 				},
 			},
@@ -212,11 +212,11 @@ func Gql__type_FindShopByNameResponse() *graphql.Object {
 			Description: `FindShopByNameResponse`,
 			Fields: graphql.Fields{
 				"id": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `固有ID`,
 				},
 				"name": &graphql.Field{
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 					Description: `店舗名`,
 				},
 				"location": &graphql.Field{
@@ -276,11 +276,11 @@ func Gql__input_StoreShopRequest() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"name": &graphql.InputObjectFieldConfig{
 					Description: `店舗名`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"location": &graphql.InputObjectFieldConfig{
 					Description: `住所`,
-					Type:        Gql__input_Location(),
+					Type:        graphql.NewNonNull(Gql__input_Location()),
 				},
 				"tel": &graphql.InputObjectFieldConfig{
 					Description: `電話番号`,
@@ -319,11 +319,11 @@ func Gql__input_Shop() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"id": &graphql.InputObjectFieldConfig{
 					Description: `固有ID`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"name": &graphql.InputObjectFieldConfig{
 					Description: `店舗名`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"location": &graphql.InputObjectFieldConfig{
 					Description: `住所`,
@@ -366,11 +366,11 @@ func Gql__input_Menu() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"name": &graphql.InputObjectFieldConfig{
 					Description: `商品名`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"price": &graphql.InputObjectFieldConfig{
 					Description: `価格`,
-					Type:        graphql.Int,
+					Type:        graphql.NewNonNull(graphql.Int),
 				},
 				"desc": &graphql.InputObjectFieldConfig{
 					Description: `商品説明`,
@@ -389,15 +389,15 @@ func Gql__input_Location() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"prefecture": &graphql.InputObjectFieldConfig{
 					Description: `県`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"city": &graphql.InputObjectFieldConfig{
 					Description: `市`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"address": &graphql.InputObjectFieldConfig{
 					Description: `住所`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 			},
 		})
@@ -412,7 +412,7 @@ func Gql__input_ListShopResponse() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"shops": &graphql.InputObjectFieldConfig{
 					Description: `店舗のリスト`,
-					Type:        graphql.NewList(Gql__input_Shop()),
+					Type:        graphql.NewNonNull(graphql.NewList(graphql.NewNonNull(Gql__input_Shop()))),
 				},
 			},
 		})
@@ -446,11 +446,11 @@ func Gql__input_FindShopByNameResponse() *graphql.InputObject {
 			Fields: graphql.InputObjectConfigFieldMap{
 				"id": &graphql.InputObjectFieldConfig{
 					Description: `固有ID`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"name": &graphql.InputObjectFieldConfig{
 					Description: `店舗名`,
-					Type:        graphql.String,
+					Type:        graphql.NewNonNull(graphql.String),
 				},
 				"location": &graphql.InputObjectFieldConfig{
 					Description: `住所`,
@@ -561,6 +561,31 @@ func (x *graphql__resolver_ShopService) GetQueries(conn *grpc.ClientConn) graphq
 				resp, err := client.FindShopByName(p.Context, &req)
 				if err != nil {
 					return nil, errors.Wrap(err, "Failed to call RPC FindShopByName")
+				}
+				return resp, nil
+			},
+		},
+		"ListShop": &graphql.Field{
+			Type: Gql__type_ListShopResponse(),
+			Args: graphql.FieldConfigArgument{
+				"page": &graphql.ArgumentConfig{
+					Type:        graphql.Int,
+					Description: `ページ番号`,
+				},
+				"per_page": &graphql.ArgumentConfig{
+					Type:        graphql.Int,
+					Description: `1ページあたりの表示数`,
+				},
+			},
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				var req ListShopRequest
+				if err := runtime.MarshalRequest(p.Args, &req, false); err != nil {
+					return nil, errors.Wrap(err, "Failed to marshal request for ListShop")
+				}
+				client := NewShopServiceClient(conn)
+				resp, err := client.ListShop(p.Context, &req)
+				if err != nil {
+					return nil, errors.Wrap(err, "Failed to call RPC ListShop")
 				}
 				return resp, nil
 			},
