@@ -12,6 +12,7 @@
     "gopls@latest"
   ],
   "shell": {
+    // go製のツールはgo.modのtoolsで管理した方がいいのかも？
     "init_hook": [
       // キャッシュサーバを経由しないための設定
       "export GOPRIVATE=github.com/sin392/db-media-sample",
