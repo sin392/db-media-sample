@@ -30,6 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatalln(fmt.Errorf("failed to connect to grpc server: %w", err))
 	}
+	// マルチプレクサはgRPCへのリクエストの振り分けを行う
 	mux := runtime.NewServeMux(
 	// ヘルスチェックの登録どうやったら？
 	// runtime.MiddlewareFunc(
