@@ -3,7 +3,7 @@ module github.com/sin392/db-media-sample/gql-gateway
 go 1.23.1
 
 require (
-	github.com/sin392/db-media-sample/sample v0.0.0-20241006044230-6607ad826be6
+	github.com/sin392/db-media-sample/sample v0.0.0-20241006050753-966627b64d84
 	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.49.0
 	google.golang.org/grpc v1.67.1

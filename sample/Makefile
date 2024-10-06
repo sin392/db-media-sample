@@ -53,6 +53,7 @@ update/proto: ## bufで管理しているprotoの依存関係を更新します
 update/link: ## 外部protoのsymlinkを作成
 	ln -sf ../../../../vendor/grpc-graphql-gateway/include/graphql/graphql.proto proto/vendor/grpc-graphql-gateway/graphql.proto
 
+# モジュール配下の単語のみで更新してしまうからルートで実行するようにしてもいいかも
 .PHONY: update/cspell
 update/cspell: ## cspellで使っているカスタム辞書を更新します。実行後に差分を見てtypoが含まれていないか確認してください。
 	npx cspell --words-only --unique . | LC_ALL=C sort -u --ignore-case | LC_ALL=C tr '[:upper:]' '[:lower:]' > ../.cspell/project-words.txt
