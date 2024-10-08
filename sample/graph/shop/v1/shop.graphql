@@ -1,0 +1,246 @@
+"""
+ShopService
+"""
+directive @ShopService on FIELD_DEFINITION
+"""
+FindShopByNameRequest
+"""
+input FindShopByNameRequestInput {
+  """
+  店舗名
+  """
+  name: String
+}
+"""
+FindShopByNameResponse
+"""
+type FindShopByNameResponse {
+  """
+  固有ID
+  """
+  id: String
+  """
+  店舗名
+  """
+  name: String
+  """
+  住所
+  """
+  location: Location
+  """
+  電話番号
+  """
+  tel: String
+  """
+  画像URL
+  """
+  imageUrl: String
+  """
+  サイトURL
+  """
+  siteUrl: String
+  """
+  評価
+  """
+  rating: Float
+  """
+  タグのリスト
+  """
+  tags: [String!]
+  """
+  メニューのリスト
+  """
+  menus: [Menu!]
+}
+"""
+ListShopRequest
+"""
+input ListShopRequestInput {
+  """
+  ページ番号
+  """
+  page: Int
+  """
+  1ページあたりの表示数
+  """
+  perPage: Int
+}
+"""
+FindShopByNameResponse
+"""
+type ListShopResponse {
+  """
+  店舗のリスト
+  """
+  shops: [Shop!]
+}
+"""
+Location
+"""
+type Location {
+  """
+  県
+  """
+  prefecture: String
+  """
+  市
+  """
+  city: String
+  """
+  住所
+  """
+  address: String
+}
+"""
+Location
+"""
+input LocationInput {
+  """
+  県
+  """
+  prefecture: String
+  """
+  市
+  """
+  city: String
+  """
+  住所
+  """
+  address: String
+}
+"""
+Menu
+"""
+type Menu {
+  """
+  商品名
+  """
+  name: String
+  """
+  価格
+  """
+  price: Int
+  """
+  商品説明
+  """
+  desc: String
+}
+"""
+Menu
+"""
+input MenuInput {
+  """
+  商品名
+  """
+  name: String
+  """
+  価格
+  """
+  price: Int
+  """
+  商品説明
+  """
+  desc: String
+}
+type Mutation {
+  """
+  StoreShop
+
+  店舗を登録する
+  """
+  shopServiceStoreShop(in: StoreShopRequestInput): Boolean
+}
+type Query {
+  """
+  FindShopByName
+
+  店舗名で店舗を検索する
+  """
+  shopServiceFindShopByName(
+    in: FindShopByNameRequestInput
+  ): FindShopByNameResponse
+  """
+  ListShop
+
+  店舗を一覧表示する
+  """
+  shopServiceListShop(in: ListShopRequestInput): ListShopResponse
+}
+"""
+Shop
+"""
+type Shop {
+  """
+  固有ID
+  """
+  id: String
+  """
+  店舗名
+  """
+  name: String
+  """
+  住所
+  """
+  location: Location
+  """
+  電話番号
+  """
+  tel: String
+  """
+  画像URL
+  """
+  imageUrl: String
+  """
+  サイトURL
+  """
+  siteUrl: String
+  """
+  評価
+  """
+  rating: Float
+  """
+  タグのリスト
+  """
+  tags: [String!]
+  """
+  メニューのリスト
+  """
+  menus: [Menu!]
+}
+"""
+StoreShopRequest
+"""
+input StoreShopRequestInput {
+  """
+  店舗名
+  """
+  name: String
+  """
+  住所
+  """
+  location: LocationInput
+  """
+  電話番号
+  """
+  tel: String
+  """
+  画像URL
+  """
+  imageUrl: String
+  """
+  サイトURL
+  """
+  siteUrl: String
+  """
+  評価
+  """
+  rating: Float
+  """
+  タグのリスト
+  """
+  tags: [String!]
+  """
+  メニューのリスト
+  """
+  menus: [MenuInput!]
+}

@@ -13,6 +13,7 @@ require (
 	github.com/jinzhu/copier v0.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.3
+	github.com/sin392/protoc-gen-graphql v0.0.0-20241008142844-aff7f064e4e3
 	github.com/spf13/viper v1.19.0
 	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
@@ -24,12 +25,12 @@ require (
 	go.opentelemetry.io/otel/sdk v1.30.0
 	go.opentelemetry.io/otel/trace v1.30.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20240903143218-8af14fe29dc1
-	google.golang.org/grpc v1.66.1
+	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.34.2
 )
 
 require (
-	github.com/agnivade/levenshtein v1.1.1 // indirect
+	github.com/agnivade/levenshtein v1.2.0 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect

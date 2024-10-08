@@ -6,7 +6,7 @@ generate: generate/proto generate/graphql ## generate系のtargetを一括で実
 
 .PHONY: generate/proto
 generate/proto: ## protoファイルのコード生成を実行します
-	cd proto && buf generate
+	cd proto && buf generate && npx prettier --write ../graph
 
 .PHONY: generate/graphql
 generate/graphql: ## graphqlファイルのコード生成を実行します
@@ -55,7 +55,7 @@ update/proto: ## bufで管理しているprotoの依存関係を更新します
 
 .PHONY: update/link
 update/link: ## 外部protoのsymlinkを作成
-	ln -sf ../../../../vendor/grpc-graphql-gateway/include/graphql/graphql.proto proto/vendor/grpc-graphql-gateway/graphql.proto
+	ln -sf ../../../../vendor/go-proto-gql/api/danielvladco/protobuf/graphql.proto proto/vendor/go-proto-gql/graphql.proto
 
 # モジュール配下の単語のみで更新してしまうからルートで実行するようにしてもいいかも
 .PHONY: update/cspell

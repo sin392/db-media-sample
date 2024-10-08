@@ -14,10 +14,11 @@ plugins:
   - local: protoc-gen-grpc-gateway
     out: ../pb
     opt: paths=source_relative
-  # gql-gatewayから参照するためのコード生成
   - local: protoc-gen-graphql
-    out: ../pb
-    opt: paths=source_relative
+    out: ../graph
+    opt:
+      # NOTE: trim_prefixにバージョン情報を指定しているのでバージョン更新時に注意
+      - paths=source_relative
   - local: protoc-gen-openapiv2
     out: ../docs/openapiv2
     opt:

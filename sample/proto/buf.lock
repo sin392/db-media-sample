@@ -7,3 +7,9 @@ deps:
   - name: buf.build/grpc-ecosystem/grpc-gateway
     commit: a48fcebcf8f140dd9d09359b9bb185a4
     digest: b5:330af8a71b579ab96c4f3ee26929d1a68a5a9e986c7cfe0a898591fc514216bb6e723dc04c74d90fdee3f3f14f9100a54b4f079eb273e6e7213f0d5baca36ff8
+  - name: buf.build/protocolbuffers/wellknowntypes
+    commit: d59b7d45e69d4e129a1b797e2766f067
+    digest: b5:79d98c29b4fadd41adba4396b9c628daf2db955f7a2cbd8dd00fb21911b31463948b1d2ba4ba202fad034eec23dbf9f56ea3c8dcef5f88e5b85111eadae88359
+  - name: buf.build/sin392/protoc-gen-graphql
+    commit: 748aed56cc994982958a4127dae75c1c
+    digest: b5:ee66c72d71f5bea2c0932d695de051ea225e04b33376fd4eee65339d7cb1bd561b93a26322f1f50fa21ab5a5c9ffb9352b08dde8886e510f139beac8ca666cc7

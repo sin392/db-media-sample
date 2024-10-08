@@ -15,6 +15,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
@@ -23,6 +24,22 @@ import (
 
 type GrpcServer struct {
 	*grpc.Server
+}
+
+func NewGrpcConnection(grpcServerEndpoint string) (*grpc.ClientConn, error) {
+	conn, err := grpc.NewClient(
+		grpcServerEndpoint,
+		grpc.WithTransportCredentials(
+			insecure.NewCredentials(),
+		),
+		grpc.WithStatsHandler(
+			otelgrpc.NewClientHandler(),
+		),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to grpc server: %w", err)
+	}
+	return conn, nil
 }
 
 func NewGrpcServer(

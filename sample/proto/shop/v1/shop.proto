@@ -2,30 +2,68 @@ syntax = "proto3";
 
 package shop.v1;
 
-option go_package = "github.com/sin392/db-media-sample/sample/pb/shop/v1;shop";
-
 import "google/api/annotations.proto";
 import "google/api/field_behavior.proto";
+import "proto/graphql/option.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
-import "vendor/grpc-graphql-gateway/graphql.proto";
+option go_package = "github.com/sin392/db-media-sample/sample/pb/shop/v1;shop";
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
+  info: {
+    title: "Sample API"
+    version: "v1.0.0"
+    contact: {email: "sin392@gmail.com"}
+    license: {
+      name: "My License"
+      url: "LICENSE.txt"
+    }
+  }
+  responses: [
+    {
+      key: "500"
+      value: {
+        description: "内部エラー"
+        schema: {
+          json_schema: {ref: ".google.rpc.Status"}
+        }
+        examples: {
+          key: "application/json"
+          value: "{\"code\": 13, \"message\": \"Internal Server Error\", \"details\": []}"
+        }
+      }
+    },
+    {
+      key: "504"
+      value: {
+        description: "タイムアウト"
+        schema: {
+          json_schema: {ref: ".google.rpc.Status"}
+        }
+        examples: {
+          key: "application/json"
+          value: "{\"code\": 4, \"message\": \"Timeout\", \"details\": []}"
+        }
+      }
+    }
+  ]
+};
 
 // Location
 message Location {
   // 県
-  string prefecture = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string prefecture = 1 [(google.api.field_behavior) = REQUIRED];
   // 市
-  string city = 2 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string city = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
-  string address = 3 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string address = 3 [(google.api.field_behavior) = REQUIRED];
 }
 
 // Menu
 message Menu {
   // 商品名
-  string name = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   // 価格
-  int32 price = 2 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  int32 price = 2 [(google.api.field_behavior) = REQUIRED];
   // 商品説明
   string desc = 3;
 }
@@ -33,9 +71,9 @@ message Menu {
 // Shop
 message Shop {
   // 固有ID
-  string id = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
   // 店舗名
-  string name = 2 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
   Location location = 3;
   // 電話番号
@@ -55,15 +93,15 @@ message Shop {
 // FindShopByNameRequest
 message FindShopByNameRequest {
   // 店舗名
-  string name = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // FindShopByNameResponse
 message FindShopByNameResponse {
   // 固有ID
-  string id = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string id = 1 [(google.api.field_behavior) = REQUIRED];
   // 店舗名
-  string name = 2 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string name = 2 [(google.api.field_behavior) = REQUIRED];
   // 住所
   Location location = 3;
   // 電話番号
@@ -91,15 +129,15 @@ message ListShopRequest {
 // FindShopByNameResponse
 message ListShopResponse {
   // 店舗のリスト
-  repeated Shop shops = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  repeated Shop shops = 1 [(google.api.field_behavior) = REQUIRED];
 }
 
 // StoreShopRequest
 message StoreShopRequest {
   // 店舗名
-  string name = 1 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  string name = 1 [(google.api.field_behavior) = REQUIRED];
   // 住所
-  Location location = 2 [(google.api.field_behavior) = REQUIRED, (graphql.field) = {required: true}];
+  Location location = 2 [(google.api.field_behavior) = REQUIRED];
   // 電話番号
   string tel = 3;
   // 画像URL
@@ -117,73 +155,21 @@ message StoreShopRequest {
 // StoreShopResponse
 message StoreShopResponse {}
 
-option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
-  info: {
-    title: "Sample API";
-    version: "v1.0.0";
-    contact: {
-      email: "sin392@gmail.com";
-    };
-    license: {
-      name: "My License";
-      url: "LICENSE.txt";
-    };
-  };
-  responses: [
-    {
-      key: "500";
-      value: {
-        description: "内部エラー";
-        schema: {
-          json_schema: {
-            ref: ".google.rpc.Status";
-          }
-        }
-        examples: {
-          key: "application/json"
-          value: "{\"code\": 13, \"message\": \"Internal Server Error\", \"details\": []}"
-        }
-      }
-    }, {
-      key: "504";
-      value: {
-        description: "タイムアウト";
-        schema: {
-          json_schema: {
-            ref: ".google.rpc.Status";
-          }
-        }
-        examples: {
-          key: "application/json"
-          value: "{\"code\": 4, \"message\": \"Timeout\", \"details\": []}"
-        }
-      }
-    }
-  ]
-};
-
 // ShopService
 service ShopService {
   // FindShopByName
   //
   // 店舗名で店舗を検索する
   rpc FindShopByName(FindShopByNameRequest) returns (FindShopByNameResponse) {
-    option (graphql.schema) = {
-      type: QUERY
-      name: "FindShopByName"
-    };
-    option (google.api.http) = {
-      get: "/v1/shops/name/{name}"
-    };
+    option (proto.graphql.rpc) = {type: QUERY};
+    option (google.api.http) = {get: "/v1/shops/name/{name}"};
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       responses: {
-        key: "404";
+        key: "404"
         value: {
           description: "店舗が見つからない場合"
           schema: {
-            json_schema: {
-              ref: ".google.rpc.Status";
-            }
+            json_schema: {ref: ".google.rpc.Status"}
           }
           examples: {
             key: "application/json"
@@ -197,36 +183,25 @@ service ShopService {
   //
   // 店舗を一覧表示する
   rpc ListShop(ListShopRequest) returns (ListShopResponse) {
-    option (graphql.schema) = {
-      type: QUERY
-      name: "ListShop"
-    };
-    option (google.api.http) = {
-      get: "/v1/shops"
-    };
+    option (proto.graphql.rpc) = {type: QUERY};
+    option (google.api.http) = {get: "/v1/shops"};
   }
   // StoreShop
   //
   // 店舗を登録する
   rpc StoreShop(StoreShopRequest) returns (StoreShopResponse) {
-    // StoreShopResponseが見つからない旨のエラーが出るため、一旦コメントアウト
-    // option (graphql.schema) = {
-    //   type: MUTATION
-    //   name: "StoreShop"
-    // };
+    option (proto.graphql.rpc) = {type: MUTATION};
     option (google.api.http) = {
       post: "/v1/shops"
       body: "*"
     };
     option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       responses: {
-        key: "409";
+        key: "409"
         value: {
           description: "登録しようとしている店舗が既に存在する場合"
           schema: {
-            json_schema: {
-              ref: ".google.rpc.Status";
-            }
+            json_schema: {ref: ".google.rpc.Status"}
           }
           examples: {
             key: "application/json"
