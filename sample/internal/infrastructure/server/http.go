@@ -9,10 +9,8 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sin392/db-media-sample/sample/pb/shop/v1"
-	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
@@ -20,31 +18,28 @@ type HttpServer struct {
 	mux http.Handler
 }
 
-func NewHttpServer() HttpServer {
-	server := HttpServer{}
-	return server
+func NewHttpServer() *HttpServer {
+	return &HttpServer{}
 }
 
-func (s *HttpServer) setupRouters(ctx context.Context) error {
-	grpcServerEndpoint := "localhost:50051"
-	conn, err := grpc.NewClient(
-		grpcServerEndpoint,
-		grpc.WithTransportCredentials(
-			insecure.NewCredentials(),
-		),
-		grpc.WithStatsHandler(
-			otelgrpc.NewClientHandler(),
-		),
-	)
-	if err != nil {
-		return fmt.Errorf("failed to connect to grpc server: %w", err)
+func (s *HttpServer) ListenAndServe(httpServerEndpoint string, grpcConn *grpc.ClientConn) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	if err := s.setupRouters(ctx, grpcConn); err != nil {
+		panic(err)
 	}
+
+	return http.ListenAndServe(httpServerEndpoint, s.mux)
+}
+
+func (s *HttpServer) setupRouters(ctx context.Context, grpcConn *grpc.ClientConn) error {
 	mux := runtime.NewServeMux(
 		runtime.WithHealthzEndpoint(
-			grpc_health_v1.NewHealthClient(conn),
+			grpc_health_v1.NewHealthClient(grpcConn),
 		),
 	)
-	if err := shop.RegisterShopServiceHandler(ctx, mux, conn); err != nil {
+	if err := shop.RegisterShopServiceHandler(ctx, mux, grpcConn); err != nil {
 		return err
 	}
 	// メトリクスエンドポイント
@@ -75,14 +70,4 @@ func (s *HttpServer) setupRouters(ctx context.Context) error {
 		otelHandler.ServeHTTP(w, r)
 	})
 	return nil
-}
-
-func (s *HttpServer) ListenAndServe() error {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	if err := s.setupRouters(ctx); err != nil {
-		panic(err)
-	}
-	return http.ListenAndServe(":8080", s.mux)
 }

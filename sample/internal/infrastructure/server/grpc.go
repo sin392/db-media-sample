@@ -26,26 +26,10 @@ type GrpcServer struct {
 	*grpc.Server
 }
 
-func NewGrpcConnection(grpcServerEndpoint string) (*grpc.ClientConn, error) {
-	conn, err := grpc.NewClient(
-		grpcServerEndpoint,
-		grpc.WithTransportCredentials(
-			insecure.NewCredentials(),
-		),
-		grpc.WithStatsHandler(
-			otelgrpc.NewClientHandler(),
-		),
-	)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to grpc server: %w", err)
-	}
-	return conn, nil
-}
-
 func NewGrpcServer(
 	shopSrv controller.ShopControllerPb,
-) GrpcServer {
-	server := GrpcServer{
+) *GrpcServer {
+	server := &GrpcServer{
 		Server: grpc.NewServer(
 			grpc.StatsHandler(
 				otelgrpc.NewServerHandler(),
@@ -125,8 +109,8 @@ func (s *GrpcServer) configure(shopSrv controller.ShopControllerPb) {
 	pb.RegisterShopServiceServer(s, &shopSrv)
 }
 
-func (s *GrpcServer) ListenAndServe() error {
-	listenPort, err := net.Listen("tcp", ":50051")
+func (s *GrpcServer) ListenAndServe(grpcServerEndpoint string) error {
+	listenPort, err := net.Listen("tcp", grpcServerEndpoint)
 	if err != nil {
 		return fmt.Errorf("failed to listen: %v", err)
 	}
@@ -135,4 +119,20 @@ func (s *GrpcServer) ListenAndServe() error {
 	}
 	log.Println("gRPC server started")
 	return nil
+}
+
+func NewGrpcConnection(grpcServerEndpoint string) (*grpc.ClientConn, error) {
+	conn, err := grpc.NewClient(
+		grpcServerEndpoint,
+		grpc.WithTransportCredentials(
+			insecure.NewCredentials(),
+		),
+		grpc.WithStatsHandler(
+			otelgrpc.NewClientHandler(),
+		),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to grpc server: %w", err)
+	}
+	return conn, nil
 }

@@ -10,17 +10,17 @@ import (
 
 type Application struct {
 	cfg        *config.Config
-	grpcServer server.GrpcServer
-	httpServer server.HttpServer
-	gqlServer  server.GqlServer
+	grpcServer *server.GrpcServer
+	httpServer *server.HttpServer
+	gqlServer  *server.GqlServer
 	wg         sync.WaitGroup
 }
 
 func NewApplication(
 	cfg *config.Config,
-	grpcServer server.GrpcServer,
-	httpServer server.HttpServer,
-	gqlServer server.GqlServer,
+	grpcServer *server.GrpcServer,
+	httpServer *server.HttpServer,
+	gqlServer *server.GqlServer,
 ) (*Application, error) {
 	app := &Application{
 		cfg:        cfg,
@@ -39,17 +39,29 @@ func (a *Application) configure() {
 }
 
 func (a *Application) Start() {
+	grpcServerEndpoint := ":50051"
+	httpServerEndpoint := ":8080"
+	gqlServerEndpoint := ":8081"
+
 	a.wg.Add(3) // 非同期に起動するサーバの数だけカウントアップ
 	go func() {
-		a.grpcServer.ListenAndServe()
+		a.grpcServer.ListenAndServe(grpcServerEndpoint)
 		a.wg.Done()
 	}()
 	go func() {
-		a.httpServer.ListenAndServe()
+		conn, err := server.NewGrpcConnection(grpcServerEndpoint)
+		if err != nil {
+			panic(err)
+		}
+		a.httpServer.ListenAndServe(httpServerEndpoint, conn)
 		a.wg.Done()
 	}()
 	go func() {
-		a.gqlServer.ListenAndServe()
+		conn, err := server.NewGrpcConnection(grpcServerEndpoint)
+		if err != nil {
+			panic(err)
+		}
+		a.gqlServer.ListenAndServe(gqlServerEndpoint, conn)
 		a.wg.Done()
 	}()
 	a.wg.Wait()
