@@ -22,11 +22,19 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+type GrpcServerEndpoint string
+
+func (e GrpcServerEndpoint) String() string {
+	return string(e)
+}
+
 type GrpcServer struct {
 	*grpc.Server
+	grpcServerEndpoint GrpcServerEndpoint
 }
 
 func NewGrpcServer(
+	grpcServerEndpoint GrpcServerEndpoint,
 	shopSrv controller.ShopControllerPb,
 ) *GrpcServer {
 	server := &GrpcServer{
@@ -41,6 +49,7 @@ func NewGrpcServer(
 				errorHandlingInterceptor,
 			),
 		),
+		grpcServerEndpoint: grpcServerEndpoint,
 	}
 	server.configure(shopSrv)
 
@@ -109,8 +118,8 @@ func (s *GrpcServer) configure(shopSrv controller.ShopControllerPb) {
 	pb.RegisterShopServiceServer(s, &shopSrv)
 }
 
-func (s *GrpcServer) ListenAndServe(grpcServerEndpoint string) error {
-	listenPort, err := net.Listen("tcp", grpcServerEndpoint)
+func (s *GrpcServer) ListenAndServe() error {
+	listenPort, err := net.Listen("tcp", s.grpcServerEndpoint.String())
 	if err != nil {
 		return fmt.Errorf("failed to listen: %v", err)
 	}
@@ -121,9 +130,9 @@ func (s *GrpcServer) ListenAndServe(grpcServerEndpoint string) error {
 	return nil
 }
 
-func NewGrpcConnection(grpcServerEndpoint string) (*grpc.ClientConn, error) {
+func NewGrpcConnection(grpcServerEndpoint GrpcServerEndpoint) (*grpc.ClientConn, error) {
 	conn, err := grpc.NewClient(
-		grpcServerEndpoint,
+		grpcServerEndpoint.String(),
 		grpc.WithTransportCredentials(
 			insecure.NewCredentials(),
 		),

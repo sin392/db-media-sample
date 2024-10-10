@@ -23,6 +23,7 @@ func InitializeApplication() (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
+	grpcServerEndpoint := server.ExtractGrpcServerEndpointFromConfig(configConfig)
 	databaseConfig := database.NewConfig()
 	noSQL, err := database.NewMongoHandler(databaseConfig)
 	if err != nil {
@@ -34,9 +35,18 @@ func InitializeApplication() (*Application, error) {
 	shopCommandRepository := repository.NewShopCommandRepositoryNoSQL(noSQL)
 	storeShopUsecase := usecase.NewStoreShopUsecase(shopCommandRepository)
 	shopControllerPb := controller.NewShopControllerPb(findShopByNameUsecase, listShopUsecase, storeShopUsecase)
-	grpcServer := server.NewGrpcServer(shopControllerPb)
-	httpServer := server.NewHttpServer()
-	gqlServer := server.NewGqlServer()
+	grpcServer := server.NewGrpcServer(grpcServerEndpoint, shopControllerPb)
+	httpServerEndpoint := server.ExtractHttpServerEndpointFromConfig(configConfig)
+	clientConn, err := server.NewGrpcConnection(grpcServerEndpoint)
+	if err != nil {
+		return nil, err
+	}
+	httpServer, err := server.NewHttpServer(httpServerEndpoint, clientConn)
+	if err != nil {
+		return nil, err
+	}
+	gqlServerEndpoint := server.ExtractGqlServerEndpointFromConfig(configConfig)
+	gqlServer := server.NewGqlServer(gqlServerEndpoint, clientConn)
 	application, err := NewApplication(configConfig, grpcServer, httpServer, gqlServer)
 	if err != nil {
 		return nil, err
@@ -48,4 +58,4 @@ func InitializeApplication() (*Application, error) {
 
 // usecaseとadapterが増えるとファイルが肥大化しそうだなぁ
 // presenterは汎用的な表現にまとめていいかも
-var WireSet = wire.NewSet(config.Load, server.NewHttpServer, server.NewGrpcServer, server.NewGqlServer, database.NewMongoHandler, database.NewConfig, controller.NewShopControllerPb, repository.NewShopQueryRepositoryNoSQL, repository.NewShopCommandRepositoryNoSQL, usecase.NewFindShopByNameUsecase, usecase.NewListShopUsecase, usecase.NewStoreShopUsecase)
+var WireSet = wire.NewSet(config.Load, server.ExtractGrpcServerEndpointFromConfig, server.ExtractHttpServerEndpointFromConfig, server.ExtractGqlServerEndpointFromConfig, server.NewGrpcServer, server.NewGrpcConnection, server.NewHttpServer, server.NewGqlServer, database.NewMongoHandler, database.NewConfig, controller.NewShopControllerPb, repository.NewShopQueryRepositoryNoSQL, repository.NewShopCommandRepositoryNoSQL, usecase.NewFindShopByNameUsecase, usecase.NewListShopUsecase, usecase.NewStoreShopUsecase)

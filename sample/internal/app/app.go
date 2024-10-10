@@ -39,29 +39,17 @@ func (a *Application) configure() {
 }
 
 func (a *Application) Start() {
-	grpcServerEndpoint := ":50051"
-	httpServerEndpoint := ":8080"
-	gqlServerEndpoint := ":8081"
-
 	a.wg.Add(3) // 非同期に起動するサーバの数だけカウントアップ
 	go func() {
-		a.grpcServer.ListenAndServe(grpcServerEndpoint)
+		a.grpcServer.ListenAndServe()
 		a.wg.Done()
 	}()
 	go func() {
-		conn, err := server.NewGrpcConnection(grpcServerEndpoint)
-		if err != nil {
-			panic(err)
-		}
-		a.httpServer.ListenAndServe(httpServerEndpoint, conn)
+		a.httpServer.ListenAndServe()
 		a.wg.Done()
 	}()
 	go func() {
-		conn, err := server.NewGrpcConnection(grpcServerEndpoint)
-		if err != nil {
-			panic(err)
-		}
-		a.gqlServer.ListenAndServe(gqlServerEndpoint, conn)
+		a.gqlServer.ListenAndServe()
 		a.wg.Done()
 	}()
 	a.wg.Wait()

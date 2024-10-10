@@ -14,36 +14,33 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
+type HttpServerEndpoint string
+
+func (e HttpServerEndpoint) String() string {
+	return string(e)
+}
+
 type HttpServer struct {
-	mux http.Handler
+	*runtime.ServeMux
+	httpServerEndpoint HttpServerEndpoint
 }
 
-func NewHttpServer() *HttpServer {
-	return &HttpServer{}
-}
-
-func (s *HttpServer) ListenAndServe(httpServerEndpoint string, grpcConn *grpc.ClientConn) error {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	if err := s.setupRouters(ctx, grpcConn); err != nil {
-		panic(err)
-	}
-
-	return http.ListenAndServe(httpServerEndpoint, s.mux)
-}
-
-func (s *HttpServer) setupRouters(ctx context.Context, grpcConn *grpc.ClientConn) error {
-	mux := runtime.NewServeMux(
-		runtime.WithHealthzEndpoint(
-			grpc_health_v1.NewHealthClient(grpcConn),
+func NewHttpServer(httpServerEndpoint HttpServerEndpoint, grpcConn *grpc.ClientConn) (*HttpServer, error) {
+	server := &HttpServer{
+		ServeMux: runtime.NewServeMux(
+			runtime.WithHealthzEndpoint(
+				grpc_health_v1.NewHealthClient(grpcConn),
+			),
 		),
-	)
-	if err := shop.RegisterShopServiceHandler(ctx, mux, grpcConn); err != nil {
-		return err
+		httpServerEndpoint: httpServerEndpoint,
+	}
+	ctx := context.Background()
+	// rpcサービスのエンドポイント
+	if err := shop.RegisterShopServiceHandler(ctx, server.ServeMux, grpcConn); err != nil {
+		return nil, err
 	}
 	// メトリクスエンドポイント
-	mux.HandlePath("GET", "/metrics",
+	server.HandlePath("GET", "/metrics",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 			metricHandler := promhttp.Handler()
 			metricHandler.ServeHTTP(w, r)
@@ -51,23 +48,33 @@ func (s *HttpServer) setupRouters(ctx context.Context, grpcConn *grpc.ClientConn
 	)
 	// Swaggerエンドポイント
 	// TODO: 開発環境以外では公開しないようにする
-	mux.HandlePath("GET", "/docs/swagger.yaml", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	server.HandlePath("GET", "/docs/swagger.yaml", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 		http.ServeFile(w, r, "./docs/openapiv2/apidocs.swagger.yaml")
 	})
 	// SwaggerUIエンドポイント
-	mux.HandlePath("GET", "/docs",
+	server.HandlePath("GET", "/docs",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 			swaggerHandler := middleware.SwaggerUI(middleware.SwaggerUIOpts{
 				SpecURL: "/docs/swagger.yaml",
-			}, mux)
+			}, server)
 			swaggerHandler.ServeHTTP(w, r)
 		}),
 	)
-	// 以下はmiddleware的に設定できるのでは？
-	s.mux = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// リクエストのパスをスパンの名前とするHTTPハンドラを生成
-		otelHandler := otelhttp.NewHandler(mux, fmt.Sprintf("%s %s", r.Method, r.URL.Path))
-		otelHandler.ServeHTTP(w, r)
+
+	return server, nil
+}
+
+// リクエストのメソッドとパスからスパンの名称を構成するミドルウェア
+func traceMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		operation := fmt.Sprintf("%s %s", r.Method, r.URL.Path)
+		handler := otelhttp.NewHandler(next, operation)
+		handler.ServeHTTP(w, r)
 	})
-	return nil
+}
+
+// ポートの指定とコネクションの指定がずれてるの微妙だな
+// ポートの設定もファクトリ側に持ってくべきか
+func (s *HttpServer) ListenAndServe() error {
+	return http.ListenAndServe(s.httpServerEndpoint.String(), traceMiddleware(s))
 }

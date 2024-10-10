@@ -19,8 +19,12 @@ import (
 var WireSet = wire.NewSet(
 	config.Load,
 	// infrastructure
-	server.NewHttpServer,
+	server.ExtractGrpcServerEndpointFromConfig,
+	server.ExtractHttpServerEndpointFromConfig,
+	server.ExtractGqlServerEndpointFromConfig,
 	server.NewGrpcServer,
+	server.NewGrpcConnection,
+	server.NewHttpServer,
 	server.NewGqlServer,
 	database.NewMongoHandler,
 	database.NewConfig,
