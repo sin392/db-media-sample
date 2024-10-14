@@ -38,6 +38,6 @@ func NewGqlServer(gqlServerEndpoint GqlServerEndpoint, grpcConn *grpc.ClientConn
 	return server
 }
 
-func (s *GqlServer) ListenAndServe() {
-	http.ListenAndServe(s.gqlServerEndpoint.String(), nil)
+func (s *GqlServer) ListenAndServe() error {
+	return http.ListenAndServe(s.gqlServerEndpoint.String(), nil)
 }

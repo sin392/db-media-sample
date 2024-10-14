@@ -37,29 +37,35 @@ func NewHttpServer(httpServerEndpoint HttpServerEndpoint, grpcConn *grpc.ClientC
 	ctx := context.Background()
 	// rpcサービスのエンドポイント
 	if err := shop.RegisterShopServiceHandler(ctx, server.ServeMux, grpcConn); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to register shop service handler: %w", err)
 	}
 	// メトリクスエンドポイント
-	server.HandlePath("GET", "/metrics",
+	if err := server.HandlePath("GET", "/metrics",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 			metricHandler := promhttp.Handler()
 			metricHandler.ServeHTTP(w, r)
 		}),
-	)
+	); err != nil {
+		return nil, fmt.Errorf("failed to handle metrics: %w", err)
+	}
 	// Swaggerエンドポイント
 	// TODO: 開発環境以外では公開しないようにする
-	server.HandlePath("GET", "/docs/swagger.yaml", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+	if err := server.HandlePath("GET", "/docs/swagger.yaml", func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 		http.ServeFile(w, r, "./docs/openapiv2/apidocs.swagger.yaml")
-	})
+	}); err != nil {
+		return nil, fmt.Errorf("failed to handle swagger.yaml: %w", err)
+	}
 	// SwaggerUIエンドポイント
-	server.HandlePath("GET", "/docs",
+	if err := server.HandlePath("GET", "/docs",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 			swaggerHandler := middleware.SwaggerUI(middleware.SwaggerUIOpts{
 				SpecURL: "/docs/swagger.yaml",
 			}, server)
 			swaggerHandler.ServeHTTP(w, r)
 		}),
-	)
+	); err != nil {
+		return nil, fmt.Errorf("failed to handle swagger ui: %w", err)
+	}
 
 	return server, nil
 }

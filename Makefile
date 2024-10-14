@@ -3,7 +3,11 @@
 ##################################################
 
 .PHONY: lint
-lint: lint/cspell ## lint系のtargetを一括実行します
+lint: lint/cspell lint/go ## lint系のtargetを一括実行します
+
+.PHONY: lint/go
+lint/go: ## goのlintを実行します
+	go list -f '{{.Dir}}/...' -m | xargs golangci-lint run
 
 .PHONY: lint/cspell
 lint/cspell: ## cspell によるスペルチェックを実行します

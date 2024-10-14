@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"sync"
 
 	"github.com/sin392/db-media-sample/sample/internal/config"
@@ -41,15 +42,21 @@ func (a *Application) configure() {
 func (a *Application) Start() {
 	a.wg.Add(3) // 非同期に起動するサーバの数だけカウントアップ
 	go func() {
-		a.grpcServer.ListenAndServe()
+		if err := a.grpcServer.ListenAndServe(); err != nil {
+			log.Fatalf("failed to listen and serve: %v", err)
+		}
 		a.wg.Done()
 	}()
 	go func() {
-		a.httpServer.ListenAndServe()
+		if err := a.httpServer.ListenAndServe(); err != nil {
+			log.Fatalf("failed to listen and serve: %v", err)
+		}
 		a.wg.Done()
 	}()
 	go func() {
-		a.gqlServer.ListenAndServe()
+		if err := a.gqlServer.ListenAndServe(); err != nil {
+			log.Fatalf("failed to listen and serve: %v", err)
+		}
 		a.wg.Done()
 	}()
 	a.wg.Wait()
