@@ -7,10 +7,10 @@ import (
 	"log"
 	"net"
 
-	"github.com/bwmarrin/snowflake"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
+	"github.com/sin392/db-media-sample/sample/module/snowflake"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -93,15 +93,15 @@ func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.U
 // Snowflake ID を生成してコンテキストに追加するインターセプター
 func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	// Node には 1 を指定していますが、環境によって変えるべき
-	node, err := snowflake.NewNode(nodeID)
+	snowflakeIDGenerator, err := snowflake.NewSnowflakeIDGenerator(nodeID)
 	if err != nil {
-		log.Fatalf("failed to create snowflake node: %v", err)
+		log.Fatalf("failed to create snowflake ID generator: %v", err)
 	}
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		// Generate a new Snowflake ID for each request
-		snowflakeID := node.Generate().String()
+		snowflakeID := snowflakeIDGenerator.Generate()
 		// Add the ID to the request context
-		ctx = context.WithValue(ctx, "snowflakeID", snowflakeID)
+		ctx = snowflake.SetSnowflakeID(ctx, snowflakeID)
 		// Call the original unary handler
 		return handler(ctx, req)
 	}

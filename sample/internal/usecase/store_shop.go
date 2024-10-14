@@ -7,6 +7,7 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
 	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
+	"github.com/sin392/db-media-sample/sample/module/snowflake"
 	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
@@ -47,7 +48,7 @@ func (a *StoreShopUsecaseImpl) Execute(ctx context.Context, input *StoreShopInpu
 
 	// TODO: コンストラクタを使ってその中でIDを生成する
 	shop := model.Shop(*input)
-	shop.ID = ctx.Value("snowflakeID").(string)
+	shop.ID = snowflake.GetSnowflakeID(ctx)
 	if err := a.qRepo.Store(ctx, shop); err != nil {
 		return fmt.Errorf("failed to store shop: %w", err)
 	}
