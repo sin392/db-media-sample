@@ -32,6 +32,7 @@ func NewGqlServer(gqlServerEndpoint GqlServerEndpoint, grpcConn *grpc.ClientConn
 		gqlServerEndpoint: gqlServerEndpoint,
 	}
 
+	// ここってデフォルトのマルチプレクサに登録されてるのか？
 	http.Handle("/query", server)
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 
@@ -39,5 +40,5 @@ func NewGqlServer(gqlServerEndpoint GqlServerEndpoint, grpcConn *grpc.ClientConn
 }
 
 func (s *GqlServer) ListenAndServe() error {
-	return http.ListenAndServe(s.gqlServerEndpoint.String(), nil)
+	return http.ListenAndServe(s.gqlServerEndpoint.String(), traceMiddleware(s))
 }
