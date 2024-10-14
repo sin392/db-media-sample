@@ -9,7 +9,8 @@
     "protoc-gen-doc@latest",
     "buf@latest",
     "graphviz@latest",
-    "gopls@latest"
+    "gopls@latest",
+    "golangci-lint@latest"
   ],
   "shell": {
     // go製のツールはgo.modのtoolsで管理した方がいいのかも？
