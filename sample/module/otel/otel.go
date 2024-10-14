@@ -149,7 +149,7 @@ func NewResource(serviceName string, serviceVersion string) (*sdkresource.Resour
 
 func newMeterProvider() (*sdkmetric.MeterProvider, error) {
 	// prometheus形式への変換はotel collectorで行うのが良さそう
-	// metricExporter, err := stdoutmetric.New()
+	// exporter, err := stdoutmetric.New()
 	exporter, err := prometheus.New()
 	if err != nil {
 		return nil, fmt.Errorf("failed to create metric exporter: %w", err)

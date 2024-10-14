@@ -7,7 +7,6 @@ import (
 	"log"
 	"net"
 
-	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/sin392/db-media-sample/sample/internal/adapter/controller"
 	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
 	"github.com/sin392/db-media-sample/sample/module/snowflake"
@@ -42,11 +41,7 @@ func NewGrpcServer(
 			grpc.StatsHandler(
 				otelgrpc.NewServerHandler(),
 			),
-			grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
 			grpc.ChainUnaryInterceptor(
-				// otelgrpc.UnaryServerInterceptorを使うべきでは？
-				// → 今は otelgrpc.NewServerHandler() が推奨の方法らしい
-				// grpc_prometheus.UnaryServerInterceptor,
 				generateSnowflakeIDInterceptor(1),
 				errorHandlingInterceptor,
 			),
@@ -114,8 +109,6 @@ func (s *GrpcServer) configure(shopSrv controller.ShopControllerPb) {
 	reflection.Register(s)
 	// ヘルスチェックサービスの登録
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
-	// gRPCのメトリクスサービスの登録
-	grpc_prometheus.Register(s.Server)
 	// Shopサービスの登録
 	pb.RegisterShopServiceServer(s, &shopSrv)
 }
