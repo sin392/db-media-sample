@@ -1,0 +1,5 @@
+{
+  "services": [
+    "http://api:8081/query"
+  ]
+}

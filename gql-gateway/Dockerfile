@@ -12,10 +12,12 @@ ENTRYPOINT ["dlv", "debug", "--listen=:40000", "--headless", "--accept-multiclie
 FROM base AS development
 WORKDIR /app
 COPY . .
-RUN go install github.com/air-verse/air@latest
-EXPOSE 3001
-ENTRYPOINT ["air", "-c", ".air.toml"]
+RUN go install github.com/movio/bramble/cmd/bramble@latest
+EXPOSE 8082
+ENTRYPOINT ["bramble"]
+CMD ["--config", "config.json"]
 
+# ここいらないかも？
 FROM base AS builder
 WORKDIR /app
 COPY . .
@@ -23,6 +25,8 @@ RUN go build -a --installsuffix cgo --ldflags="-s" -o main
 
 FROM alpine:latest AS production
 RUN apk --no-cache add ca-certificates
+RUN go install github.com/movio/bramble/cmd/bramble@latest
 COPY --from=builder /app .
-EXPOSE 3001
-ENTRYPOINT ["./main"]
+EXPOSE 8082
+ENTRYPOINT ["bramble"]
+CMD ["--config", "config.json"]

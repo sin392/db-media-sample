@@ -1,0 +1,11 @@
+# for bramble
+
+type Service {
+  name: String!
+  version: String!
+  schema: String!
+}
+
+extend type Query {
+  service: Service!
+}

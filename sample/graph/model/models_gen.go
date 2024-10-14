@@ -5,6 +5,12 @@ package model
 type Query struct {
 }
 
+type Service struct {
+	Name    string `json:"name"`
+	Version string `json:"version"`
+	Schema  string `json:"schema"`
+}
+
 type ShopTypeFindShopByNameResponse struct {
 	ID       string            `json:"id"`
 	ImageURL *string           `json:"image_url,omitempty"`

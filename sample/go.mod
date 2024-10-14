@@ -15,6 +15,7 @@ require (
 	github.com/prometheus/client_golang v1.20.3
 	github.com/sin392/protoc-gen-graphql v0.0.0-20241008142844-aff7f064e4e3
 	github.com/spf13/viper v1.19.0
+	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.5.17
 	github.com/ysugimoto/grpc-graphql-gateway v0.23.0
 	go.mongodb.org/mongo-driver v1.17.0

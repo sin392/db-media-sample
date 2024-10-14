@@ -9,9 +9,10 @@ services:
       - "8082:8082"
     volumes:
       - ./gql-gateway:/app
-      - .air.toml:/app/.air.toml
     depends_on:
-      - api
+      # APIサーバが立ち上がってから起動する
+      api:
+        condition: service_healthy
     networks:
       - db-media-sample-network
   api:
@@ -29,6 +30,11 @@ services:
     depends_on:
       - migration
       - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:8081/query"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
     networks:
       - db-media-sample-network
     environment:
