@@ -5,7 +5,7 @@ import (
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -28,7 +28,7 @@ func NewShopQueryRepositoryNoSQL(db NoSQL) repository.ShopQueryRepository {
 
 // FindByName 名前から店舗を取得する
 func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
-	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
+	ctx, span := otel.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
 	defer span.End()
 
 	var result model.Shop
@@ -45,7 +45,7 @@ func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name stri
 
 // List 店舗一覧を取得する
 func (r *ShopQueryRepositoryNoSQLImpl) List(ctx context.Context) (model.ShopList, error) {
-	ctx, span := trace.StartSpan(ctx, "ShopRepositoryImpl.List")
+	ctx, span := otel.StartSpan(ctx, "ShopRepositoryImpl.List")
 	defer span.End()
 
 	var results model.ShopList

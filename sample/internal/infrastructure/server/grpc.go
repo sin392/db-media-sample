@@ -44,7 +44,9 @@ func NewGrpcServer(
 			),
 			grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
 			grpc.ChainUnaryInterceptor(
-				grpc_prometheus.UnaryServerInterceptor,
+				// otelgrpc.UnaryServerInterceptorを使うべきでは？
+				// → 今は otelgrpc.NewServerHandler() が推奨の方法らしい
+				// grpc_prometheus.UnaryServerInterceptor,
 				generateSnowflakeIDInterceptor(1),
 				errorHandlingInterceptor,
 			),

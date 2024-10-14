@@ -6,7 +6,7 @@ import (
 
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 )
 
 type (
@@ -35,7 +35,7 @@ func (a *ListShopUsecaseImpl) newOutput(shops model.ShopList) *ShopListOutput {
 }
 
 func (a *ListShopUsecaseImpl) Execute(ctx context.Context) (*ShopListOutput, error) {
-	ctx, span := trace.StartSpan(ctx, "ListShopUsecaseImpl.Execute")
+	ctx, span := otel.StartSpan(ctx, "ListShopUsecaseImpl.Execute")
 	defer span.End()
 
 	shops, err := a.qRepo.List(ctx)

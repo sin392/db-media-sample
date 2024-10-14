@@ -1,12 +1,13 @@
 package app
 
 import (
+	"context"
 	"log"
 	"sync"
 
 	"github.com/sin392/db-media-sample/sample/internal/config"
 	"github.com/sin392/db-media-sample/sample/internal/infrastructure/server"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 )
 
 type Application struct {
@@ -15,6 +16,8 @@ type Application struct {
 	httpServer *server.HttpServer
 	gqlServer  *server.GqlServer
 	wg         sync.WaitGroup
+
+	otelShutdown func(context.Context) error
 }
 
 func NewApplication(
@@ -36,7 +39,11 @@ func NewApplication(
 
 func (a *Application) configure() {
 	// OpenTelemetryの初期化
-	trace.InitTraceProvider(a.cfg)
+	shutdown, err := otel.SetupOTelSDK(a.cfg)
+	if err != nil {
+		log.Fatalf("failed to setup otel: %v", err)
+	}
+	a.otelShutdown = shutdown
 }
 
 func (a *Application) Start() {
@@ -66,4 +73,6 @@ func (a *Application) Start() {
 func (a *Application) Stop() {
 	// a.grpcServer.Stop()
 	// a.httpServer.Stop()
+	// a.gqlServer.Stop()
+	// a.otelShutdown(context.Background())
 }

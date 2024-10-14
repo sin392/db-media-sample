@@ -42,6 +42,7 @@ func NewHttpServer(httpServerEndpoint HttpServerEndpoint, grpcConn *grpc.ClientC
 	// メトリクスエンドポイント
 	if err := server.HandlePath("GET", "/metrics",
 		runtime.HandlerFunc(func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+			// TODO: otel形式でエクスポートするようにする
 			metricHandler := promhttp.Handler()
 			metricHandler.ServeHTTP(w, r)
 		}),

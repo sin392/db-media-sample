@@ -7,8 +7,8 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
 	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 	"github.com/sin392/db-media-sample/sample/module/snowflake"
-	"github.com/sin392/db-media-sample/sample/module/trace"
 )
 
 type (
@@ -43,7 +43,7 @@ func NewStoreShopUsecase(
 }
 
 func (a *StoreShopUsecaseImpl) Execute(ctx context.Context, input *StoreShopInput) error {
-	ctx, span := trace.StartSpan(ctx, "StoreShopUsecase.Execute")
+	ctx, span := otel.StartSpan(ctx, "StoreShopUsecase.Execute")
 	defer span.End()
 
 	// TODO: コンストラクタを使ってその中でIDを生成する

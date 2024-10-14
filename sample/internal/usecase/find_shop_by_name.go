@@ -7,7 +7,7 @@ import (
 	"github.com/sin392/db-media-sample/sample/internal/domain/model"
 	"github.com/sin392/db-media-sample/sample/internal/domain/repository"
 	appErrors "github.com/sin392/db-media-sample/sample/internal/errors"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 )
 
 type (
@@ -50,7 +50,7 @@ func (a *FindShopByNameUsecaseImpl) newOutput(shop *model.Shop) *FindShopByNameO
 }
 
 func (a *FindShopByNameUsecaseImpl) Execute(ctx context.Context, input *FindShopByNameInput) (*FindShopByNameOutput, error) {
-	ctx, span := trace.StartSpan(ctx, "FindShopByNameUsecase.Execute")
+	ctx, span := otel.StartSpan(ctx, "FindShopByNameUsecase.Execute")
 	defer span.End()
 
 	shop, err := a.qRepo.FindByName(ctx, input.Name)

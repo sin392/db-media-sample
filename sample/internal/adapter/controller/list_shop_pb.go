@@ -5,12 +5,12 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/copier"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
 func (c *ShopControllerPb) ListShop(ctx context.Context, req *pb.ListShopRequest) (*pb.ListShopResponse, error) {
-	ctx, span := trace.StartSpan(ctx, "ShopControllerPb.ListShop")
+	ctx, span := otel.StartSpan(ctx, "ShopControllerPb.ListShop")
 	defer span.End()
 
 	// usecaseの実行

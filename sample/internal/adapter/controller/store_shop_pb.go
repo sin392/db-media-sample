@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/copier"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
@@ -23,7 +23,7 @@ func newStoreShopInput(req *pb.StoreShopRequest) (*usecase.StoreShopInput, error
 }
 
 func (c *ShopControllerPb) StoreShop(ctx context.Context, req *pb.StoreShopRequest) (*pb.StoreShopResponse, error) {
-	ctx, span := trace.StartSpan(ctx, "StoreShopPbController.StoreShop")
+	ctx, span := otel.StartSpan(ctx, "StoreShopPbController.StoreShop")
 	defer span.End()
 
 	// リクエストのパースとバリデーション

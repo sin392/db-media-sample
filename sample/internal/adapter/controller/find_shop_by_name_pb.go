@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/copier"
 	"github.com/sin392/db-media-sample/sample/internal/usecase"
-	"github.com/sin392/db-media-sample/sample/module/trace"
+	"github.com/sin392/db-media-sample/sample/module/otel"
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
@@ -22,7 +22,7 @@ func newFindShopByNameInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByN
 }
 
 func (c *ShopControllerPb) FindShopByName(ctx context.Context, req *pb.FindShopByNameRequest) (*pb.FindShopByNameResponse, error) {
-	ctx, span := trace.StartSpan(ctx, "FindShopByNamePbController.FindShopByName")
+	ctx, span := otel.StartSpan(ctx, "FindShopByNamePbController.FindShopByName")
 	defer span.End()
 
 	// リクエストのパースとバリデーション
