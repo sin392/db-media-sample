@@ -10,7 +10,7 @@ linters-settings:
         files:
           - "./*/internal/infrastructure/**/*.go"
         allow:
-          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/module/**/*"
           - "github.com/sin392/db-media-sample/*/internal/infrastructure/**/*"
           - "github.com/sin392/db-media-sample/*/internal/adapter/**/*"
           - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
@@ -19,7 +19,7 @@ linters-settings:
         files:
           - "./*/internal/adapter/**/*.go"
         allow:
-          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/module/**/*"
           - "github.com/sin392/db-media-sample/*/internal/adapter/**/*"
           - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
           - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
@@ -27,14 +27,14 @@ linters-settings:
         files:
           - "./*/internal/usecase/**/*.go"
         allow:
-          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/module/**/*"
           - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
           - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
       domain:
         files:
           - "./*/internal/domain/**/*.go"
         allow:
-          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/module/**/*"
           - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
   lll:
     line-length: 150
