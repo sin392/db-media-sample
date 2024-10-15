@@ -18,6 +18,7 @@ func NewSnowflakeIDGenerator(nodeID int64) (*SnowflakeIDGenerator, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to create snowflake node: %w", err)
 	}
+
 	return &SnowflakeIDGenerator{
 		node: node,
 	}, nil
@@ -33,5 +34,6 @@ func SetSnowflakeID(ctx context.Context, snowflakeID string) context.Context {
 
 func GetSnowflakeID(ctx context.Context) string {
 	snowflakeID, _ := ctx.Value(SnowflakeIDKey{}).(string)
+
 	return snowflakeID
 }
