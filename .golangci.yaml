@@ -1,0 +1,40 @@
+linters:
+  enable-all: true
+  disable:
+    - tagliatelle # tagの命名は自由に行いたいため
+
+linters-settings:
+  depguard:
+    rules:
+      infrastructure:
+        files:
+          - "./*/internal/infrastructure/**/*.go"
+        allow:
+          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/infrastructure/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/adapter/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
+      adapter:
+        files:
+          - "./*/internal/adapter/**/*.go"
+        allow:
+          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/adapter/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
+      usecase:
+        files:
+          - "./*/internal/usecase/**/*.go"
+        allow:
+          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/usecase/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
+      domain:
+        files:
+          - "./*/internal/domain/**/*.go"
+        allow:
+          - "github.com/sin392/db-media-sample/*/internal/module/**/*"
+          - "github.com/sin392/db-media-sample/*/internal/domain/**/*"
+  lll:
+    line-length: 150

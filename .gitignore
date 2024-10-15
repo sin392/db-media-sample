@@ -3,4 +3,5 @@
 /grafana
 */tmp
 !.cspell
+!.golangci.yaml
 go.work*
