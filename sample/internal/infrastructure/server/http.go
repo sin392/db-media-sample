@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -84,4 +85,14 @@ func traceMiddleware(next http.Handler) http.Handler {
 // ポートの設定もファクトリ側に持ってくべきか.
 func (s *HttpServer) ListenAndServe() error {
 	return http.ListenAndServe(s.httpServerEndpoint.String(), traceMiddleware(s))
+}
+
+func (s *HttpServer) Shutdown(ctx context.Context) error {
+	if err := s.Shutdown(ctx); err != nil {
+		return fmt.Errorf("failed to shutdown http server: %w", err)
+	}
+
+	log.Println("http server stopped")
+
+	return nil
 }

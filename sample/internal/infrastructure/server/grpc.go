@@ -61,10 +61,11 @@ func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.U
 	if err != nil {
 		log.Printf("ERROR: %v", err)
 	}
-	// コンテキストに関するエラーの判定
+	// コンテキストデッドラインに関するエラーの判定
 	if errors.Is(err, context.DeadlineExceeded) {
 		return nil, status.Errorf(codes.DeadlineExceeded, "timeout")
 	}
+	// コンテキストキャンセルに関するエラーの判定
 	if errors.Is(err, context.Canceled) {
 		return nil, status.Errorf(codes.Internal, "canceled")
 	}
@@ -84,6 +85,7 @@ func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.U
 			return nil, status.Errorf(codes.Unknown, "unknown")
 		}
 	}
+
 	return resp, err
 }
 
@@ -94,6 +96,7 @@ func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req 
 	if err != nil {
 		log.Fatalf("failed to create snowflake ID generator: %v", err)
 	}
+
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		// Generate a new Snowflake ID for each request
 		snowflakeID := snowflakeIDGenerator.Generate()
@@ -118,10 +121,21 @@ func (s *GrpcServer) ListenAndServe() error {
 	if err != nil {
 		return fmt.Errorf("failed to listen: %v", err)
 	}
+
 	if err := s.Serve(listenPort); err != nil {
 		return fmt.Errorf("failed to serve: %v", err)
 	}
+
 	log.Println("gRPC server started")
+
+	return nil
+}
+
+func (s *GrpcServer) Shutdown(ctx context.Context) error {
+	s.GracefulStop()
+
+	log.Println("gRPC server stopped")
+
 	return nil
 }
 
@@ -138,5 +152,6 @@ func NewGrpcConnection(grpcServerEndpoint GrpcServerEndpoint) (*grpc.ClientConn,
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to grpc server: %w", err)
 	}
+
 	return conn, nil
 }

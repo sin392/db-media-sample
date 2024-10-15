@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -41,4 +43,14 @@ func NewGqlServer(gqlServerEndpoint GqlServerEndpoint, grpcConn *grpc.ClientConn
 
 func (s *GqlServer) ListenAndServe() error {
 	return http.ListenAndServe(s.gqlServerEndpoint.String(), traceMiddleware(s))
+}
+
+func (s *GqlServer) Shutdown() error {
+	if err := s.Shutdown(); err != nil {
+		return fmt.Errorf("failed to shutdown gql server: %w", err)
+	}
+
+	log.Println("gql server shutdown")
+
+	return nil
 }
