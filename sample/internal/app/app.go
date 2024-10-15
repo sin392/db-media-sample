@@ -69,7 +69,7 @@ func (a *Application) Start() {
 	a.wg.Wait()
 }
 
-// TODO: 停止処理の追加
+// TODO: 停止処理の追加.
 func (a *Application) Stop() {
 	// a.grpcServer.Stop()
 	// a.httpServer.Stop()

@@ -31,6 +31,7 @@ func NewListShopUsecase(
 
 func (a *ListShopUsecaseImpl) newOutput(shops model.ShopList) *ShopListOutput {
 	output := ShopListOutput(shops)
+
 	return &output
 }
 
@@ -42,5 +43,6 @@ func (a *ListShopUsecaseImpl) Execute(ctx context.Context) (*ShopListOutput, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to list shops: %w", err)
 	}
+
 	return a.newOutput(shops), nil
 }

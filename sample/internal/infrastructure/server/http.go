@@ -71,7 +71,7 @@ func NewHttpServer(httpServerEndpoint HttpServerEndpoint, grpcConn *grpc.ClientC
 	return server, nil
 }
 
-// リクエストのメソッドとパスからスパンの名称を構成するミドルウェア
+// リクエストのメソッドとパスからスパンの名称を構成するミドルウェア.
 func traceMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		operation := fmt.Sprintf("%s %s", r.Method, r.URL.Path)
@@ -81,7 +81,7 @@ func traceMiddleware(next http.Handler) http.Handler {
 }
 
 // ポートの指定とコネクションの指定がずれてるの微妙だな
-// ポートの設定もファクトリ側に持ってくべきか
+// ポートの設定もファクトリ側に持ってくべきか.
 func (s *HttpServer) ListenAndServe() error {
 	return http.ListenAndServe(s.httpServerEndpoint.String(), traceMiddleware(s))
 }

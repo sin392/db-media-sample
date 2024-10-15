@@ -30,9 +30,11 @@ func (i *FindShopByNameInput) Validate() error {
 	if i.Name == "" {
 		err = fmt.Errorf("name is required")
 	}
+
 	if err != nil {
 		return appErrors.NewApplicationError(appErrors.InvalidParameterError, err.Error())
 	}
+
 	return nil
 }
 
@@ -46,6 +48,7 @@ func NewFindShopByNameUsecase(
 
 func (a *FindShopByNameUsecaseImpl) newOutput(shop *model.Shop) *FindShopByNameOutput {
 	output := FindShopByNameOutput(*shop)
+
 	return &output
 }
 
@@ -57,5 +60,6 @@ func (a *FindShopByNameUsecaseImpl) Execute(ctx context.Context, input *FindShop
 	if err != nil {
 		return nil, fmt.Errorf("failed to find shop by name: %w", err)
 	}
+
 	return a.newOutput(shop), nil
 }

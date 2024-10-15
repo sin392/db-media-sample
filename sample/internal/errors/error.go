@@ -2,7 +2,7 @@ package errors
 
 import "errors"
 
-// ユースケース層/アダプター層で扱うエラー
+// ユースケース層/アダプター層で扱うエラー.
 type ApplicationError struct {
 	ErrType ErrorType
 	err     error
@@ -11,15 +11,15 @@ type ApplicationError struct {
 type ErrorType int
 
 const (
-	// 入力パラメータの不正
+	// 入力パラメータの不正.
 	InvalidParameterError ErrorType = iota
-	// データが見つからない
+	// データが見つからない.
 	NotFoundError
-	// データが既に存在する
+	// データが既に存在する.
 	ConflictError
-	// 内部エラー
+	// 内部エラー.
 	InternalError
-	// その他
+	// その他.
 	UnknownError
 )
 

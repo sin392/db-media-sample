@@ -8,15 +8,14 @@ import (
 	"strings"
 
 	"github.com/sin392/db-media-sample/sample/internal/config"
-	// "go.opentelemetry.io/contrib/bridges/otelzap"
+	// "go.opentelemetry.io/contrib/bridges/otelzap".
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
 	"go.opentelemetry.io/otel/exporters/prometheus"
-
 	// "go.opentelemetry.io/otel/exporters/stdout/stdoutlog"
-	// "go.opentelemetry.io/otel/log/global"
+	// "go.opentelemetry.io/otel/log/global".
 	"go.opentelemetry.io/otel/propagation"
-	// sdklog "go.opentelemetry.io/otel/sdk/log"
+	// sdklog "go.opentelemetry.io/otel/sdk/log".
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
 	sdkresource "go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -26,9 +25,11 @@ import (
 
 const name = "github.com/sin392/db-media-sample"
 
-// TODO: パッケージの位置微妙
-var tracer = otel.Tracer(name)
-var meter = otel.Meter(name)
+// TODO: パッケージの位置微妙.
+var (
+	tracer = otel.Tracer(name)
+	meter  = otel.Meter(name)
+)
 
 // otelのbridgeにバグがありコンパイルされない
 // ref: https://github.com/open-telemetry/opentelemetry-go-contrib/issues/6239

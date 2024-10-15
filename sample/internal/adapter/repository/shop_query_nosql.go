@@ -26,7 +26,7 @@ func NewShopQueryRepositoryNoSQL(db NoSQL) repository.ShopQueryRepository {
 	}
 }
 
-// FindByName 名前から店舗を取得する
+// FindByName 名前から店舗を取得する.
 func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name string) (*model.Shop, error) {
 	ctx, span := otel.StartSpan(ctx, "ShopRepositoryImpl.FindByName")
 	defer span.End()
@@ -43,7 +43,7 @@ func (r *ShopQueryRepositoryNoSQLImpl) FindByName(ctx context.Context, name stri
 	return &result, nil
 }
 
-// List 店舗一覧を取得する
+// List 店舗一覧を取得する.
 func (r *ShopQueryRepositoryNoSQLImpl) List(ctx context.Context) (model.ShopList, error) {
 	ctx, span := otel.StartSpan(ctx, "ShopRepositoryImpl.List")
 	defer span.End()

@@ -54,7 +54,7 @@ func NewGrpcServer(
 }
 
 // エラーのロギングとgRPCステータスコードの変換を行うインターセプター
-// TODO: detailsも返すようにしたい
+// TODO: detailsも返すようにしたい.
 func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	resp, err := handler(ctx, req)
 	// エラーのロギング
@@ -87,7 +87,7 @@ func errorHandlingInterceptor(ctx context.Context, req interface{}, info *grpc.U
 	return resp, err
 }
 
-// Snowflake ID を生成してコンテキストに追加するインターセプター
+// Snowflake ID を生成してコンテキストに追加するインターセプター.
 func generateSnowflakeIDInterceptor(nodeID int64) func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	// Node には 1 を指定していますが、環境によって変えるべき
 	snowflakeIDGenerator, err := snowflake.NewSnowflakeIDGenerator(nodeID)

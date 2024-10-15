@@ -93,7 +93,7 @@ func (mgo mongoHandler) FindOne(
 	projection interface{},
 	result interface{},
 ) error {
-	var err = mgo.db.Collection(collection).
+	err := mgo.db.Collection(collection).
 		FindOne(
 			ctx,
 			query,

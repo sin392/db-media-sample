@@ -14,7 +14,7 @@ type ShopControllerPb struct {
 
 var _ pb.ShopServiceServer = (*ShopControllerPb)(nil)
 
-// pb.ShopServiceServerを実装したShopControllerPbを生成する
+// pb.ShopServiceServerを実装したShopControllerPbを生成する.
 func NewShopControllerPb(
 	findShopByNameUc usecase.FindShopByNameUsecase,
 	listShopUc usecase.ListShopUsecase,

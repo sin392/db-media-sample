@@ -10,7 +10,7 @@ import (
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
-// バリデーションもここで行う
+// バリデーションもここで行う.
 func newStoreShopInput(req *pb.StoreShopRequest) (*usecase.StoreShopInput, error) {
 	var input usecase.StoreShopInput
 	if err := copier.Copy(&input, req); err != nil {

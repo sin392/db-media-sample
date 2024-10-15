@@ -10,7 +10,7 @@ import (
 	pb "github.com/sin392/db-media-sample/sample/pb/shop/v1"
 )
 
-// バリデーションもここで行う
+// バリデーションもここで行う.
 func newFindShopByNameInput(req *pb.FindShopByNameRequest) (*usecase.FindShopByNameInput, error) {
 	input := &usecase.FindShopByNameInput{
 		Name: req.GetName(),

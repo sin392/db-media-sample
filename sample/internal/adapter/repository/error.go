@@ -14,17 +14,17 @@ type DatabaseError struct {
 type ErrorType int
 
 const (
-	// 入力パラメータの不正
+	// 入力パラメータの不正.
 	InvalidParameterError ErrorType = iota
-	// データ不整合
+	// データ不整合.
 	DataIntegrityError
-	// データが見つからない
+	// データが見つからない.
 	NotFoundError
-	// データが既に存在する
+	// データが既に存在する.
 	ConflictError
-	// 接続に失敗
+	// 接続に失敗.
 	ConnectionError
-	// その他
+	// その他.
 	UnknownError
 )
 

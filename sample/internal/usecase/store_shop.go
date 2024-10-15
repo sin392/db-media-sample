@@ -28,9 +28,11 @@ func (i *StoreShopInput) Validate() error {
 	if i.Name == "" {
 		err = fmt.Errorf("name is required")
 	}
+
 	if err != nil {
 		return appErrors.NewApplicationError(appErrors.InvalidParameterError, err.Error())
 	}
+
 	return nil
 }
 
@@ -49,8 +51,10 @@ func (a *StoreShopUsecaseImpl) Execute(ctx context.Context, input *StoreShopInpu
 	// TODO: コンストラクタを使ってその中でIDを生成する
 	shop := model.Shop(*input)
 	shop.ID = snowflake.GetSnowflakeID(ctx)
+
 	if err := a.qRepo.Store(ctx, shop); err != nil {
 		return fmt.Errorf("failed to store shop: %w", err)
 	}
+
 	return nil
 }
